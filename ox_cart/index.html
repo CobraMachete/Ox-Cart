@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Shots! Shots! Shots!</title>
+        <!-- <link rel="stylesheet" type="text/css" href="css/style.css"> -->
+        <link rel="preconnect" href="https://rsms.me/">
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+        <link rel="stylesheet" type="text/css" href="css/inter.css">
+        <link rel="stylesheet" type="text/css" href="css/etc.min.css">
+        <link rel="stylesheet" type="text/css" href="css/ext.min.css">
+        <link rel="stylesheet" type="text/css" href="css/ftrack-theme-dark-vars.min.css">
+        <link rel="stylesheet" type="text/css" href="css/ftrack-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="css/material-icons.css">
+        <link rel="stylesheet" type="text/css" href="css/normalize.min.css">
+        <link rel="stylesheet" type="text/css" href="css/theme-dark.css">
+
+        <!-- <script type="text/javascript" src="js/rive.js"></script> -->
+        <script src="https://unpkg.com/@rive-app/canvas@2.20.0"></script>
+        <script type="text/javascript" src="js/jquery-3.7.1.slim.min.js"></script>
+
+        <script type="text/javascript" src="js/ui.js"></script>
+        <script type="text/javascript" src="js/data_handler.js"></script>
+        <script type="text/javascript" src="js/endscreen.js"></script>
+        
+    </head>
+    <body>
+        <script>
+            $(document).ready(function() {
+
+                console.log('document ready')
+                $('#shotstable').hide();
+
+                var treecont = document.getElementById("treepreview");
+                $(treecont).hide();
+                
+                var thetable = document.getElementById("shotstable");
+                var datatableheader = document.getElementById("shottableheader");
+                var datatable = document.getElementById("shottablebody");
+                var shotsearchbox = document.getElementById("searchbar");
+
+                var ddone = document.getElementById("startselection");
+                var ddtwo = document.getElementById("startselectiontwo");
+
+                shotsearchbox.addEventListener('input', function() {
+                    
+                    var myinput = shotsearchbox.value.toLowerCase();
+                    $('#shottablebody').empty();
+                    if (myinput.length > 0) {
+                        var suggestions = shots_data.filter(function(item) {
+                            return item.toLowerCase().includes(myinput);
+                        });
+                        if (suggestions.length > 0) {
+                            
+                            for (var i = 0; i < suggestions.length; i++) {
+
+                                var info = "<tr onclick='addToShotField(this)'><td>" + suggestions[i] + "<td><tr>";
+                                $(datatable).append(info);
+                                
+                            }
+
+                            $('#shotstable').show();
+                            
+                        } else {
+                            $('#shotstable').hide();
+                        }
+                    } else {
+                        $('#shotstable').hide();
+                    }
+
+                });
+
+
+                var thetasktable = document.getElementById("comptablebody");
+                var cmptskcont = document.getElementById("comptaskcontainer");
+
+                var the3Dtasktable = document.getElementById("threedtablebody");
+                var thrddtskcont = document.getElementById("threedtaskcontainer");
+
+                //PASTING EXCEL SHEET ITEMS INTO COMP TASK COLUMNS
+                cmptskcont.addEventListener('paste', function (e) {
+                    excelToTable(e, thetasktable)
+                });
+
+                //PASTING EXCEL SHEET ITEMS INTO 3D TASK COLUMNS
+                thrddtskcont.addEventListener('paste', function (e) {
+                    excelToDotsTable(e, the3Dtasktable)
+                });
+
+                //SHOWING DD CONTENT ON HOVER
+                ddtwo.addEventListener("mouseenter", function(event) {
+                    $("#ddcontentstagetwo").show();
+                });
+
+                //SHOWING DD CONTENT ON HOVER
+                ddone.addEventListener("mouseenter", function(event) {
+                    $("#ddcontentstageone").show();
+                });
+
+                //EVENT LISTENER FOR DELETING ROWS
+                document.addEventListener('keydown', (event) => {
+                    if (document.activeElement.tagName == "TBODY") {
+                        if (event.key == "Backspace"){
+                            keyboardDeleteRows(document.activeElement);
+                        }
+                    }
+                });
+
+                //EVENT LISTENER FOR TREEVIEW CREATION
+                document.addEventListener('mousedown', (event) => {
+                    if (document.activeElement.id == "searchbar") {
+                        searchActive = true;
+                        treeviewHandler();
+                    } else {
+                        searchActive = false;
+                        treeviewHandler();
+                    }
+                });
+
+                //EVENT LISTENER FOR STANDALONE TEXT FIELD
+                standalonefield.addEventListener('change', function(e) {
+                    theinputval = standalonefield.value;
+                    theinputval = sanitizestring(theinputval);
+                    standalonefield.value = theinputval.toUpperCase();
+                });
+
+                window.addEventListener('resize', function(event) {
+                    var mainmarg = getElMargin();
+                    
+                    
+                }, true);
+
+                //CLASS SWITCHING FOR TOGGLES
+                $('.toggle').click(function(e){
+                    e.preventDefault();
+                    $(this).toggleClass('toggle-on');
+                });
+
+
+                getElMargin();
+                initRive();
+
+            });
+
+            
+
+            //GLOBAL VARS
+            var lastRowClicked;
+            var firstTab = false;
+            var totCompTasks = 0;
+            var totThreeDTasks = 0;
+
+            var compcolumnvis = true;
+            var threedcolumnvis = false;
+
+            var noDataEntries = false;
+            var prevTaskData = "Tricode";
+
+            var ghostcomptasks = [];
+            var ghost3Dtasks = [];
+            var clickedInside = false;
+
+            var searchActive = false;
+
+            var theprjid = "";
+            var theproduction = "";
+            var propName = "";
+            var thumbResFold = "";
+            
+
+            var compItemsFinished = false;
+            var thrdItemsFinished = false;
+
+            
+
+
+        </script>
+        <div id="widget">
+            <div class="master-container" id="mastercontainer">
+                <!------------------------ SHOTS CREATOR ------------------------>
+                <div class="main-container" id="maincontainer">
+
+                    <div class="title-row">
+                        <div class="app-title-thin"><p>Shots!</p></div>
+                        <div class="app-title-big"><p>Creator</p></div>
+                    </div>
+
+                    <div class="search-container" id="searchcontainer">
+                        <div class="shot-search-bar" id="shotsearch">
+                            <input id="searchbar" type="text" name="search" placeholder="Input Shot Name...">
+                        </div>
+                        <!-- SHOTS CREATOR SEARCH TABLE -->
+                        <div class="bodycontainer">
+                            <table class="custom-table" id="shotstable">
+                                <thead id="shottableheader">
+                                    <tr>
+                                    <th scope="col">Available Shots</th>
+                                    </tr>
+                                </thead>
+                               
+                                <tbody class="custom-table custom-table-body" id="shottablebody">
+                                
+                                </tbody>
+                            </table>
+
+                            <!-- TREEVIEW PREVIEW -->
+                            <div class="treeviewcontainer" id="treepreview">
+                                <div class="shots-icon-container">
+                                    <div class="shots-icon"></div>
+                                    <p class="treetext" id="shottextroot">0101_teamTransA</p>
+                                </div>
+
+                                <!-- COMP TASKS TREE -->
+                                <div class="folder-icon-container" id="taskrootcomp">
+                                    <div class="folder-icon"></div>
+                                    <p class="treetext">02_cmp</p>
+                                </div>
+
+                                <div class="third-icon-container" id="teamsrootcomp">
+                                    <div class="teams-obj-icon"></div>
+                                    <p class="treetext" id="teamstextcomproot">USWNT</p>
+                                </div>
+
+                                <div class="task-teams-container" id="firsttaskcomp">
+                                    <div class="task-icon"></div>
+                                    <p class="treetext" id="firstcomptext">ATL (Comp)</p>
+                                </div>
+
+                                <div class="task-teams-container" id="secondtaskcomp">
+                                    <div class="task-icon"></div>
+                                    <p class="treetext" id="secondcomptext">BOS (Comp)</p>
+                                </div>
+
+                                <div class="task-teams-container" id="moretaskcomp">
+                                    <div class="task-icon"></div>
+                                    <p class="treetext" id="moretaskcomptext">...</p>
+                                </div>
+
+                                <!-- 3D TASKS TREE -->
+                                <div class="folder-icon-container" id="taskroot3D">
+                                    <div class="folder-icon"></div>
+                                    <p class="treetext">00_3D</p>
+                                </div>
+
+                                <div class="third-icon-container" id="teamsroot3D">
+                                    <div class="teams-obj-icon"></div>
+                                    <p class="treetext" id="teamstext3Droot">USWNT</p>
+                                </div>
+
+                                <div class="task-teams-container" id="firsttask3D">
+                                    <div class="task-icon"></div>
+                                    <p class="treetext" id="first3Dtext">ATL (C4D)</p>
+                                </div>
+
+                                <div class="task-teams-container" id="secondtask3D">
+                                    <div class="task-icon"></div>
+                                    <p class="treetext" id="second3Dtext">BOS (C4D)</p>
+                                </div>
+                                
+                                <div class="task-teams-container" id="moretaskcomp3D">
+                                    <div class="task-icon"></div>
+                                    <p class="treetext" id="moretask3Dtext">...</p>
+                                </div>
+
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+
+                <div class="linesep" id="spacer"></div>
+
+                <!------------------------ TASK BUILDER ------------------------>
+                <div class="secondary-container" id="secondarycontainer">
+                    <div class="title-row-inline">
+                        <div class="app-title-thin"><p>Task <span style="font-weight: 800;">Builder</span></p></div>
+                        
+                    </div>
+                    <!------------------------ BREADCRUMB SELECTOR ------------------------>
+                    <div class="breadcrumbcontainer" id="breadcont">
+
+                        <div class="dropdown" id="ddstageone">
+                            <button class="dropbtn" id="startselection">Test</button>
+                            <div class="dropdown-content" id="ddcontentstageone">
+                                
+                            </div>
+                        </div>
+
+                        <div class="dropdown" style="padding-left: 15px" id="ddstagetwo">
+                            <button class="dropbtn" id="startselectiontwo" style="font-weight: 400;">Tricode</button>
+                            <div class="dropdown-content" id="ddcontentstagetwo" style="left: 0px">
+                               
+                            </div>
+                        </div>
+
+                        <div class="btn-txt" role="button" id="btntxt">+ Add all Tricodes</div>
+
+                        <div class="manual-txt" id="mantxt">* Manual Task Entry Only</div>
+                        
+                    </div>
+
+                    <!------------------------ TOGGLE GROUP ------------------------>
+                    <div class="togglegrpcont" id="togglegrp">
+
+                        <!------------------------ COMP TOGGLE ------------------------>
+                        <div class="tsktogglelabelcont">
+                            <p class="togglelabelposition" id="comptogglelabel">Comp</p>
+                        </div>
+                        <div class="cmptogglecontainer">
+                            
+                            <div class="toggle toggle-on" id="compswitch" onclick="toggleVisCompTasks()">
+                                <div class="toggle-text-off">OFF</div>
+                                <div class="glow-comp"></div>
+                                <div class="toggle-button"></div>
+                                <div class="toggle-text-on">ON</div>
+                            </div>
+                        </div>
+
+                        <!------------------------ 3D TOGGLE ------------------------>
+                        <div class="threedtogglelabelcont">
+                            <p class="togglelabelposition" id="comptogglelabel">3D</p>
+                        </div>
+                        <div class="cmptogglecontainer">
+                            
+                            <div class="toggle" id="threedswitch" onclick="toggleVis3DTasks()">
+                                <div class="toggle-text-off">OFF</div>
+                                <div class="glow-comp"></div>
+                                <div class="toggle-button"></div>
+                                <div class="toggle-text-on">ON</div>
+                            </div>
+                        </div>
+
+                        <!------------------------ STANDALONE TOGGLE ------------------------>
+                        <div class="standalonetogglelabelcont">
+                            <p class="togglelabelposition" id="comptogglelabel">Standalone</p>
+                        </div>
+                        <div class="cmptogglecontainer">
+                            
+                            <div class="toggle" id="standaloneswitch" onclick="delayedMouseEvt()">
+                                <div class="toggle-text-off">OFF</div>
+                                <div class="glow-comp"></div>
+                                <div class="toggle-button"></div>
+                                <div class="toggle-text-on">ON</div>
+                            </div>
+                        </div>
+
+                        <!------------------------ STANDALONE INPUT ------------------------>
+                        <div class="standalone-container" id="standalonecontainer">
+                            <div class="standalone-bar bar-disabled" id="standalone">
+                                <input id="standalonefield" type="text" name="search" placeholder="Ex: USWNT">
+                            </div>
+                        </div>
+                        
+                    </div>
+
+
+                    <!------------------------ TASK CONTAINERS ------------------------>
+                    <div class="taskmaincontainer">
+
+                        <div class="comptaskgroup" id="comptaskgroup">
+                            <!------------------------ COMP TASK CONTAINER ------------------------>
+                            <div class="comptaskcontainer" id="comptaskcontainer">
+                                <table class="task-table" id="comptasktable">
+                                    <thead id="comptableheader">
+                                        <tr>
+                                        <th scope="col">Comp Tasks (02_cmp)</th>
+                                        </tr>
+                                    </thead>
+                                   
+                                    <tbody class="task-table task-table-body" id="comptablebody" tabindex="0">
+                                       
+                                    
+                                    </tbody>
+                                </table>
+    
+                                <!------------------------ COMP TASK BOTTOM ROW ------------------------>
+                                <div class="columnrowcontainer" id="taskcolumnrowcontainer">
+
+                                    <div class="comptaskbottomcontainer">
+                                        <div class="addbutton">
+                                            <img class="addimage" src="img/add_icon.svg" type="button" onclick="addSingleCompTask()">
+                                        </div>
+                                        
+                                        <div class="clearlistcontainer">
+                                            <div class="clearlistbutton">
+                                                <img class="addimage" src="img/delete_icon.svg" type="button" onclick="removeAllRows(document.getElementById('comptablebody'))">
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="threedtaskgroup threedtaskgroupoff" id="threedtaskgroup">
+                            <!------------------------ 3D TASK CONTAINER ------------------------>
+                            <div class="threedtaskcontainer" id="threedtaskcontainer">
+                                <table class="task-table" id="threedtasktable">
+                                    <thead id="threedtableheader">
+                                        <tr>
+                                        <th scope="col" style="display: flex; margin-top: 2px; min-width: 173px">3D Tasks (00_3D)<span><div class="rowicongrp"><img class="rowicon rowiconon" src="img/c4d_icon_on.png" id="c4dicon" onclick="swap3DIcon(this)"></div></span><span><div class="rowicongrptwo"><img class="rowicon" src="img/maya_icon_off.png" id="mayaicon" onclick="swap3DIcon(this)"></div></span></th>
+                                        </tr>
+                                    </thead>
+                                
+                                    <tbody class="task-table task-table-body" id="threedtablebody" tabindex="1">
+                                        
+                                    
+                                    </tbody>
+                                </table>
+
+                                <!------------------------ 3D TASK BOTTOM ROW ------------------------>
+                                <div class="columnrowcontainer columnrowcontaineroff" id="threedcolumnrowcontainer"> 
+
+                                    <div class="comptaskbottomcontainer">
+                                        <div class="addbutton">
+                                            <img class="addimage" src="img/add_icon.svg" type="button" onclick="addSingle3DTask()">
+                                        </div>
+
+                                        <!-- ADDING SHOTS TO 3D TASKS -->
+                                        <div class="threedshotsbottomcontainer" id="threedshots">
+                                            <div class="makeshotstxt" id="mkshotstxt">Shots:</div>
+                                            <div class="shotnumdim" id="shotA" onclick="selectShotNum(this)">1</div>
+                                            <div class="shotnumdim" id="shotB" onclick="selectShotNum(this)">2</div>
+                                            <div class="shotnumdim" id="shotC" onclick="selectShotNum(this)">3</div>
+                                            <div class="shotnumdim" id="shotD" onclick="selectShotNum(this)">4</div>
+                                            <div class="shotnumdim" id="shotE" onclick="selectShotNum(this)">5</div>
+                                        </div>
+
+                                        
+                                        <div class="clearlistcontainer">
+                                            <div class="clearlistbutton">
+                                                <img class="addimage" src="img/delete_icon.svg" type="button" onclick="removeAllRows(document.getElementById('threedtablebody'))">
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="bottomrowcontainer">
+                        <div class="createbtncont">
+                            <button class="createbtn" type="button" onclick="createShotAndTasks()">Create Shot</button>
+                        </div>
+                        
+                    </div>
+
+                </div>
+
+                <div class="rive-cont-off" id="rivcontainer">
+                    <div class="canv-cont">
+                        <canvas id="canvas" width="1050" height="550"></canvas>
+                    </div>
+                </div>
+                
+                
+            </div>
+            
+            
+        </div>
+
+        <script type="text/javascript" src="js/ftrack.min.js"></script>
+        <script type="text/javascript" src="js/ftrack_widget.js"></script>
+        <script type="text/javascript" src="js/shots_index.js"></script>
+        <script type="text/javascript" src="js/createassets.js"></script>
+        
+        
+    </body>
+</html>
