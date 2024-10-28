@@ -19,6 +19,10 @@ var entityCheckObj = [
 var ERROR_MULTIPLE_TMS_OBJ = "MULTIPLE_TEAMS";
 var ERROR_SHOT_EXISTS = "SHOT_EXISTS";
 
+ //COMP AND 3D TASK ERROR LISTS
+ var cmpTaskErrs = [];
+ var thrDTaskErrs = [];
+
 
 function createShotAndTasks() {
 
@@ -96,10 +100,7 @@ function createShotAndTasks() {
     var theshots = document.getElementById("threedshots");
     var shotchildren = [];
 
-    //COMP AND 3D TASK ERROR LISTS
-    var cmpTaskErrs = [];
-    var thrDTaskErrs = [];
-
+   
     //COMP AND 3D TASK LISTS
     var cmpTaskList = [];
     var thrDTaskList = [];
@@ -168,6 +169,8 @@ function createShotAndTasks() {
     }
 
     //INTERFACE ERROR CHECKING
+    checkEmptyRows();
+
     if (isTeamsObj == true) {
         if (teamsObjName.length == 0) {
 
@@ -778,11 +781,13 @@ function createTeamObj(foldEntId, prjid, teamsName) {
 
                     if (response.data.length > 0) {
 
+                        var theObj;
                         console.log(response.data);
                         for (var t=0; t <= response.data.length; t++) {
 
-                            if (response.data[t].name !== teamsName) {
-                                rej(ERROR_MULTIPLE_TMS_OBJ);
+                            if (response.data[t].name == teamsName) {
+                                theObj = response.data[t];
+                                break;
                             }
                         }
     
@@ -794,8 +799,8 @@ function createTeamObj(foldEntId, prjid, teamsName) {
                             entityCheckObj[0].teamsobjectthrd_name = response.data[0].name;
                         }
     
-                        console.log(response)
-                        resp(response.data[0])
+                        console.log(theObj);
+                        resp(theObj);
                         
                         
                     } else {
@@ -1122,5 +1127,43 @@ async function process3DTasks(thrDArr, entOBJ, projID, tasktype) {
     }
     
     
+
+}
+
+function checkEmptyRows() {
+
+    var cmptable = document.getElementById("comptablebody");
+    var thdtable = document.getElementById("threedtablebody");
+
+    var cmptggle = document.getElementById("compswitch");
+    var threedtggle = document.getElementById("threedswitch");
+    
+
+    if (cmptggle.classList.contains("toggle-on")){
+
+        for (var i = cmptable.rows.length-1; i >= 1; i--) {
+            var currrow = cmptable.rows[i];
+            var rwchild = currrow.children[0].children[0];
+            console.log(rwchild);
+
+            if (rwchild.innerHTML.length == 0) {
+                currrow.remove();
+            }
+
+        }
+    }
+
+    if (threedtggle.classList.contains("toggle-on")){
+
+        for (var j = thdtable.rows.length-1; j >= 1; j--) {
+            var currtdrow = thdtable.rows[j];
+            var rwtdchild = currtdrow.children[0].children[0];
+
+            if (rwtdchild.innerHTML.length == 0) {
+                currtdrow.remove();
+            }
+
+        }
+    }
 
 }

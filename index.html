@@ -363,11 +363,11 @@
                                 <table class="task-table" id="comptasktable">
                                     <thead id="comptableheader">
                                         <tr>
-                                        <th scope="col">Comp Tasks (02_cmp)</th>
+                                        <th scope="col">Comp Tasks</th>
                                         </tr>
                                     </thead>
                                    
-                                    <tbody class="task-table task-table-body" id="comptablebody" tabindex="0">
+                                    <tbody class="task-table task-table-body" id="comptablebody">
                                        
                                     
                                     </tbody>
@@ -378,7 +378,7 @@
 
                                     <div class="comptaskbottomcontainer">
                                         <div class="addbutton">
-                                            <img class="addimage" src="img/add_icon.svg" type="button" onclick="addSingleCompTask()">
+                                            <img class="addimage" src="img/add_icon.svg" type="button" onclick="addSingleCompTask()" id="cmpaddbtn">
                                         </div>
                                         
                                         <div class="clearlistcontainer">
@@ -400,11 +400,11 @@
                                 <table class="task-table" id="threedtasktable">
                                     <thead id="threedtableheader">
                                         <tr>
-                                        <th scope="col" style="display: flex; margin-top: 2px; min-width: 173px">3D Tasks (00_3D)<span><div class="rowicongrp"><img class="rowicon rowiconon" src="img/c4d_icon_on.png" id="c4dicon" onclick="swap3DIcon(this)"></div></span><span><div class="rowicongrptwo"><img class="rowicon" src="img/maya_icon_off.png" id="mayaicon" onclick="swap3DIcon(this)"></div></span></th>
+                                        <th scope="col" style="display: flex; min-width: 173px">3D Tasks<span><div class="rowicongrp"><img class="rowicon rowiconon" src="img/c4d_icon_on.png" id="c4dicon" onclick="swap3DIcon(this)"></div></span><span><div class="rowicongrptwo"><img class="rowicon" src="img/maya_icon_off.png" id="mayaicon" onclick="swap3DIcon(this)"></div></span></th>
                                         </tr>
                                     </thead>
                                 
-                                    <tbody class="task-table task-table-body" id="threedtablebody" tabindex="1">
+                                    <tbody class="task-table task-table-body" id="threedtablebody">
                                         
                                     
                                     </tbody>
@@ -415,7 +415,7 @@
 
                                     <div class="comptaskbottomcontainer">
                                         <div class="addbutton">
-                                            <img class="addimage" src="img/add_icon.svg" type="button" onclick="addSingle3DTask()">
+                                            <img class="addimage" src="img/add_icon.svg" type="button" onclick="addSingle3DTask()" id="thrdaddbtn">
                                         </div>
 
                                         <!-- ADDING SHOTS TO 3D TASKS -->

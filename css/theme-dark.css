@@ -834,8 +834,8 @@ body {
         /* border-bottom: none !important; */
         color: rgba(235, 235, 235, .45);
         font-family: Inter;
-        font-size: 12px;
-        font-weight: 700;
+        font-size: 14px;
+        font-weight: 400;
         letter-spacing: normal;
         max-height: 300px;
         /* text-transform: uppercase; */
@@ -1367,16 +1367,16 @@ body {
 }
 
 .rowicon {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     cursor: pointer;
     opacity: 40%;
     
 }
 
 .rowiconon {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     cursor: pointer;
     opacity: 70%;
     
@@ -1386,8 +1386,8 @@ body {
 .rowicongrp {
     
     border: none;
-    height: 18px;
-    width: 18px;
+    height: 16px;
+    width: 16px;
     padding-left: 25px;
     padding-top: 0px;
     padding-top: 0px;
@@ -1401,8 +1401,8 @@ body {
 .rowicongrptwo {
     
     border: none;
-    height: 18px;
-    width: 18px;
+    height: 16px;
+    width: 16px;
     padding-left: 10px;
     padding-top: 0px;
     padding-top: 0px;

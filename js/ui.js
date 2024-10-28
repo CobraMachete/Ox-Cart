@@ -88,14 +88,17 @@ function toggleVisCompTasks() {
 //ADDING SINGLE COMP TASK FROM BUTTON
 function addSingleCompTask() {
 
+
+    var the3daddbtn = document.getElementById("thrdaddbtn");
+    var thdtggl = document.getElementById("threedswitch");
     var tblebody = document.getElementById("comptablebody");
 
     newRow = tblebody.insertRow();
     newRow.setAttribute("onclick", `onRowSelected("comptablebody", ${newRow.rowIndex}, event)`);
     newCell = newRow.insertCell();
-    // newCell.contentEditable  = true;
 
     var newInput = document.createElement("input");
+    newInput.id = "cmpinpt" + (tblebody.rows.length+1);
     newInput.type = "text";
     newInput.placeholder = "Enter Task Name";
     newCell.appendChild(newInput);
@@ -104,8 +107,7 @@ function addSingleCompTask() {
 
     totCompTasks += 1
 
-    newInput.click();
-
+    
     newInput.addEventListener('change', function(e) {
         theinputval = newInput.value;
         theinputval = sanitizestring(theinputval);
@@ -113,13 +115,59 @@ function addSingleCompTask() {
         
     });
 
+    newInput.addEventListener('blur', function(e) {
+
+        fieldval = newInput.value;
+
+        if (fieldval.length === 0) {
+            parEl = this.parentElement.parentElement;
+            parEl.remove();
+            
+        }
+        
+    });
+
+    //EVENT LISTENER FOR MOVING TO NEXT CELL
+    newInput.addEventListener('keydown', (event) => {
+        
+        if (document.activeElement.id == newInput.id) {
+            console.log(document.activeElement.id);
+            if (event.key == "Enter"){
+                addSingleCompTask();
+            }
+            // if (event.key == "Tab"){
+                
+            //     if (!thdtggl.classList.contains("toggle-on")) {
+
+            //         thdtggl.click();
+            //         addSingle3DTask();
+
+            //     } else {
+            //         addSingle3DTask();
+            //     }
+                
+            // }
+        }
+        
+    });
+
+    
+    
+    newInput.focus();
+    
+
     document.dispatchEvent(new MouseEvent('mousedown'));
 
 }
 
+
+
 //ADDING SINGLE 3D TASK FROM BUTTON
 function addSingle3DTask() {
+    
+    
 
+    var cmptggl = document.getElementById("compswitch");
     var tblebody = document.getElementById("threedtablebody");
 
     newRow = tblebody.insertRow();
@@ -128,6 +176,7 @@ function addSingle3DTask() {
     // newCell.contentEditable  = true;
 
     var newInput = document.createElement("input");
+    newInput.id = "thdinpt" + (tblebody.rows.length+1);
     newInput.type = "text";
     newInput.placeholder = "Enter Task Name";
     newInput.style.width = "85px";
@@ -165,14 +214,59 @@ function addSingle3DTask() {
 
     totCompTasks += 1
     updateRowRadios();
-    newInput.click();
 
+    
     newInput.addEventListener('change', function(e) {
         theinputval = newInput.value;
         theinputval = sanitizestring(theinputval);
         newInput.value = theinputval.toUpperCase();
         
     });
+
+    newInput.addEventListener('blur', function(e) {
+
+        fieldval = newInput.value;
+
+        if (fieldval.length === 0) {
+
+            parEl = this.parentElement.parentElement;
+            parEl.remove();
+            
+        }
+        
+    });
+
+    //EVENT LISTENER FOR MOVING TO NEXT CELL
+    newInput.addEventListener('keydown', (event) => {
+        
+        if (document.activeElement.id == newInput.id) {
+            console.log(document.activeElement.id);
+            if (event.key == "Enter"){
+                
+                addSingle3DTask();
+            }
+
+            // if (event.key == "Tab"){
+                
+            //     if (!cmptggl.classList.contains("toggle-on")) {
+
+            //         cmptggl.click();
+            //         addSingleCompTask();
+                    
+            //     } else {
+
+            //         addSingleCompTask();
+                   
+            //     }
+                
+            // }
+        }
+        
+    });
+
+    
+    newInput.focus();
+
     document.dispatchEvent(new MouseEvent('mousedown'));
 
 }
