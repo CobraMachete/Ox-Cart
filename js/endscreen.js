@@ -1,6 +1,10 @@
 
 var theRive;
 
+function computeSize() {
+    theRive.resizeDrawingSurfaceToCanvas();
+}
+
 function initRive() {
 
     var rivinst = new rive.Rive({
@@ -8,15 +12,14 @@ function initRive() {
         canvas: document.getElementById("canvas"),
         autoplay: true,
         artboard: "Artboard",
-        layout: new rive.Layout({fit: rive.Fit.Contain,
-            minX: 0,
-            minY: 0,
-            maxX: 1050,
-            maxY: 550, alignment: 'center'}),
+        layout: new rive.Layout({fit: rive.Fit.FitWidth,
+            alignment: rive.Alignment.TopCenter,
+        }),
         stateMachines: 'State Machine 1',
         onLoad: () => {
 
-            rivinst.resizeDrawingSurfaceToCanvas();
+            computeSize();
+            // rivinst.resizeDrawingSurfaceToCanvas();
             console.log("Loaded Rive...");
             
         },

@@ -165,6 +165,10 @@
 
                 getElMargin();
                 initRive();
+                window.onresize = computeSize;
+
+                window.addEventListener("change", computeSize);
+
 
             });
 
