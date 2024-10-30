@@ -21,6 +21,7 @@
         <script type="text/javascript" src="js/ui.js"></script>
         <script type="text/javascript" src="js/data_handler.js"></script>
         <script type="text/javascript" src="js/endscreen.js"></script>
+        <script type="text/javascript" src="js/mousetrap.min.js"></script>
         
     </head>
     <body>
@@ -79,11 +80,19 @@
                 //PASTING EXCEL SHEET ITEMS INTO COMP TASK COLUMNS
                 cmptskcont.addEventListener('paste', function (e) {
                     excelToTable(e, thetasktable)
+
+                    setTimeout(function() {
+                        checkForDuplicateTasks(thetasktable);
+                    }, 500);
                 });
 
                 //PASTING EXCEL SHEET ITEMS INTO 3D TASK COLUMNS
                 thrddtskcont.addEventListener('paste', function (e) {
-                    excelToDotsTable(e, the3Dtasktable)
+                    excelToDotsTable(e, the3Dtasktable);
+
+                    setTimeout(function() {
+                        checkForDuplicateTasks(the3Dtasktable);
+                    }, 500);
                 });
 
                 //SHOWING DD CONTENT ON HOVER
@@ -96,14 +105,32 @@
                     $("#ddcontentstageone").show();
                 });
 
-                //EVENT LISTENER FOR DELETING ROWS
+                // EVENT LISTENER FOR TABLE OPERATIONS
                 document.addEventListener('keydown', (event) => {
+                    
                     if (document.activeElement.tagName == "TBODY") {
                         if (event.key == "Backspace"){
                             keyboardDeleteRows(document.activeElement);
                         }
                     }
+
                 });
+
+                
+
+                Mousetrap.bind(['command+k', 'ctrl+k'], function(e) {
+
+                    if (document.activeElement.id == "comptaskcontainer") {
+                        addSingleCompTask();
+                    }
+
+                    if (document.activeElement.id == "threedtaskcontainer") {
+                        addSingle3DTask()
+                    }
+                    
+                    return false;
+                });
+              
 
                 //EVENT LISTENER FOR TREEVIEW CREATION
                 document.addEventListener('mousedown', (event) => {
@@ -332,7 +359,7 @@
 
                         <!------------------------ STANDALONE TOGGLE ------------------------>
                         <div class="standalonetogglelabelcont">
-                            <p class="togglelabelposition" id="comptogglelabel">Standalone</p>
+                            <p class="togglelabelposition" id="comptogglelabel">Multicomp</p>
                         </div>
                         <div class="cmptogglecontainer">
                             
@@ -359,7 +386,7 @@
 
                         <div class="comptaskgroup" id="comptaskgroup">
                             <!------------------------ COMP TASK CONTAINER ------------------------>
-                            <div class="comptaskcontainer" id="comptaskcontainer">
+                            <div class="comptaskcontainer" id="comptaskcontainer" ondblclick="makeNewCompRow()" tabindex="0">
                                 <table class="task-table" id="comptasktable">
                                     <thead id="comptableheader">
                                         <tr>
@@ -367,7 +394,7 @@
                                         </tr>
                                     </thead>
                                    
-                                    <tbody class="task-table task-table-body" id="comptablebody">
+                                    <tbody class="task-table task-table-body" id="comptablebody" tabindex="1">
                                        
                                     
                                     </tbody>
@@ -378,12 +405,13 @@
 
                                     <div class="comptaskbottomcontainer">
                                         <div class="addbutton">
-                                            <img class="addimage" src="img/add_icon.svg" type="button" onclick="addSingleCompTask()" id="cmpaddbtn">
+                                            <!-- <input type="image" src="img/add_icon.svg" /> -->
+                                            <img class="addimage" src="img/add_icon.svg" type="button" onclick="addSingleCompTask()" id="cmpaddbtn" />
                                         </div>
                                         
                                         <div class="clearlistcontainer">
                                             <div class="clearlistbutton">
-                                                <img class="addimage" src="img/delete_icon.svg" type="button" onclick="removeAllRows(document.getElementById('comptablebody'))">
+                                                <img class="addimage" src="img/delete_icon.svg" type="button" onclick="removeAllRows(document.getElementById('comptablebody'))" />
                                             </div>
                                         </div>
                                         
@@ -396,7 +424,7 @@
                         
                         <div class="threedtaskgroup threedtaskgroupoff" id="threedtaskgroup">
                             <!------------------------ 3D TASK CONTAINER ------------------------>
-                            <div class="threedtaskcontainer" id="threedtaskcontainer">
+                            <div class="threedtaskcontainer" id="threedtaskcontainer" ondblclick="makeNew3DRow()" tabindex="2">
                                 <table class="task-table" id="threedtasktable">
                                     <thead id="threedtableheader">
                                         <tr>
@@ -404,7 +432,7 @@
                                         </tr>
                                     </thead>
                                 
-                                    <tbody class="task-table task-table-body" id="threedtablebody">
+                                    <tbody class="task-table task-table-body" id="threedtablebody" tabindex="3">
                                         
                                     
                                     </tbody>
@@ -415,7 +443,7 @@
 
                                     <div class="comptaskbottomcontainer">
                                         <div class="addbutton">
-                                            <img class="addimage" src="img/add_icon.svg" type="button" onclick="addSingle3DTask()" id="thrdaddbtn">
+                                            <img class="addimage" src="img/add_icon.svg" type="button" onclick="addSingle3DTask()" id="thrdaddbtn" />
                                         </div>
 
                                         <!-- ADDING SHOTS TO 3D TASKS -->
@@ -431,7 +459,7 @@
                                         
                                         <div class="clearlistcontainer">
                                             <div class="clearlistbutton">
-                                                <img class="addimage" src="img/delete_icon.svg" type="button" onclick="removeAllRows(document.getElementById('threedtablebody'))">
+                                                <img class="addimage" src="img/delete_icon.svg" type="button" onclick="removeAllRows(document.getElementById('threedtablebody'))" />
                                             </div>
                                         </div>
                                         
@@ -445,7 +473,7 @@
 
                     <div class="bottomrowcontainer">
                         <div class="createbtncont">
-                            <button class="createbtn" type="button" onclick="createShotAndTasks()">Create Shot</button>
+                            <button class="createbtn" type="button" onclick="preflightChecks()">Create Shot</button>
                         </div>
                         
                     </div>

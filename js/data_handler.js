@@ -426,11 +426,6 @@ function removeGhostRows() {
     ghost3Dtasks = [];
 }
 
-function checkForDuplicateTasks() {
-
-    var cmptble = document.getElementById("comptablebody");
-    var thrdtble = document.getElementById("threedtablebody");
-}
 
 function sanitizestring(str) {
     var snstr = str.replace(" ","_");

@@ -8,7 +8,11 @@ function initRive() {
         canvas: document.getElementById("canvas"),
         autoplay: true,
         artboard: "Artboard",
-        layout: new rive.Layout({fit: 'cover', alignment: 'center'}),
+        layout: new rive.Layout({fit: rive.Fit.Contain,
+            minX: 0,
+            minY: 0,
+            maxX: 1050,
+            maxY: 550, alignment: 'center'}),
         stateMachines: 'State Machine 1',
         onLoad: () => {
 

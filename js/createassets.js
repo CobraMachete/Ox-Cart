@@ -18,34 +18,57 @@ var entityCheckObj = [
 
 var ERROR_MULTIPLE_TMS_OBJ = "MULTIPLE_TEAMS";
 var ERROR_SHOT_EXISTS = "SHOT_EXISTS";
+var ERROR_SHORT_TITLE = "ERROR: SHOT NAME TOO SHORT";
+var ERROR_NOTNUM = "ERROR: SHOT NAME MUST START WITH 4 DIGITS";
+var ERROR_MISSING_MULTICOMP = "ERROR: MULTICOMP OBJECT IS UNNAMED";
+var ERROR_DUPE_TASK = "ERROR: DUPLICATE TASK";
 
- //COMP AND 3D TASK ERROR LISTS
- var cmpTaskErrs = [];
- var thrDTaskErrs = [];
+//COMP AND 3D TASK ERROR LISTS
+var cmpTaskErrs = [];
+var thrDTaskErrs = [];
 
+function preflightChecks() {
+    //DEFOCUS BG ELEMENTS
+    blurBGElements();
+
+    // //INIT RIVE ANIM
+    triggerRiveStart();
+
+    // INTERFACE ERROR CHECKING
+    checkToggles().then(function (tglresult) {
+
+        if (tglresult !== true) {
+            throw new Error(tglresult);
+        }
+
+        checkShotStructure().then(function (structresult) {
+            if (structresult !== true) {
+                throw new Error(structresult);
+            }
+
+            console.log("ERROR CHECKS PASSED.  MOVING ON...")
+            createShotAndTasks();
+
+        })
+        .catch(error => {
+            console.log(error);
+            triggerFailure(error);
+        });
+ 
+    })
+    .catch(error => {
+        console.log(error);
+        triggerFailure(error);
+    });
+}
 
 function createShotAndTasks() {
 
     var rejections = [];
-    
-    //GET UI CONTAINERS AND DEFOCUS
-    var mc = document.getElementById("maincontainer");
-    var sc = document.getElementById("secondarycontainer");
-    var spcr = document.getElementById("spacer");
 
-    mc.classList.add("main-container-blur");
-    sc.classList.add("secondary-container-blur");
-    spcr.classList.add("linesep-blur");
-
-    var rc = document.getElementById("rivcontainer");
-    rc.classList.add("rive-cont-on");
-    rc.classList.remove("rive-cont-off");
-
-    //INIT RIVE ANIM
-    txtActionLoops("RunLoopA", 1);
-    txtActionLoops("RunLoopB", 2);
-    fireAnim("startAnim");
-
+    //COMP AND 3D TASK LISTS
+    var cmpTaskList = [];
+    var thrDTaskList = [];
     
     //3D TASK TYPES
     var mayaType = "c53970b0-ecbe-433d-a307-b8477d7e7c5a";
@@ -61,7 +84,7 @@ function createShotAndTasks() {
     if (c4dtasktypeselect.classList.contains("rowiconon")) {
         the3dtasktype = c4dType;
     } else {
-        the3dtasktype = maxType;
+        the3dtasktype = mayaType;
     }
 
     
@@ -100,14 +123,10 @@ function createShotAndTasks() {
     var theshots = document.getElementById("threedshots");
     var shotchildren = [];
 
-   
-    //COMP AND 3D TASK LISTS
-    var cmpTaskList = [];
-    var thrDTaskList = [];
-
-
     if (cmptggle.classList.contains("toggle-on")) {
-        
+
+        console.log("THE COMP TOGGLE IS ON!")
+    
         isCompElement = true;
 
         for (var i = 0; i < compTbl.rows.length; i++) {
@@ -115,10 +134,12 @@ function createShotAndTasks() {
             var rowinpt = currrow.children[0].children[0].value;
             cmpTaskList.push(rowinpt)
         }
+
+        console.log(cmpTaskList)
     }
 
     if (threedtggle.classList.contains("toggle-on")) {
-
+        console.log("THE 3D TOGGLE IS ON!")
         is3DElement = true;
 
         //BUILD ARRAY OF CLASSLIST FOR NUMBERING SYSTEM
@@ -168,8 +189,7 @@ function createShotAndTasks() {
         isTeamsObj = true;
     }
 
-    //INTERFACE ERROR CHECKING
-    checkEmptyRows();
+    
 
     if (isTeamsObj == true) {
         if (teamsObjName.length == 0) {
@@ -452,7 +472,6 @@ function createShotAndTasks() {
             },1000);
         }
     });
-    
 
 }
 
@@ -918,8 +937,8 @@ function createCompTask(parentEntId, prjid, currTaskName, typeid) {
         .then(function (response) {
             console.log(response);
             if (response.data.length > 0) {
-                console.log("REJECTED!")
-                reject(taskErrs.push(currTaskName))
+                cmpTaskErrs.push(currTaskName);
+                reject(ERROR_DUPE_TASK)
             }
 
             
@@ -927,8 +946,15 @@ function createCompTask(parentEntId, prjid, currTaskName, typeid) {
             session.query('select id, name from TypedContext where id is "' + parentEntId + '"')
                 .then(function (entityResponse) {
                     console.log(entityResponse)
+                    if (entityResponse == ERROR_DUPE_TASK){
+                        console.log(ERROR_DUPE_TASK);
+                        cmpTaskErrs.push(currTaskName);
+                        reject(ERROR_DUPE_TASK)
+                    }
                     if (entityResponse.data.length === 0) {
-                        reject(taskErrs.push(currTaskName));
+                        console.log(ERROR_DUPE_TASK);
+                        cmpTaskErrs.push(currTaskName);
+                        reject(ERROR_DUPE_TASK);
                     }
 
 
@@ -937,7 +963,13 @@ function createCompTask(parentEntId, prjid, currTaskName, typeid) {
                     if (thumbnailwhitelist.includes(currTaskName)) {
                         var thmbNameJoin = currTaskName.toUpperCase() + "_THUMBNAIL";
                         session.query('select thumbnail_id from TypedContext where parent_id is "' + thumbResFold + '" and name is "' + thmbNameJoin + '"')
+
                         .then(function(data) {
+
+                            if (data == ERROR_DUPE_TASK) {
+                                reject(ERROR_DUPE_TASK);
+                            }
+
                             console.log(data);
                             var tskThumbId = data.data[0].thumbnail_id
                             
@@ -950,10 +982,22 @@ function createCompTask(parentEntId, prjid, currTaskName, typeid) {
                                 thumbnail_id: tskThumbId
                             }).then(function (res) {
 
-                                    resolve(res);
+                                if (res == ERROR_DUPE_TASK) {
+                                    reject(ERROR_DUPE_TASK);
+                                }
+
+                                resolve(res);
                                 
+                            })
+                            .catch(function (error) {
+                                console.error('Error duplicate task:', error);
+                                reject(ERROR_DUPE_TASK)
                             });
                             
+                        })
+                        .catch(function (error) {
+                            console.error('Error duplicate task:', error);
+                            reject(ERROR_DUPE_TASK)
                         });
 
                     } else {
@@ -964,24 +1008,33 @@ function createCompTask(parentEntId, prjid, currTaskName, typeid) {
                             parent_id: entity.id,
                             project_id: prjid,
                             type_id: typeid
-                        }).then(function (res) {
+                            })
+                            .then(function (res) {
+
+                                if (res == ERROR_DUPE_TASK) {
+                                    reject(ERROR_DUPE_TASK);
+                                }
 
                                 resolve(res);
-                            
-                        });
+                                
+                            })
+                            .catch(function (error) {
+                                console.error('Error duplicate task:', error);
+                                reject(ERROR_DUPE_TASK)
+                            });
 
                     }
                     
                 })
                 .catch(function (error) {
-                    console.error('Error fetching entity:', error);
-                    reject(taskErrs.push(currTaskName))
+                    console.error('Error duplicate task:', error);
+                    reject(ERROR_DUPE_TASK)
                 });
 
         })
         .catch(function (error) {
-            console.error('Error querying teams object:', error);
-            reject(taskErrs.push(currTaskName))
+            console.error('Error duplicate task:', error);
+            reject(ERROR_DUPE_TASK)
         });
 
     });
@@ -999,7 +1052,8 @@ function create3DTask(parentEntId, prjid, currTaskName, typeid) {
         session.query('select id, name from Task where name is ' + currTaskName +' and parent_id is "' + parentEntId + '"')
         .then(function (response) {
             if (response.data.length > 0) {
-                reject(taskErrs.push(currTaskName));
+                taskErrs.push(currTaskName);
+                reject(ERROR_DUPE_TASK)
             }
 
             // FETCH PARENT ENTITY
@@ -1007,7 +1061,14 @@ function create3DTask(parentEntId, prjid, currTaskName, typeid) {
                 .then(function (entityResponse) {
                     
                     if (entityResponse.data.length === 0) {
-                        reject(taskErrs.push(currTaskName));
+                        taskErrs.push(currTaskName);
+                        reject(ERROR_DUPE_TASK)
+                    }
+
+                    if (entityResponse.data.length === 0) {
+                        console.log(ERROR_DUPE_TASK);
+                        cmpTaskErrs.push(currTaskName);
+                        reject(ERROR_DUPE_TASK);
                     }
 
                     const entity = entityResponse.data[0];
@@ -1030,6 +1091,10 @@ function create3DTask(parentEntId, prjid, currTaskName, typeid) {
                         session.query('select thumbnail_id from TypedContext where parent_id is "' + thumbResFold + '" and name is "' + thmbNameJoin + '"')
                         .then(function(data) {
                             
+                            if (data == ERROR_DUPE_TASK) {
+                                reject(ERROR_DUPE_TASK);
+                            }
+
                             var tskThumbId = data.data[0].thumbnail_id
                             
                             //CREATE NEW TASK
@@ -1039,12 +1104,25 @@ function create3DTask(parentEntId, prjid, currTaskName, typeid) {
                                 project_id: prjid,
                                 type_id: typeid,
                                 thumbnail_id: tskThumbId
-                            }).then(function (res) {
+                            })
+                            .then(function (res) {
 
-                                    resolve(res);
+                                if (res == ERROR_DUPE_TASK) {
+                                    reject(ERROR_DUPE_TASK);
+                                }
+
+                                resolve(res);
                                 
+                            })
+                            .catch(function (error) {
+                                console.error('Error duplicate task:', error);
+                                reject(ERROR_DUPE_TASK)
                             });
                             
+                        })
+                        .catch(function (error) {
+                            console.error('Error duplicate task:', error);
+                            reject(ERROR_DUPE_TASK)
                         });
 
                     } else {
@@ -1055,10 +1133,19 @@ function create3DTask(parentEntId, prjid, currTaskName, typeid) {
                             parent_id: entity.id,
                             project_id: prjid,
                             type_id: typeid
-                        }).then(function (res) {
+                        })
+                        .then(function (res) {
+                            
+                            if (res == ERROR_DUPE_TASK) {
+                                reject(ERROR_DUPE_TASK);
+                            }
                             
                             resolve(res);
                             
+                        })
+                        .catch(function (error) {
+                            console.error('Error duplicate task:', error);
+                            reject(ERROR_DUPE_TASK)
                         });
 
                     }
@@ -1067,14 +1154,14 @@ function create3DTask(parentEntId, prjid, currTaskName, typeid) {
                     
                 })
                 .catch(function (error) {
-                    console.error(error);
-                    reject(taskErrs.push(currTaskName));
+                    console.error('Error duplicate task:', error);
+                    reject(ERROR_DUPE_TASK)
                 });
 
         })
         .catch(function (error) {
-            console.error(error);
-            reject(taskErrs.push(currTaskName));
+            console.error('Error duplicate task:', error);
+            reject(ERROR_DUPE_TASK)
         });
 
     });
@@ -1116,7 +1203,7 @@ async function process3DTasks(thrDArr, entOBJ, projID, tasktype) {
             .then(taskItemEnt => {
                 console.log("Item " + taskItemEnt.data.name + " successfully added.")
             }).catch((errTask) => {
-                thrDTaskList.push(errTask);
+                thrDTaskErrs.push(errTask);
             });
     
         }
@@ -1132,38 +1219,143 @@ async function process3DTasks(thrDArr, entOBJ, projID, tasktype) {
 
 function checkEmptyRows() {
 
-    var cmptable = document.getElementById("comptablebody");
-    var thdtable = document.getElementById("threedtablebody");
+    return new Promise(function (resolve, reject) {
 
-    var cmptggle = document.getElementById("compswitch");
-    var threedtggle = document.getElementById("threedswitch");
+        // var cmptable = document.getElementById("comptablebody");
+        // var thdtable = document.getElementById("threedtablebody");
+
+        // var cmptggle = document.getElementById("compswitch");
+        // var threedtggle = document.getElementById("threedswitch");
+        
+
+        // if (cmptggle.classList.contains("toggle-on")){
+
+        //     for (var i = cmptable.rows.length-1; i >= 1; i--) {
+        //         var currrow = cmptable.rows[i];
+        //         var rwchild = currrow.children[0].children[0];
+                
+
+        //         if (rwchild.innerHTML.length == 0) {
+        //             currrow.remove();
+        //         }
+
+        //     }
+        // }
+
+        // if (threedtggle.classList.contains("toggle-on")){
+
+        //     for (var j = thdtable.rows.length-1; j >= 1; j--) {
+        //         var currtdrow = thdtable.rows[j];
+        //         var rwtdchild = currtdrow.children[0].children[0];
+
+        //         if (rwtdchild.innerHTML.length == 0) {
+        //             currtdrow.remove();
+        //         }
+
+        //     }
+        // }
+
+        resolve(true)
+    });
     
 
-    if (cmptggle.classList.contains("toggle-on")){
+}
 
-        for (var i = cmptable.rows.length-1; i >= 1; i--) {
-            var currrow = cmptable.rows[i];
-            var rwchild = currrow.children[0].children[0];
-            console.log(rwchild);
+function checkToggles() {
 
-            if (rwchild.innerHTML.length == 0) {
-                currrow.remove();
-            }
+    return new Promise(function (resolve, reject) {
 
+        var cmptggle = document.getElementById("compswitch");
+        var threedtggle = document.getElementById("threedswitch");
+        var multitggle = document.getElementById("standaloneswitch");
+        var multifield = document.getElementById("standalonefield");
+        
+
+        if (multitggle.classList.contains("toggle-on") && multifield.value.length == 0) {
+            //THROW ERROR HERE OR TOGGLE OFF
+            reject(ERROR_MISSING_MULTICOMP)
         }
-    }
 
-    if (threedtggle.classList.contains("toggle-on")){
-
-        for (var j = thdtable.rows.length-1; j >= 1; j--) {
-            var currtdrow = thdtable.rows[j];
-            var rwtdchild = currtdrow.children[0].children[0];
-
-            if (rwtdchild.innerHTML.length == 0) {
-                currtdrow.remove();
+        if (threedtggle.classList.contains("toggle-on")) {
+            if (document.getElementById("threedtablebody").rows.length == 0) {
+                threedtggle.click();
+                // toggleVis3DTasks();
+                
             }
-
         }
-    }
 
+        if (cmptggle.classList.contains("toggle-on")) {
+            if (document.getElementById("comptablebody").rows.length == 0) {
+                cmptggle.click();
+                // toggleVisCompTasks();
+            }
+        }
+
+        resolve(true) 
+    });
+    
+
+
+}
+
+function checkShotStructure() {
+
+    return new Promise(function (resolve, reject) {
+
+        var shottitle = document.getElementById("searchbar");
+        var splittitle = shottitle.value.split("_");
+
+        if (splittitle.length <= 1) {
+            //THROW ERROR FOR IMPROPER STRUCTURE
+            reject(ERROR_SHORT_TITLE)
+        }
+
+        if (parseInt(splittitle[0]) == NaN) {
+            //THROW ERROR FOR NUMBER
+            reject(ERROR_NOTNUM)
+        }
+
+        var prefixlen = splittitle[0].split("").length;
+        if (prefixlen !== 4) {
+            reject(ERROR_NOTNUM)
+        }
+
+        resolve(true)
+    });
+
+    
+}
+
+function triggerRiveStart(){
+    var rc = document.getElementById("rivcontainer");
+    rc.classList.add("rive-cont-on");
+    rc.classList.remove("rive-cont-off");
+
+    //INIT RIVE ANIM
+    txtActionLoops("RunLoopA", 1);
+    txtActionLoops("RunLoopB", 2);
+    fireAnim("startAnim");
+}
+
+function blurBGElements() {
+    //GET UI CONTAINERS AND DEFOCUS
+    var mc = document.getElementById("maincontainer");
+    var sc = document.getElementById("secondarycontainer");
+    var spcr = document.getElementById("spacer");
+
+    mc.classList.add("main-container-blur");
+    sc.classList.add("secondary-container-blur");
+    spcr.classList.add("linesep-blur");
+}
+
+function triggerFailure(theerror) {
+
+    adjustTxtRuntimes("RunError", theerror);
+    adjustTxtRuntimes("RunSuccess", "Tasks Need Attention");
+    
+    
+    setTimeout(function() {
+        fireAnim("stopAnim");
+        fireAnim("sendErr");
+    }, 2000);
 }

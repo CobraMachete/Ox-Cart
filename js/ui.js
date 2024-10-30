@@ -100,7 +100,7 @@ function addSingleCompTask() {
     var newInput = document.createElement("input");
     newInput.id = "cmpinpt" + (tblebody.rows.length+1);
     newInput.type = "text";
-    newInput.placeholder = "Enter Task Name";
+    newInput.placeholder = "Task Name";
     newCell.appendChild(newInput);
     
     tblebody.appendChild(newRow);
@@ -112,6 +112,11 @@ function addSingleCompTask() {
         theinputval = newInput.value;
         theinputval = sanitizestring(theinputval);
         newInput.value = theinputval.toUpperCase();
+
+        setTimeout(function() {
+            checkForDuplicateTasks(tblebody);
+        }, 500);
+        
         
     });
 
@@ -122,6 +127,8 @@ function addSingleCompTask() {
         if (fieldval.length === 0) {
             parEl = this.parentElement.parentElement;
             parEl.remove();
+
+        
             
         }
         
@@ -178,13 +185,13 @@ function addSingle3DTask() {
     var newInput = document.createElement("input");
     newInput.id = "thdinpt" + (tblebody.rows.length+1);
     newInput.type = "text";
-    newInput.placeholder = "Enter Task Name";
+    newInput.placeholder = "Task Name";
     newInput.style.width = "85px";
     newCell.appendChild(newInput);
 
 
     var newCellDots = newRow.insertCell(1);
-    newCellDots.style.paddingLeft = "15px";
+    newCellDots.style.paddingLeft = "5px";
     var mydiv = document.createElement("div");
     mydiv.classList.add("button-div");
 
@@ -220,6 +227,10 @@ function addSingle3DTask() {
         theinputval = newInput.value;
         theinputval = sanitizestring(theinputval);
         newInput.value = theinputval.toUpperCase();
+
+        setTimeout(function() {
+            checkForDuplicateTasks(tblebody);
+        }, 500);
         
     });
 
@@ -325,7 +336,7 @@ function addAllPreviewTasks() {
         thecell.appendChild(theinput);
 
         var dotcell = therow.insertCell(1);
-        dotcell.style.paddingLeft = "15px";
+        dotcell.style.paddingLeft = "5px";
         var mydiv = document.createElement("div");
         mydiv.classList.add("button-div");
 
@@ -886,3 +897,48 @@ function ddFromCurrProp(prop) {
     }
 
 }
+
+function makeNewCompRow() {
+    addSingleCompTask();
+}
+
+function makeNew3DRow() {
+    addSingle3DTask();
+}
+
+function checkForDuplicateTasks(selectedtable) {
+
+    var tskarr = [];
+    var totalrows = selectedtable.rows.length;
+
+    for (var i = 0; i <= totalrows-1; i++) {
+        
+        tskarr.push(selectedtable.rows[i].children[0].children[0].value)
+    }
+
+    var dupes = findDupes(tskarr);
+
+    if (dupes.length > 0) {
+
+        for (var j = dupes.length - 1; j >= 0; j--) {
+            var rowidx = dupes[j];
+            selectedtable.rows[rowidx].remove();
+            
+        }
+    }
+    
+
+
+}
+
+function findDupes(arr) {
+    
+    var filteredarr = arr.reduce((acc, value, index) => {
+        if (arr.indexOf(value) !== index) {
+            acc.push(index);
+        }
+        return acc;
+        }, []);
+    
+    return filteredarr
+} 
