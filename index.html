@@ -98,6 +98,7 @@
                 //SHOWING DD CONTENT ON HOVER
                 ddtwo.addEventListener("mouseenter", function(event) {
                     $("#ddcontentstagetwo").show();
+                    
                 });
 
                 //SHOWING DD CONTENT ON HOVER
@@ -319,8 +320,8 @@
 
                         <div class="dropdown" style="padding-left: 15px" id="ddstagetwo">
                             <button class="dropbtn" id="startselectiontwo" style="font-weight: 400;">Tricode</button>
-                            <div class="dropdown-content" id="ddcontentstagetwo" style="left: 0px">
-                               
+                            <div class="dropdown-content" id="ddcontentstagetwo" style="left: 0px;">
+                                
                             </div>
                         </div>
 
@@ -409,13 +410,12 @@
 
                                     <div class="comptaskbottomcontainer">
                                         <div class="addbutton">
-                                            <!-- <input type="image" src="img/add_icon.svg" /> -->
-                                            <img class="addimage" src="img/add_icon.svg" type="button" onclick="addSingleCompTask()" id="cmpaddbtn" />
+                                            <img class="addimageplus" src="img/add_icon.svg" type="button" onclick="addSingleCompTask()" id="cmpaddbtn" />
                                         </div>
                                         
                                         <div class="clearlistcontainer">
                                             <div class="clearlistbutton">
-                                                <img class="addimage" src="img/delete_icon.svg" type="button" onclick="removeAllRows(document.getElementById('comptablebody'))" />
+                                                <img class="addimageplus" src="img/delete_icon.svg" type="button" onclick="removeAllRows(document.getElementById('comptablebody'))" />
                                             </div>
                                         </div>
                                         
