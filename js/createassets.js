@@ -428,7 +428,7 @@ function createShotAndTasks() {
     }).then(function(result) {
 
         console.log(result);
-        return Promise.all([processCompTasks(cmpTaskList, result[0], theprjid, cmpType), process3DTasks(thrDTaskList, result[1], theprjid, the3dtasktype)])
+        return Promise.all([processCompTasks(cmpTaskList, result[0], theprjid, cmpType), process3DTasks(thrDTaskList, result[1], theprjid, the3dtasktype), processCompTasks(["TEMPLATE"], result[0], theprjid, templateType), process3DTasks(["TEMPLATE"], result[1], theprjid, templateType)])
 
     }).then(function(resp) {
         
@@ -1184,6 +1184,8 @@ async function processCompTasks(compArr, entOBJ, projID, tasktype) {
             });
     
         }
+
+
         
         console.log("ALL COMP ITEMS HAVE BEEN PROCESSED")
     } else {
