@@ -48,10 +48,21 @@
             theproduction = values[0].data[0].id;
             theprjid = values[1].data[0].project_id;
             propName = values[2].data[0].ancestors[0].name;
+            console.log("=======================================================    THE PRODUCTION IS:     ====================================================================");
+            console.log(values[0].data[0])
+            console.log("=======================================================    THE PROJECT IS:     ====================================================================");
+            console.log(values[1].data[0])
+            console.log("=======================================================    THE PROPNAME IS:     ====================================================================");
+            console.log(values[2].data[0])
             ddFromCurrProp(values[2].data[0].ancestors[0].name);
             buildThumbList(values[2].data[0].ancestors[0].name);
 
+            //  PATH STRUCTURE ---> ADMIN (Project) -> _RESOURCES -> Current Project (Lowercase) -> Property (Lowercase) -> _thumbnails
+
+
+
             var thumbfoldermain = "thumbnails";
+            // var thumbfoldermain = "_thumbnails";
 
             var thumbFoldSearch = session.query(
                 'select descendants from ' + entity.type + ' where project_id is "' + theprjid + '" and name is "' + thumbfoldermain + '" limit 1' 
