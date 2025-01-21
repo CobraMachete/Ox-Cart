@@ -59,20 +59,28 @@
 
             //  PATH STRUCTURE ---> ADMIN (Project) -> _RESOURCES -> Current Project (Lowercase) -> Property (Lowercase) -> _thumbnails
 
-
+            var theworkingprjname = values[1].data[0].project.name.toLowerCase();
+            var theworkingpropname = values[2].data[0].ancestors[0].name.toLowerCase();
 
             var thumbfoldermain = "thumbnails";
-            // var thumbfoldermain = "_thumbnails";
+            var resthumbfoldermain = "_thumbnails";
 
             var thumbFoldSearch = session.query(
                 'select descendants from ' + entity.type + ' where project_id is "' + theprjid + '" and name is "' + thumbfoldermain + '" limit 1' 
             );
 
-            Promise.all([thumbFoldSearch]).then(function (vals) {
+            var newThumbFoldSearch = session.query(
+                'select descendants from Folder where project_id is "' + ADMIN_PRJ_ID + '" and parent.name is "' + theworkingpropname + '" and name is "' + resthumbfoldermain + '" limit 1' 
+            );
+
+            Promise.all([thumbFoldSearch, newThumbFoldSearch]).then(function (vals) {
                 
                 if (vals[0].data.length !== 0) {
                     thumbResFold = vals[0].data[0].id;
                 }
+
+                console.log("=======================================================    THE NEW THUMNALS ARE:     ====================================================================");
+                console.log(vals[1].data[0])
                 
             });
             
