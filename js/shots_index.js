@@ -73,8 +73,7 @@
                 'select descendants from Folder where project_id is "' + ADMIN_PRJ_ID + '" and parent.name is "' + theworkingpropname + '" and name is "' + resthumbfoldermain + '" limit 1' 
             );
 
-            console.log("=======================================================    END     ====================================================================");
-
+            
             Promise.all([thumbFoldSearch, newThumbFoldSearch]).then(function (vals) {
                 
                 // if (vals[0].data.length !== 0) {
@@ -85,13 +84,12 @@
 
                 if (vals[1].data.length !== 0) {
                     thumbResFold = vals[1].data[0].id;
-                    console.log("=======================================================    THE OLD THUMBNAILS ARE:     ====================================================================");
+                    console.log("=======================================================    THE NEW THUMBNAIL FOLDER ID IS:    ====================================================================");
                     console.log(thumbResFold);
                 }
 
 
-                // console.log("=======================================================    THE NEW THUMBNAILS ARE:     ====================================================================");
-                // console.log(vals[1].data[0]);
+                
                 
             });
             

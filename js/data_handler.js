@@ -27,8 +27,9 @@ function readTeamsJson(jsonfile) {
 function buildThumbList(props) {
     console.log("========================================     CURRENT PROPERTY IS    ========================================================================");
     console.log(props);
-    var prop = "nba";
-    var datakeys = Object.keys(teams_data)
+    // var prop = "nba";
+    var prop = props;
+    var datakeys = Object.keys(teams_data);
     
     for (var x=0; x < datakeys.length; x++) {
         
