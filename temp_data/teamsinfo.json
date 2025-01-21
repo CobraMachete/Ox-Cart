@@ -780,6 +780,15 @@
     },
     {
       "id": 28,
+      "tricode":"UTA",
+      "city":"Utah",
+      "conference":"Western",
+      "division":"Central",
+      "full_name":"Utah Hockey Club",
+      "name":"Hockey Club"
+    },
+    {
+      "id": 29,
       "tricode":"VAN",
       "city":"Vancouver",
       "conference":"Western",
@@ -788,7 +797,7 @@
       "name":"Canucks"
     },
     {
-      "id": 29,
+      "id": 30,
       "tricode":"VGK",
       "city":"Vegas",
       "conference":"Western",
@@ -797,7 +806,7 @@
       "name":"Golden Knights"
     },
     {
-      "id": 30,
+      "id": 31,
       "tricode":"WPG",
       "city":"Winnipeg",
       "conference":"Western",
@@ -806,23 +815,72 @@
       "name":"Jets"
     },
     {
-      "id": 31,
+      "id": 32,
       "tricode":"WSH",
       "city":"Washington",
       "conference":"Eastern",
       "division":"Metropolitan",
       "full_name":"Washington Capitals",
       "name":"Capitals"
+    }
+  ],
+
+  "unrivaled": [
+    {
+      "id": 1,
+      "tricode":"LBC",
+      "city":"Laces",
+      "full_name":"Laces Basketball Club",
+      "short_name":"Laces BC",
+      "location":"Miami",
+      "name":"Laces"
     },
     {
-      "id": 32,
-      "tricode":"UTA",
-      "city":"Salt Lake City",
-      "conference":"Eastern",
-      "division":"Metropolitan",
-      "full_name":"Utah Hockey Club",
-      "name":"Utah"
+      "id": 2,
+      "tricode":"LOBC",
+      "city":"Lunar Owls",
+      "full_name":"Lunar Owls Basketball Club",
+      "short_name":"Lunar Owls BC",
+      "location":"Miami",
+      "name":"Lunar Owls"
+    },
+    {
+      "id": 3,
+      "tricode":"MBC",
+      "city":"Mist",
+      "full_name":"Mist Basketball Club",
+      "short_name":"Mist BC",
+      "location":"Miami",
+      "name":"Mist"
+    },
+    {
+      "id": 4,
+      "tricode":"PBC",
+      "city":"Phantom",
+      "full_name":"Phantom Basketball Club",
+      "short_name":"Phantom BC",
+      "location":"Miami",
+      "name":"Phantom"
+    },
+    {
+      "id": 5,
+      "tricode":"RBC",
+      "city":"Rose",
+      "full_name":"Rose Basketball Club",
+      "short_name":"Rose BC",
+      "location":"Miami",
+      "name":"Rose"
+    },
+    {
+      "id": 6,
+      "tricode":"VBC",
+      "city":"Vinyl",
+      "full_name":"Vinyl Basketball Club",
+      "short_name":"Vinyl BC",
+      "location":"Miami",
+      "name":"Vinyl"
     }
+    
   ]
   
 }
