@@ -73,6 +73,8 @@
                 'select descendants from Folder where project_id is "' + ADMIN_PRJ_ID + '" and parent.name is "' + theworkingpropname + '" and name is "' + resthumbfoldermain + '" limit 1' 
             );
 
+            console.log("=======================================================    END     ====================================================================");
+            
             Promise.all([thumbFoldSearch, newThumbFoldSearch]).then(function (vals) {
                 
                 if (vals[0].data.length !== 0) {
