@@ -77,14 +77,21 @@
 
             Promise.all([thumbFoldSearch, newThumbFoldSearch]).then(function (vals) {
                 
-                if (vals[0].data.length !== 0) {
-                    thumbResFold = vals[0].data[0].id;
+                // if (vals[0].data.length !== 0) {
+                //     thumbResFold = vals[0].data[0].id;
+                //     console.log("=======================================================    THE OLD THUMBNAILS ARE:     ====================================================================");
+                //     console.log(thumbResFold);
+                // }
+
+                if (vals[1].data.length !== 0) {
+                    thumbResFold = vals[1].data[0].id;
                     console.log("=======================================================    THE OLD THUMBNAILS ARE:     ====================================================================");
                     console.log(thumbResFold);
                 }
 
-                console.log("=======================================================    THE NEW THUMBNAILS ARE:     ====================================================================");
-                console.log(vals[1].data[0]);
+
+                // console.log("=======================================================    THE NEW THUMBNAILS ARE:     ====================================================================");
+                // console.log(vals[1].data[0]);
                 
             });
             
