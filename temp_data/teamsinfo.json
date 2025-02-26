@@ -182,11 +182,11 @@
       },
       {
         "id":20,
-        "tricode":"OAK",
-        "city":"Oakland",
+        "tricode":"ATH",
+        "city":"",
         "league":"American",
         "division":"West",
-        "full_name":"Oakland Athletics",
+        "full_name":"Athletics",
         "name":"Athletics",
         "short_name":"A's"
       },
