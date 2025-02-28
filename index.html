@@ -13,10 +13,12 @@
         <link rel="stylesheet" type="text/css" href="css/material-icons.css">
         <link rel="stylesheet" type="text/css" href="css/normalize.min.css">
         <link rel="stylesheet" type="text/css" href="css/theme-dark.css">
+        <link rel="stylesheet" type="text/css" href="css/nice-select.css">
 
         <!-- <script type="text/javascript" src="js/rive.js"></script> -->
         <script src="https://unpkg.com/@rive-app/canvas@2.20.0"></script>
         <script type="text/javascript" src="js/jquery-3.7.1.slim.min.js"></script>
+        <script type="text/javascript" src="js/jquery.nice-select.js"></script>
 
         <script type="text/javascript" src="js/ui.js"></script>
         <script type="text/javascript" src="js/data_handler.js"></script>
@@ -42,9 +44,18 @@
                 var ddone = document.getElementById("startselection");
                 var ddtwo = document.getElementById("startselectiontwo");
 
-                shotsearchbox.addEventListener('input', function() {
+
+                //EVENT LISTENER FOR SHOT SEARCH BOX
+                shotsearchbox.addEventListener('input', function(e) {
                     
-                    var myinput = shotsearchbox.value.toLowerCase();
+                    var targinput = event.target.value;
+                    var sanshot = sanitizeshot(targinput);
+                    
+                    var myinput = sanshot.toLowerCase();
+
+                    // PUSHING THE SANITIZED TEXT BACK TO FIELD
+                    shotsearchbox.value = myinput;
+
                     $('#shottablebody').empty();
                     if (myinput.length > 0) {
                         var suggestions = shots_data.filter(function(item) {
@@ -108,6 +119,7 @@
 
                 // EVENT LISTENER FOR TABLE OPERATIONS
                 document.addEventListener('keydown', (event) => {
+
                     
                     if (document.activeElement.tagName == "TBODY") {
                         if (event.key == "Backspace"){
@@ -115,10 +127,19 @@
                         }
                     }
 
+                    if (document.activeElement.id == "standalonefield") {
+                        if (event.key == "Enter"){
+                            addSingleCompTask();
+                            
+                        }
+                    }
+
                 });
 
-                
+                //INITIALIZING NICE SELECT DROPDOWN
+                $('select').niceSelect();
 
+                //INITIALIZING KEY BINDINGS FOR MOUSETRAP
                 Mousetrap.bind(['command+k', 'ctrl+k'], function(e) {
 
                     if (document.activeElement.id == "comptaskcontainer") {
@@ -144,12 +165,78 @@
                     }
                 });
 
+
                 //EVENT LISTENER FOR STANDALONE TEXT FIELD
-                standalonefield.addEventListener('change', function(e) {
-                    theinputval = standalonefield.value;
-                    theinputval = sanitizestring(theinputval);
-                    standalonefield.value = theinputval.toUpperCase();
+                standalonefield.addEventListener('input', function(event) {
+
+                    var multiTeamsTxtField = document.getElementById("standalone");
+                    var teamobjcomptxt = document.getElementById("teamstextcomproot");
+                    var teamobj3Dtxt = document.getElementById("teamstext3Droot");
+                    var multisel = $('#multiteamsselect').find(":selected").text();
+                    var tskbtn = document.getElementById("crtebtn");
+                    
+                    var theinputval = event.target.value;
+
+                    if (theinputval == "") {
+                        if (!multiTeamsTxtField.classList.contains("bar-empty")) {
+                            multiTeamsTxtField.classList.add("bar-empty");
+                        }
+                    } else {
+                        if (multiTeamsTxtField.classList.contains("bar-empty")) {
+                            multiTeamsTxtField.classList.remove("bar-empty");
+                        }
+                    }
+
+                    // SETTING TREE VIEW TEXT
+                    if (standalonefield.value !== "" && multisel !== "Standard") {
+                        teamobjcomptxt.innerHTML = standalonefield.value.toUpperCase();
+                        teamobj3Dtxt.innerHTML = standalonefield.value.toUpperCase();
+                    } else if (standalonefield.value == "" && multisel !== "Standard") {
+                        teamobjcomptxt.innerHTML = "TEAM OBJECT EMPTY";
+                        teamobj3Dtxt.innerHTML = "TEAM OBJECT EMPTY";
+                    } else {
+                        teamobjcomptxt.innerHTML = "TEAM OBJECT EMPTY";
+                        teamobj3Dtxt.innerHTML = "TEAM OBJECT EMPTY";
+                    }
+
+                    // BUTTON LOCKING
+                    if (standalonefield.value == "" && multisel !== "Standard") {
+
+                        if (!tskbtn.classList.contains("btnlock")) {
+                            tskbtn.classList.add("btnlock");
+                        }
+
+                    } else if (standalonefield.value !== "" && multisel !== "Standard") {
+
+                        if (tskbtn.classList.contains("btnlock")) {
+                            tskbtn.classList.remove("btnlock");
+                        }
+
+                    } else {
+                        if (tskbtn.classList.contains("btnlock")) {
+                            tskbtn.classList.remove("btnlock");
+                        }
+                    }
+
+                    
+
+
+                    newinputval = sanitizestring(theinputval);
+
+                    // Perform actions based on the text input
+                    console.log('Text input:', newinputval);
+                    standalonefield.value = newinputval.toUpperCase();
+
                 });
+
+
+                //EVENT LISTENER FOR STANDALONE TEXT FIELD
+                // standalonefield.addEventListener('change', function(e) {
+                //     theinputval = standalonefield.value;
+                //     newinputval = sanitizestring(theinputval);
+                //     console.log(newinputval);
+                //     standalonefield.value = newinputval.toUpperCase();
+                // });
 
                 window.addEventListener('resize', function(event) {
                     var mainmarg = getElMargin();
@@ -162,6 +249,116 @@
                     e.preventDefault();
                     $(this).toggleClass('toggle-on');
                 });
+
+                // ADJUSTING TEXT FIELD ON CHANGE
+                $('#multiteamsselect').change(function(e){
+                    console.log(e);
+
+                    var teamstreeicon = document.getElementById("teamsmultiicon");
+                    var fieldIso = document.getElementById("standalonefield");
+                    var multiTeamsTxtField = document.getElementById("standalone");
+                    var ddselection = $('#multiteamsselect').find(":selected").text();
+
+                    var teamobjcomptxt = document.getElementById("teamstextcomproot");
+                    var teamobj3Dtxt = document.getElementById("teamstext3Droot");
+                    var tskbtn = document.getElementById("crtebtn");
+                    
+
+                    if (ddselection == "Standard") { // STANDARD SINGLE COMP PROJECTS
+
+                        fieldIso.value = "";
+                        if (!multiTeamsTxtField.classList.contains("bar-disabled")) {
+                            multiTeamsTxtField.classList.add("bar-disabled");
+                        }
+
+                        if (multiTeamsTxtField.classList.contains("bar-empty")) {
+                            multiTeamsTxtField.classList.remove("bar-empty");
+                        }
+
+                        
+                    } else if (ddselection == "Teams") { // TEAMS PROJECTS
+
+                        if (multiTeamsTxtField.classList.contains("bar-disabled")) {
+                            multiTeamsTxtField.classList.remove("bar-disabled");
+                        }
+
+                        if (fieldIso.value == "") {
+
+                            if (!multiTeamsTxtField.classList.contains("bar-empty")) {
+                                multiTeamsTxtField.classList.add("bar-empty");
+                            }
+
+                        } else {
+                            if (multiTeamsTxtField.classList.contains("bar-empty")) {
+                                multiTeamsTxtField.classList.remove("bar-empty");
+                            }
+                        }
+
+                        // ICON SWAP
+                        if (teamstreeicon.classList.contains("multicomp-obj-icon")) {
+                            teamstreeicon.classList.remove("multicomp-obj-icon");
+                            teamstreeicon.classList.add("teams-obj-icon");
+                        }
+                        
+                    } else { // MULTICOMP PROJECTS
+
+                        if (multiTeamsTxtField.classList.contains("bar-disabled")) {
+                            multiTeamsTxtField.classList.remove("bar-disabled");
+                        }
+
+                        if (fieldIso.value == "") {
+
+                            if (!multiTeamsTxtField.classList.contains("bar-empty")) {
+                                multiTeamsTxtField.classList.add("bar-empty");
+                            }
+
+                        } else {
+                            if (multiTeamsTxtField.classList.contains("bar-empty")) {
+                                multiTeamsTxtField.classList.remove("bar-empty");
+                            }
+                        }
+
+                        // ICON SWAP
+                        if (teamstreeicon.classList.contains("teams-obj-icon")) {
+                            teamstreeicon.classList.remove("teams-obj-icon");
+                            teamstreeicon.classList.add("multicomp-obj-icon");
+                        }
+                    }
+
+                    //SETTING TREE VIEW
+                    if (fieldIso.value !== "" && ddselection !== "Standard") {
+                        teamobjcomptxt.innerHTML = fieldIso.value.toUpperCase();;
+                        teamobj3Dtxt.innerHTML = fieldIso.value.toUpperCase();;
+                    } else if (fieldIso.value == "" && ddselection !== "Standard") {
+                        teamobjcomptxt.innerHTML = "TEAM OBJECT EMPTY";
+                        teamobj3Dtxt.innerHTML = "TEAM OBJECT EMPTY";
+                    } else {
+                        teamobjcomptxt.innerHTML = "TEAM OBJECT EMPTY";
+                        teamobj3Dtxt.innerHTML = "TEAM OBJECT EMPTY";
+                    }
+
+
+                    // BUTTON LOCKING
+                    if (standalonefield.value == "" && ddselection !== "Standard") {
+
+                        if (!tskbtn.classList.contains("btnlock")) {
+                            tskbtn.classList.add("btnlock");
+                        }
+
+                    } else if (standalonefield.value !== "" && ddselection !== "Standard") {
+
+                        if (tskbtn.classList.contains("btnlock")) {
+                            tskbtn.classList.remove("btnlock");
+                        }
+
+                    } else {
+                        if (tskbtn.classList.contains("btnlock")) {
+                            tskbtn.classList.remove("btnlock");
+                        }
+                    }
+
+                    console.log($('#multiteamsselect').find(":selected").text());
+                })
 
 
                 getElMargin();
@@ -252,7 +449,7 @@
                                 </div>
 
                                 <div class="third-icon-container" id="teamsrootcomp">
-                                    <div class="teams-obj-icon"></div>
+                                    <div class="teams-obj-icon" id="teamsmultiicon"></div>
                                     <p class="treetext" id="teamstextcomproot">USWNT</p>
                                 </div>
 
@@ -367,7 +564,7 @@
                         </div>
 
                         <!------------------------ STANDALONE TOGGLE ------------------------>
-                        <div class="standalonetogglelabelcont">
+                        <!-- <div class="standalonetogglelabelcont">
                             <p class="togglelabelposition" id="comptogglelabel">Multicomp</p>
                         </div>
                         <div class="cmptogglecontainer">
@@ -378,9 +575,22 @@
                                 <div class="toggle-button"></div>
                                 <div class="toggle-text-on">ON</div>
                             </div>
+                        </div> -->
+
+                        <!------------------------ STANDALONE DROPDOWN ------------------------>
+                        <div style="height: 45px; padding-left: 40px" id="ddcontainer">
+                            <div>
+                                <select id="multiteamsselect" class="small">
+
+                                    <option value="1">Standard</option>
+                                    <option value="2">Teams</option>
+                                    <option value="3" disabled>Multicomp</option>
+                                    
+                                </select>
+                            </div>
                         </div>
 
-                        <!------------------------ STANDALONE INPUT ------------------------>
+                        <!------------------------ MULTICOMP AND TEAMS INPUT ------------------------>
                         <div class="standalone-container" id="standalonecontainer">
                             <div class="standalone-bar bar-disabled" id="standalone">
                                 <input id="standalonefield" type="text" name="search" placeholder="Ex: USWNT">
@@ -481,7 +691,7 @@
 
                     <div class="bottomrowcontainer">
                         <div class="createbtncont">
-                            <button class="createbtn" type="button" onclick="preflightChecks()">Create Shot</button>
+                            <button class="createbtn" id="crtebtn" type="button" onclick="preflightChecks()">Create Shot</button>
                         </div>
                         
                     </div>

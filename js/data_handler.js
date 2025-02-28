@@ -429,9 +429,13 @@ function removeGhostRows() {
     ghost3Dtasks = [];
 }
 
-
 function sanitizestring(str) {
-    var snstr = str.replace(" ","_");
+    var snstr = str.replaceAll(" ","_");
+    return snstr
+}
+
+function sanitizeshot(str) {
+    var snstr = str.replaceAll(" ","_");
     return snstr
 }
 

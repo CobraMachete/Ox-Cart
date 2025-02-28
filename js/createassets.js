@@ -17,6 +17,7 @@ var entityCheckObj = [
 ]
 
 var ERROR_MULTIPLE_TMS_OBJ = "MULTIPLE_TEAMS";
+var ERROR_MULTIPLE_MULTICOMP_OBJ = "MULTIPLE_MULTICOMPS";
 var ERROR_SHOT_EXISTS = "SHOT_EXISTS";
 var ERROR_SHORT_TITLE = "ERROR: SHOT NAME TOO SHORT";
 var ERROR_NOTNUM = "ERROR: SHOT NAME MUST START WITH 4 DIGITS";
@@ -102,6 +103,7 @@ function createShotAndTasks() {
     var isCompElement = false;
     var is3DElement = false;
     var isTeamsObj = false;
+    var isMultiObj = false;
     var hasShotNumbering = false;
 
     //SHOT NAME FROM UI
@@ -109,6 +111,7 @@ function createShotAndTasks() {
     var currShotName = shotNameField.value;
 
     //TEAMS OBJ NAME FROM UI
+    var multiteamsdd = $('#multiteamsselect').find(":selected").text();
     var teamsObjField = document.getElementById("standalonefield");
     var teamsObjName = teamsObjField.value;
     
@@ -185,13 +188,42 @@ function createShotAndTasks() {
         
     }
 
-    if (stndtggle.classList.contains("toggle-on")) {
+    
+    if (multiteamsdd === "Teams") {
         isTeamsObj = true;
+    } else if (multiteamsdd === "Multicomp") {
+        isMultiObj = true;
     }
+    
+    // if (stndtggle.classList.contains("toggle-on")) {
+    //     isTeamsObj = true;
+    // }
 
     
 
     if (isTeamsObj == true) {
+        if (teamsObjName.length == 0) {
+
+            rejections.push("MISSING STANDALONE NAME");
+
+            if (rejections.length != 0) {
+                var therejects = rejections.join(" and ");
+                var errtxt = "Errors: " + therejects.toUpperCase();
+                adjustTxtRuntimes("RunError", errtxt);
+                adjustTxtRuntimes("RunSuccess", "Input Needed");
+            }
+            
+            setTimeout(function() {
+                fireAnim("stopAnim");
+                fireAnim("sendErr");
+            }, 500);
+            
+            return
+        }
+    }
+
+    if (isMultiObj == true) {
+
         if (teamsObjName.length == 0) {
 
             rejections.push("MISSING STANDALONE NAME");
@@ -220,7 +252,9 @@ function createShotAndTasks() {
     var theCompFoldEnt;
     var the3DFoldEnt;
     var thecmpTeamsObjEnt;
+    var thecmpMulticompObjEnt;
     var the3DTeamsObjEnt;
+    var the3DMulticompObjEnt;
 
     //PROMISE CHAIN FUNCTIONS
     function shotItemPromise() {
@@ -370,6 +404,61 @@ function createShotAndTasks() {
         
     }
 
+    function cmpMulticompObjPromise(compElemsActive) {
+
+        return new Promise(function(resolve,reject) {
+
+            if (compElemsActive != "None") {
+
+                //CHECKING IF TEAMS OBJ IS CHECKED
+                if (isMultiObj == true) {
+                    createMulticompObj(theCompFoldEnt, theprjid, teamsObjName)
+                        .then(resMultiObjEnt => {
+
+                            if (resMultiObjEnt == ERROR_MULTIPLE_TMS_OBJ) {
+                                throw new Error(ERROR_MULTIPLE_TMS_OBJ);
+                            } else {
+
+                                console.log(resMultiObjEnt);
+                                if (resMultiObjEnt.data != undefined) {
+                                    thecmpMulticompObjEnt = resMultiObjEnt.data;
+                                } else {
+                                    thecmpMulticompObjEnt = resMultiObjEnt;
+                                }
+                                console.log(thecmpMulticompObjEnt);
+                                resolve(thecmpMulticompObjEnt);
+
+                            }
+
+                            
+                            
+                            
+                        }).catch((err) => {
+                            
+                            if (err == ERROR_MULTIPLE_MULTICOMP_OBJ) {
+                                reject(ERROR_MULTIPLE_MULTICOMP_OBJ);
+                            } else {
+                                console.log(err);
+                                rejections.push[err];
+                                reject(err);
+                            }
+                            
+                        });
+
+                } else {
+
+                    resolve(theCompFoldEnt);
+                    
+                }
+            } else {
+                resolve("None");
+            }
+
+            
+        });
+        
+    }
+
     function thrdTeamsObjPromise(thrdElemsActive) {
 
         return new Promise(function(resolve,reject) {
@@ -410,6 +499,46 @@ function createShotAndTasks() {
         
     }
 
+    function thrdMulticompObjPromise(thrdElemsActive) {
+
+        return new Promise(function(resolve,reject) {
+
+            if (thrdElemsActive != "None") {
+                //CHECKING IF TEAMS OBJ IS CHECKED
+                if (isMultiObj == true) {
+                    createMulticompObj(the3DFoldEnt, theprjid, teamsObjName)
+                        .then(resMulticompObjEnt => {
+
+                            console.log(resMulticompObjEnt);
+                            if (resMulticompObjEnt.data != undefined) {
+                                the3DMulticompObjEnt = resMulticompObjEnt.data;
+                            } else {
+                                the3DMulticompObjEnt = resMulticompObjEnt;
+                            }
+                            console.log(the3DMulticompObjEnt);
+                            resolve(the3DMulticompObjEnt);
+                            
+                        }).catch((err) => {
+                            console.log(err);
+                            reject(err);
+                            rejections.push[err];
+                            
+                        });
+
+                } else {
+
+                    resolve(the3DFoldEnt);
+                    
+                }
+            } else {
+                resolve("None");
+            }
+
+            
+        });
+        
+    }
+
 
     //GET AND DO EVERYTHING
     shotItemPromise().then(function(res) {
@@ -421,14 +550,14 @@ function createShotAndTasks() {
         
         
         console.log(response);
-        return Promise.all([cmpTeamsObjPromise(response[0]), thrdTeamsObjPromise(response[1])])
+        return Promise.all([cmpTeamsObjPromise(response[0]), cmpMulticompObjPromise(response[0]), thrdTeamsObjPromise(response[1]), thrdMulticompObjPromise(response[1])])
         
         
 
     }).then(function(result) {
 
         console.log(result);
-        return Promise.all([processCompTasks(cmpTaskList, result[0], theprjid, cmpType), process3DTasks(thrDTaskList, result[1], theprjid, the3dtasktype), processCompTasks(["TEMPLATE"], result[0], theprjid, templateType), process3DTasks(["TEMPLATE"], result[1], theprjid, templateType)])
+        return Promise.all([processCompTasks(cmpTaskList, result[0], theprjid, cmpType), process3DTasks(thrDTaskList, result[2], theprjid, the3dtasktype)])
 
     }).then(function(resp) {
         
@@ -927,6 +1056,145 @@ function createTeamObj(foldEntId, prjid, teamsName) {
 
 }
 
+// CREATE NEW MULTICOMP OBJ
+function createMulticompObj(foldEntId, prjid, teamsName) {
+
+    return new Promise(function (resolve, reject) {
+        console.log(foldEntId)
+        session.query('select id, name from Multicomp where parent_id is "' + foldEntId.id + '"')
+            .then(function (response) {
+
+                return new Promise(function (resp, rej) {
+
+                    if (response.data.length > 0) {
+
+                        var theObj;
+                        console.log(response.data);
+                        for (var t=0; t <= response.data.length; t++) {
+
+                            if (response.data[t].name == teamsName) {
+                                theObj = response.data[t];
+                                break;
+                            }
+                        }
+    
+                        if (foldEntId.name == "02_cmp") {
+                            entityCheckObj[0].multiobjectcmp_id = response.data[0].id;
+                            entityCheckObj[0].multiobjectcmp_name = response.data[0].name;
+                        } else {
+                            entityCheckObj[0].multiobjectthrd_id = response.data[0].id;
+                            entityCheckObj[0].multiobjectthrd_name = response.data[0].name;
+                        }
+    
+                        console.log(theObj);
+                        resp(theObj);
+                        
+                        
+                    } else {
+                        rej("None")
+                    }
+                }).then(function (ret) {
+
+                    if (ret == ERROR_MULTIPLE_MULTICOMP_OBJ){
+                        throw new Error(ERROR_MULTIPLE_MULTICOMP_OBJ);
+                    }
+                    
+                    if (ret !== "None") {
+
+                        resolve(ret);
+
+                    } else {
+
+                        
+                        // FETCH PARENT ENTITY
+                        session.query('select id, name from TypedContext where id is "' + foldEntId.id + '"')
+                            .then(function (entityResponse) {
+                                
+                                if (entityResponse.data.length === 0) {
+                                    console.error('Entity not found.');
+                                    reject('Entity not found.');
+                                }
+        
+                                const entity = entityResponse.data[0];
+        
+                                // CREATE NEW SHOT
+                                const newFold = session.create('Multicomp', {
+                                    name: teamsName,
+                                    parent_id: entity.id,
+                                    project_id: prjid,
+                                }).then(function (res) {
+                                    
+                                    resolve(res);
+                                    
+                                });
+                                
+                            })
+                            .catch(function (error) {
+                                console.error('ERROR FETCHING ENTITY:', error);
+                                reject('Error fetching entity:', error);
+                            });
+                    }
+
+                })
+                .catch(function (args) {
+
+                    if (args == ERROR_MULTIPLE_MULTICOMP_OBJ){
+                        
+                        console.error(ERROR_MULTIPLE_MULTICOMP_OBJ);
+                        reject(ERROR_MULTIPLE_MULTICOMP_OBJ);
+                        
+                        
+                    } else {
+
+                        // FETCH PARENT ENTITY
+                        session.query('select id, name from TypedContext where id is "' + foldEntId.id + '"')
+                        .then(function (entityResponse) {
+                            
+                            if (entityResponse.data.length === 0) {
+                                console.error('Entity not found.');
+                                reject('Entity not found.');
+                            }
+
+                            const entity = entityResponse.data[0];
+
+                            // CREATE NEW SHOT
+                            const newFold = session.create('Multicomp', {
+                                name: teamsName,
+                                parent_id: entity.id,
+                                project_id: prjid,
+                            }).then(function (res) {
+                                
+                                resolve(res);
+                                
+                            });
+                            
+                        })
+                        .catch(function (error) {
+                            console.error('ERROR FETCHING ENTITY:', error);
+                            reject('Error fetching entity:', error);
+                        });
+
+                    }
+
+                    
+                });
+                
+
+            })
+            .catch(function (error) {
+                
+                console.error(error);
+                reject(error);
+                
+                
+            });
+
+    });
+
+    
+
+}
+
 // CREATE NEW COMP TASK
 function createCompTask(parentEntId, prjid, currTaskName, typeid) {
 
@@ -1172,19 +1440,41 @@ function create3DTask(parentEntId, prjid, currTaskName, typeid) {
 
 async function processCompTasks(compArr, entOBJ, projID, tasktype) {
 
+    var templateType = "e88adbd1-851f-415f-bc63-214d22bfc3b9";
+
     if (entOBJ != "None") {
 
-        for (var x=0; x < compArr.length; x++) {
+        if (compArr.length !== 0) {
 
-            await createCompTask(entOBJ.id, projID, compArr[x], tasktype)
+            for (var x=0; x < compArr.length; x++) {
+
+                await createCompTask(entOBJ.id, projID, compArr[x], tasktype)
+                .then(taskItemEnt => {
+                    console.log("Item " + taskItemEnt.data.name + " successfully added.")
+                }).catch((errTask) => {
+                    cmpTaskErrs.push(errTask);
+                });
+        
+            }
+
+            await createCompTask(entOBJ.id, projID, "TEMPLATE", templateType)
             .then(taskItemEnt => {
                 console.log("Item " + taskItemEnt.data.name + " successfully added.")
             }).catch((errTask) => {
                 cmpTaskErrs.push(errTask);
             });
-    
-        }
 
+
+        } else {
+
+            await createCompTask(entOBJ.id, projID, "TEMPLATE", templateType)
+            .then(taskItemEnt => {
+                console.log("Item " + taskItemEnt.data.name + " successfully added.")
+            }).catch((errTask) => {
+                cmpTaskErrs.push(errTask);
+            });
+
+        }
 
         
         console.log("ALL COMP ITEMS HAVE BEEN PROCESSED")
@@ -1197,18 +1487,41 @@ async function processCompTasks(compArr, entOBJ, projID, tasktype) {
 
 async function process3DTasks(thrDArr, entOBJ, projID, tasktype) {
 
+    var templateType = "e88adbd1-851f-415f-bc63-214d22bfc3b9";
     if (entOBJ != "None") {
 
-        for (var x=0; x < thrDArr.length; x++) {
+        if (thrDArr.length !== 0) {
 
-            await create3DTask(entOBJ.id, projID, thrDArr[x], tasktype)
+            for (var x=0; x < thrDArr.length; x++) {
+
+                await create3DTask(entOBJ.id, projID, thrDArr[x], tasktype)
+                .then(taskItemEnt => {
+                    console.log("Item " + taskItemEnt.data.name + " successfully added.")
+                }).catch((errTask) => {
+                    thrDTaskErrs.push(errTask);
+                });
+        
+            }
+
+            await create3DTask(entOBJ.id, projID, "TEMPLATE", templateType)
             .then(taskItemEnt => {
                 console.log("Item " + taskItemEnt.data.name + " successfully added.")
             }).catch((errTask) => {
                 thrDTaskErrs.push(errTask);
             });
-    
+
+
+        } else {
+
+            await create3DTask(entOBJ.id, projID, "TEMPLATE", templateType)
+            .then(taskItemEnt => {
+                console.log("Item " + taskItemEnt.data.name + " successfully added.")
+            }).catch((errTask) => {
+                thrDTaskErrs.push(errTask);
+            });
         }
+
+        
         
         console.log("ALL 3D ITEMS HAVE BEEN PROCESSED");
     } else {
@@ -1269,11 +1582,14 @@ function checkToggles() {
 
         var cmptggle = document.getElementById("compswitch");
         var threedtggle = document.getElementById("threedswitch");
-        var multitggle = document.getElementById("standaloneswitch");
+
+        // var multitggle = document.getElementById("standaloneswitch");
+        var multidd = document.getElementById("multiteamsselect");
+
         var multifield = document.getElementById("standalonefield");
         
 
-        if (multitggle.classList.contains("toggle-on") && multifield.value.length == 0) {
+        if (multidd.value !== "Standard" && multifield.value.length == 0) {
             //THROW ERROR HERE OR TOGGLE OFF
             reject(ERROR_MISSING_MULTICOMP)
         }

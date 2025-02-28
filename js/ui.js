@@ -108,9 +108,11 @@ function addSingleCompTask() {
     totCompTasks += 1
 
     
-    newInput.addEventListener('change', function(e) {
+    newInput.addEventListener('input', function(e) {
+        
         theinputval = newInput.value;
         theinputval = sanitizestring(theinputval);
+
         newInput.value = theinputval.toUpperCase();
 
         setTimeout(function() {
@@ -223,7 +225,7 @@ function addSingle3DTask() {
     updateRowRadios();
 
     
-    newInput.addEventListener('change', function(e) {
+    newInput.addEventListener('input', function(e) {
         theinputval = newInput.value;
         theinputval = sanitizestring(theinputval);
         newInput.value = theinputval.toUpperCase();
@@ -600,7 +602,10 @@ function treeviewHandler() {
     var thesearchbar = document.getElementById("searchbar");
     var thecompswitch = document.getElementById("compswitch");
     var the3Dswitch = document.getElementById("threedswitch");
+
     var thestandaloneswitch = document.getElementById("standaloneswitch");
+    var themultiteamdd = document.getElementById("multiteamsselect");
+    var themultiselection = $('#multiteamsselect').find(":selected").text();
     var thestandalonefield = document.getElementById("standalonefield");
 
     var thecmptable = document.getElementById("comptablebody");
@@ -642,18 +647,30 @@ function treeviewHandler() {
         }
 
         //SETTINGS TEAMS OBJECT TEXT VALUE
-        if (thestandalonefield.value !== "" && thestandaloneswitch.classList.contains("toggle-on")) {
-            teamobjcomptxt.innerHTML = thestandalonefield.value;
-            teamobj3Dtxt.innerHTML = thestandalonefield.value;
-        } else if (thestandalonefield.value == "" && thestandaloneswitch.classList.contains("toggle-on")) {
-            teamobjcomptxt.innerHTML = "TEAM OBJECT EMPTY";
-            teamobj3Dtxt.innerHTML = "TEAM OBJECT EMPTY";
-        } else {
-            //DO SOMETHING
-        }
+        // if (thestandalonefield.value !== "" && themultiselection !== "Standard") {
+        //     teamobjcomptxt.innerHTML = thestandalonefield.value;
+        //     teamobj3Dtxt.innerHTML = thestandalonefield.value;
+        // } else if (thestandalonefield.value == "" && themultiselection !== "Standard") {
+        //     teamobjcomptxt.innerHTML = "TEAM OBJECT EMPTY";
+        //     teamobj3Dtxt.innerHTML = "TEAM OBJECT EMPTY";
+        // } else {
+        //     //DO SOMETHING
+        // }
+
+        // //SETTINGS TEAMS OBJECT TEXT VALUE
+        // if (thestandalonefield.value !== "" && thestandaloneswitch.classList.contains("toggle-on")) {
+        //     teamobjcomptxt.innerHTML = thestandalonefield.value;
+        //     teamobj3Dtxt.innerHTML = thestandalonefield.value;
+        // } else if (thestandalonefield.value == "" && thestandaloneswitch.classList.contains("toggle-on")) {
+        //     teamobjcomptxt.innerHTML = "TEAM OBJECT EMPTY";
+        //     teamobj3Dtxt.innerHTML = "TEAM OBJECT EMPTY";
+        // } else {
+        //     //DO SOMETHING
+        // }
 
         //TEAMS OBJECT VISIBILITY
-        if (thestandaloneswitch.classList.contains("toggle-on") == true) {
+        if (themultiselection !== "Standard") {
+
             if (toggleCompisOn == true) {
                 $(teamobjcomp).show();
             } else {

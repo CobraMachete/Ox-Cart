@@ -714,6 +714,17 @@ body {
     content: url("../img/teams_star.svg");
 }
 
+.multicomp-obj-icon {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    padding-right: 0px;
+    padding-left: 0px;
+    padding-top: 0px;
+    margin-right: 0;
+    margin-left: 0;
+    content: url("../img/multicomp.svg");
+}
+
 .task-icon {
     width: var(--icon-size);
     height: var(--icon-size);
@@ -1348,6 +1359,13 @@ body {
     margin-left: 0px;
 }
 
+.btnlock {
+    pointer-events: none;
+    background-color: rgba(105, 105, 105, .3) !important;
+    border-color: rgba(88, 88, 88, .5) !important;
+    color: rgba(228, 228, 228, .2) !important;
+}
+
 .createbtn {
     position: absolute;
     float: right;
@@ -1363,7 +1381,8 @@ body {
     border-color: rgb(121, 71, 134);
     border-radius: 5px;
     background-color: rgb(143, 71, 163);
-    height: 30px
+    height: 30px;
+    
     
 }
 
@@ -1385,6 +1404,7 @@ body {
     background-color: rgb(166, 157, 168);
     height: 30px;
     scale: 0.85;
+    
     
 }
 
@@ -1689,6 +1709,36 @@ body {
     font-weight: 300;
     
     color: rgba(218, 218, 218, 0.1) !important
+    
+}
+
+
+.bar-empty input[name="search"] {
+    
+    width: 100%;
+    height: 30px;
+    padding: 0px;
+    margin-top: 10px;
+    border: 1px solid;
+    border-color: rgba(235, 56, 56, 0.45);
+    border-radius: 5px;
+    background: rgba(82, 82, 82, .05);
+    padding-left: 10px;
+    pointer-events: all;
+    
+    
+}
+
+.bar-empty input::placeholder, .bar-empty isindex::placeholder {
+    white-space: pre;
+    word-wrap: normal;
+    overflow: hidden;
+    font-family: Inter !important;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 300;
+    
+    color: rgba(161, 54, 54, 0.45) !important
     
 }
 
