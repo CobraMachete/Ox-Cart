@@ -68,8 +68,8 @@ function createShotAndTasks() {
     var rejections = [];
 
     //COMP AND 3D TASK LISTS
-    var cmpTaskList = ["TEMPLATE"];
-    var thrDTaskList = ["TEMPLATE"];
+    var cmpTaskList = [];
+    var thrDTaskList = [];
     
     //3D TASK TYPES
     var mayaType = "c53970b0-ecbe-433d-a307-b8477d7e7c5a";
@@ -557,7 +557,7 @@ function createShotAndTasks() {
     }).then(function(result) {
 
         console.log(result);
-        return Promise.all([processCompTasks(cmpTaskList, result[0], theprjid, cmpType), process3DTasks(thrDTaskList, result[2], theprjid, the3dtasktype)])
+        return Promise.all([processCompTasks(cmpTaskList, result[0], theprjid, cmpType),processCompTasks(["TEMPLATE"], result[0], theprjid, templateType), process3DTasks(thrDTaskList, result[2], theprjid, the3dtasktype), process3DTasks(["TEMPLATE"], result[2], theprjid, templateType)])
 
     }).then(function(resp) {
         
@@ -1441,64 +1441,43 @@ function create3DTask(parentEntId, prjid, currTaskName, typeid) {
 async function processCompTasks(compArr, entOBJ, projID, tasktype) {
 
     
-    var templateType = "e88adbd1-851f-415f-bc63-214d22bfc3b9";
-    if (entOBJ != "None") {
+    if (compArr.length > 0) {
+        if (entOBJ != "None") {
 
-        for (var x=0; x < compArr.length; x++) {
+            for (var x=0; x < compArr.length; x++) {
 
-            if (x = 0) {
-                await createCompTask(entOBJ.id, projID, "TEMPLATE", templateType)
-                .then(taskItemEnt => {
-                    console.log("Item " + taskItemEnt.data.name + " successfully added.")
-                }).catch((errTask) => {
-                    cmpTaskErrs.push(errTask);
-                });
-
-            } else {
                 await createCompTask(entOBJ.id, projID, compArr[x], tasktype)
                 .then(taskItemEnt => {
                     console.log("Item " + taskItemEnt.data.name + " successfully added.")
                 }).catch((errTask) => {
                     cmpTaskErrs.push(errTask);
                 });
+        
             }
 
-                
-    
+            console.log("ALL COMP ITEMS HAVE BEEN PROCESSED")
+        } else {
+            //DO NOTHING
         }
-
-        console.log("ALL COMP ITEMS HAVE BEEN PROCESSED")
-    } else {
-        //DO NOTHING
     }
+    
     
 
 }
 
 async function process3DTasks(thrDArr, entOBJ, projID, tasktype) {
 
-    var templateType = "e88adbd1-851f-415f-bc63-214d22bfc3b9";
+    
     if (entOBJ != "None") {
 
         for (var x=0; x < thrDArr.length; x++) {
 
-            if (x=0) {
-                await create3DTask(entOBJ.id, projID, "TEMPLATE", templateType)
-                .then(taskItemEnt => {
-                    console.log("Item " + taskItemEnt.data.name + " successfully added.")
-                }).catch((errTask) => {
-                    thrDTaskErrs.push(errTask);
-                });
-            } else {
-                await create3DTask(entOBJ.id, projID, thrDArr[x], tasktype)
-                .then(taskItemEnt => {
-                    console.log("Item " + taskItemEnt.data.name + " successfully added.")
-                }).catch((errTask) => {
-                    thrDTaskErrs.push(errTask);
-                });
-            }
-
-            
+            await create3DTask(entOBJ.id, projID, thrDArr[x], tasktype)
+            .then(taskItemEnt => {
+                console.log("Item " + taskItemEnt.data.name + " successfully added.")
+            }).catch((errTask) => {
+                thrDTaskErrs.push(errTask);
+            });
     
         }
 
