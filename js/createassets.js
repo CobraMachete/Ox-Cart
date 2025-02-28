@@ -68,8 +68,8 @@ function createShotAndTasks() {
     var rejections = [];
 
     //COMP AND 3D TASK LISTS
-    var cmpTaskList = [];
-    var thrDTaskList = [];
+    var cmpTaskList = ["TEMPLATE"];
+    var thrDTaskList = ["TEMPLATE"];
     
     //3D TASK TYPES
     var mayaType = "c53970b0-ecbe-433d-a307-b8477d7e7c5a";
@@ -194,7 +194,7 @@ function createShotAndTasks() {
     } else if (multiteamsdd === "Multicomp") {
         isMultiObj = true;
     }
-    
+
     // if (stndtggle.classList.contains("toggle-on")) {
     //     isTeamsObj = true;
     // }
@@ -1440,43 +1440,33 @@ function create3DTask(parentEntId, prjid, currTaskName, typeid) {
 
 async function processCompTasks(compArr, entOBJ, projID, tasktype) {
 
+    
     var templateType = "e88adbd1-851f-415f-bc63-214d22bfc3b9";
-
     if (entOBJ != "None") {
 
-        if (compArr.length !== 0) {
+        for (var x=0; x < compArr.length; x++) {
 
-            for (var x=0; x < compArr.length; x++) {
+            if (x = 0) {
+                await createCompTask(entOBJ.id, projID, "TEMPLATE", templateType)
+                .then(taskItemEnt => {
+                    console.log("Item " + taskItemEnt.data.name + " successfully added.")
+                }).catch((errTask) => {
+                    cmpTaskErrs.push(errTask);
+                });
 
+            } else {
                 await createCompTask(entOBJ.id, projID, compArr[x], tasktype)
                 .then(taskItemEnt => {
                     console.log("Item " + taskItemEnt.data.name + " successfully added.")
                 }).catch((errTask) => {
                     cmpTaskErrs.push(errTask);
                 });
-        
             }
 
-            await createCompTask(entOBJ.id, projID, "TEMPLATE", templateType)
-            .then(taskItemEnt => {
-                console.log("Item " + taskItemEnt.data.name + " successfully added.")
-            }).catch((errTask) => {
-                cmpTaskErrs.push(errTask);
-            });
-
-
-        } else {
-
-            await createCompTask(entOBJ.id, projID, "TEMPLATE", templateType)
-            .then(taskItemEnt => {
-                console.log("Item " + taskItemEnt.data.name + " successfully added.")
-            }).catch((errTask) => {
-                cmpTaskErrs.push(errTask);
-            });
-
+                
+    
         }
 
-        
         console.log("ALL COMP ITEMS HAVE BEEN PROCESSED")
     } else {
         //DO NOTHING
@@ -1490,39 +1480,28 @@ async function process3DTasks(thrDArr, entOBJ, projID, tasktype) {
     var templateType = "e88adbd1-851f-415f-bc63-214d22bfc3b9";
     if (entOBJ != "None") {
 
-        if (thrDArr.length !== 0) {
+        for (var x=0; x < thrDArr.length; x++) {
 
-            for (var x=0; x < thrDArr.length; x++) {
-
+            if (x=0) {
+                await create3DTask(entOBJ.id, projID, "TEMPLATE", templateType)
+                .then(taskItemEnt => {
+                    console.log("Item " + taskItemEnt.data.name + " successfully added.")
+                }).catch((errTask) => {
+                    thrDTaskErrs.push(errTask);
+                });
+            } else {
                 await create3DTask(entOBJ.id, projID, thrDArr[x], tasktype)
                 .then(taskItemEnt => {
                     console.log("Item " + taskItemEnt.data.name + " successfully added.")
                 }).catch((errTask) => {
                     thrDTaskErrs.push(errTask);
                 });
-        
             }
 
-            await create3DTask(entOBJ.id, projID, "TEMPLATE", templateType)
-            .then(taskItemEnt => {
-                console.log("Item " + taskItemEnt.data.name + " successfully added.")
-            }).catch((errTask) => {
-                thrDTaskErrs.push(errTask);
-            });
-
-
-        } else {
-
-            await create3DTask(entOBJ.id, projID, "TEMPLATE", templateType)
-            .then(taskItemEnt => {
-                console.log("Item " + taskItemEnt.data.name + " successfully added.")
-            }).catch((errTask) => {
-                thrDTaskErrs.push(errTask);
-            });
+            
+    
         }
 
-        
-        
         console.log("ALL 3D ITEMS HAVE BEEN PROCESSED");
     } else {
         //DO NOTHING
