@@ -1441,25 +1441,26 @@ function create3DTask(parentEntId, prjid, currTaskName, typeid) {
 async function processCompTasks(compArr, entOBJ, projID, tasktype) {
 
     
-    if (compArr.length > 0) {
-        if (entOBJ != "None") {
+    
 
-            for (var x=0; x < compArr.length; x++) {
+    if (entOBJ != "None") {
 
-                await createCompTask(entOBJ.id, projID, compArr[x], tasktype)
-                .then(taskItemEnt => {
-                    console.log("Item " + taskItemEnt.data.name + " successfully added.")
-                }).catch((errTask) => {
-                    cmpTaskErrs.push(errTask);
-                });
-        
-            }
+        for (var x=0; x < compArr.length; x++) {
 
-            console.log("ALL COMP ITEMS HAVE BEEN PROCESSED")
-        } else {
-            //DO NOTHING
+            await createCompTask(entOBJ.id, projID, compArr[x], tasktype)
+            .then(taskItemEnt => {
+                console.log("Item " + taskItemEnt.data.name + " successfully added.")
+            }).catch((errTask) => {
+                cmpTaskErrs.push(errTask);
+            });
+    
         }
+
+        console.log("ALL COMP ITEMS HAVE BEEN PROCESSED")
+    } else {
+        //DO NOTHING
     }
+    
     
     
 
