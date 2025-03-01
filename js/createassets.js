@@ -1443,9 +1443,8 @@ function create3DTask(parentEntId, prjid, currTaskName, typeid) {
 
 async function processCompTasks(compArr, entOBJ, projID, tasktype) {
 
-    
-    
-
+    console.log("========================   THE ARRAY LENGTH  ======================");
+    console.log(compArr.length);
     if (entOBJ != "None") {
 
         for (var x=0; x < compArr.length; x++) {
