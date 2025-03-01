@@ -539,7 +539,7 @@ function createShotAndTasks() {
         
     }
 
-
+    
     //GET AND DO EVERYTHING
     shotItemPromise().then(function(res) {
 
@@ -559,7 +559,8 @@ function createShotAndTasks() {
         console.log(result);
         console.log(cmpTaskList);
 
-        return Promise.all([processCompTasks(cmpTaskList, result[0], theprjid, cmpType),processCompTasks(["TEMPLATE"], result[0], theprjid, templateType), process3DTasks(thrDTaskList, result[2], theprjid, the3dtasktype), process3DTasks(["TEMPLATE"], result[2], theprjid, templateType)])
+        // return Promise.all([processCompTasks(cmpTaskList, result[0], theprjid, cmpType),processCompTasks(["TEMPLATE"], result[0], theprjid, templateType), process3DTasks(thrDTaskList, result[2], theprjid, the3dtasktype), process3DTasks(["TEMPLATE"], result[2], theprjid, templateType)])
+        return Promise.all([processCompTasks(["TEMPLATE"], result[0], theprjid, templateType), process3DTasks(["TEMPLATE"], result[2], theprjid, templateType)])
         
 
     }).then(function(resp) {
