@@ -1551,7 +1551,7 @@ function checkToggles() {
         var threedtggle = document.getElementById("threedswitch");
 
         // var multitggle = document.getElementById("standaloneswitch");
-        var multidd = document.getElementById("multiteamsselect");
+        var multidd = $('#multiteamsselect').find(":selected").text();
 
         var multifield = document.getElementById("standalonefield");
         
