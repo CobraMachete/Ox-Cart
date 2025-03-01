@@ -1561,20 +1561,20 @@ function checkToggles() {
             reject(ERROR_MISSING_MULTICOMP)
         }
 
-        if (threedtggle.classList.contains("toggle-on")) {
-            if (document.getElementById("threedtablebody").rows.length == 0) {
-                // threedtggle.click();
-                // toggleVis3DTasks();
+        // if (threedtggle.classList.contains("toggle-on")) {
+        //     if (document.getElementById("threedtablebody").rows.length == 0) {
+        //         // threedtggle.click();
+        //         // toggleVis3DTasks();
                 
-            }
-        }
+        //     }
+        // }
 
-        if (cmptggle.classList.contains("toggle-on")) {
-            if (document.getElementById("comptablebody").rows.length == 0) {
-                // cmptggle.click();
-                // toggleVisCompTasks();
-            }
-        }
+        // if (cmptggle.classList.contains("toggle-on")) {
+        //     if (document.getElementById("comptablebody").rows.length == 0) {
+        //         // cmptggle.click();
+        //         // toggleVisCompTasks();
+        //     }
+        // }
 
         resolve(true) 
     });
