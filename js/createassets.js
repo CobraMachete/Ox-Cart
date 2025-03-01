@@ -1555,15 +1555,15 @@ function checkToggles() {
 
         var multifield = document.getElementById("standalonefield");
         
-
-        if (multidd.value !== "Standard" && multifield.value.length == 0) {
+        console.log(multidd);
+        if (multidd !== "Standard" && multifield.value.length == 0) {
             //THROW ERROR HERE OR TOGGLE OFF
             reject(ERROR_MISSING_MULTICOMP)
         }
 
         if (threedtggle.classList.contains("toggle-on")) {
             if (document.getElementById("threedtablebody").rows.length == 0) {
-                threedtggle.click();
+                // threedtggle.click();
                 // toggleVis3DTasks();
                 
             }
