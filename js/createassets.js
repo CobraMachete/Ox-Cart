@@ -1566,7 +1566,7 @@ function checkToggles() {
 
         if (cmptggle.classList.contains("toggle-on")) {
             if (document.getElementById("comptablebody").rows.length == 0) {
-                cmptggle.click();
+                // cmptggle.click();
                 // toggleVisCompTasks();
             }
         }
