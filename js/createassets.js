@@ -1446,6 +1446,7 @@ async function processCompTasks(compArr, entOBJ, projID, tasktype) {
 
     console.log("========================   THE ARRAY LENGTH  ======================");
     console.log(compArr.length);
+    console.log(compArr);
     if (entOBJ != "None") {
 
         for (var x=0; x < compArr.length; x++) {
