@@ -559,7 +559,7 @@ function createShotAndTasks() {
         console.log(result);
         console.log(cmpTaskList);
 
-        if (cmpTaskList.length > 0){
+        if (cmpTaskList.length > 0) {
             return Promise.all([processCompTasks(cmpTaskList, result[0], theprjid, cmpType),processCompTasks(["TEMPLATE"], result[0], theprjid, templateType), process3DTasks(thrDTaskList, result[2], theprjid, the3dtasktype), process3DTasks(["TEMPLATE"], result[2], theprjid, templateType)])
         } else {
             return Promise.all([processCompTasks(["TEMPLATE"], result[0], theprjid, templateType), process3DTasks(["TEMPLATE"], result[2], theprjid, templateType)])
@@ -567,48 +567,48 @@ function createShotAndTasks() {
 
             
 
-            }).then(function(resp) {
-                
-                console.log("PROCESSED ALL ENTRIES")
+    }).then(function(resp) {
+        
+        console.log("PROCESSED ALL ENTRIES")
 
-                if (rejections.length != 0) {
-                    var therejects = rejections.join(" and ");
-                    var errtxt = "Run errors: " + therejects.toUpperCase();
-                    adjustTxtRuntimes("RunError", errtxt);
-                    adjustTxtRuntimes("RunSuccess", "Shots finished with errors");
-                }
-            
-                if (rejections.length > 0) {
-                    setTimeout(function() {
-                        fireAnim("stopAnim");
-                        fireAnim("sendErr");
-                        
-                    }, 500);
-                } else {
-                    setTimeout(function() {
-                        fireAnim("stopAnim");
-                    }, 500);
-                }
+        if (rejections.length != 0) {
+            var therejects = rejections.join(" and ");
+            var errtxt = "Run errors: " + therejects.toUpperCase();
+            adjustTxtRuntimes("RunError", errtxt);
+            adjustTxtRuntimes("RunSuccess", "Shots finished with errors");
+        }
+    
+        if (rejections.length > 0) {
+            setTimeout(function() {
+                fireAnim("stopAnim");
+                fireAnim("sendErr");
                 
-                
+            }, 500);
+        } else {
+            setTimeout(function() {
+                fireAnim("stopAnim");
+            }, 500);
+        }
+        
+        
 
-                
-            })
-            .catch(error => {
-                // Handle errors
-                console.error(error);
-                if (error == "MULTIPLE") {
-                    //TRIGGERING ERROR FOR MULTIPLE TEAMS ITEMS
-                    adjustTxtRuntimes("RunError", "A Teams Object already exists.");
-                    adjustTxtRuntimes("RunSuccess", "Error: Multiple Teams Objects");
+        
+    })
+    .catch(error => {
+        // Handle errors
+        console.error(error);
+        if (error == "MULTIPLE") {
+            //TRIGGERING ERROR FOR MULTIPLE TEAMS ITEMS
+            adjustTxtRuntimes("RunError", "A Teams Object already exists.");
+            adjustTxtRuntimes("RunSuccess", "Error: Multiple Teams Objects");
 
-                    setTimeout(() => {
-                        fireAnim("stopAnim");
-                        fireAnim("sendErr");
-                        
-                    },1000);
-                }
-            });
+            setTimeout(() => {
+                fireAnim("stopAnim");
+                fireAnim("sendErr");
+                
+            },1000);
+        }
+    });
 
 }
 
