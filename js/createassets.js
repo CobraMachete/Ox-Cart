@@ -560,7 +560,7 @@ function createShotAndTasks() {
         console.log(cmpTaskList);
 
         // return Promise.all([processCompTasks(cmpTaskList, result[0], theprjid, cmpType),processCompTasks(["TEMPLATE"], result[0], theprjid, templateType), process3DTasks(thrDTaskList, result[2], theprjid, the3dtasktype), process3DTasks(["TEMPLATE"], result[2], theprjid, templateType)])
-        return Promise.all([processCompTasks(["TEMPLATE"], result[0], theprjid, templateType), process3DTasks(["TEMPLATE"], result[2], theprjid, templateType)])
+        return Promise.all([processCompTasks(cmpTaskList, result[0], theprjid, cmpType), processCompTasks(["TEMPLATE"], result[0], theprjid, templateType), process3DTasks(thrDTaskList, result[2], theprjid, the3dtasktype) ,process3DTasks(["TEMPLATE"], result[2], theprjid, templateType)])
         
 
     }).then(function(resp) {
@@ -1444,26 +1444,30 @@ function create3DTask(parentEntId, prjid, currTaskName, typeid) {
 
 async function processCompTasks(compArr, entOBJ, projID, tasktype) {
 
-    console.log("========================   THE ARRAY LENGTH  ======================");
-    console.log(compArr.length);
-    console.log(compArr);
-    if (entOBJ != "None") {
+    if (compArr.length > 0) {
 
-        for (var x=0; x < compArr.length; x++) {
+        if (entOBJ != "None") {
 
-            await createCompTask(entOBJ.id, projID, compArr[x], tasktype)
-            .then(taskItemEnt => {
-                console.log("Item " + taskItemEnt.data.name + " successfully added.")
-            }).catch((errTask) => {
-                cmpTaskErrs.push(errTask);
-            });
-    
+            for (var x=0; x < compArr.length; x++) {
+
+                await createCompTask(entOBJ.id, projID, compArr[x], tasktype)
+                .then(taskItemEnt => {
+                    console.log("Item " + taskItemEnt.data.name + " successfully added.")
+                }).catch((errTask) => {
+                    cmpTaskErrs.push(errTask);
+                });
+        
+            }
+
+            console.log("ALL COMP ITEMS HAVE BEEN PROCESSED")
+        } else {
+            //DO NOTHING
         }
 
-        console.log("ALL COMP ITEMS HAVE BEEN PROCESSED")
     } else {
-        //DO NOTHING
-    }
+        console.log("Array is empty.  No Tasks to add");
+    } 
+    
     
     
     
