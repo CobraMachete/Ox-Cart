@@ -557,50 +557,58 @@ function createShotAndTasks() {
     }).then(function(result) {
 
         console.log(result);
-        return Promise.all([processCompTasks(cmpTaskList, result[0], theprjid, cmpType),processCompTasks(["TEMPLATE"], result[0], theprjid, templateType), process3DTasks(thrDTaskList, result[2], theprjid, the3dtasktype), process3DTasks(["TEMPLATE"], result[2], theprjid, templateType)])
+        console.log(cmpTaskList);
 
-    }).then(function(resp) {
-        
-        console.log("PROCESSED ALL ENTRIES")
-
-        if (rejections.length != 0) {
-            var therejects = rejections.join(" and ");
-            var errtxt = "Run errors: " + therejects.toUpperCase();
-            adjustTxtRuntimes("RunError", errtxt);
-            adjustTxtRuntimes("RunSuccess", "Shots finished with errors");
-        }
-    
-        if (rejections.length > 0) {
-            setTimeout(function() {
-                fireAnim("stopAnim");
-                fireAnim("sendErr");
-                
-            }, 500);
+        if (cmpTaskList.length > 0){
+            return Promise.all([processCompTasks(cmpTaskList, result[0], theprjid, cmpType),processCompTasks(["TEMPLATE"], result[0], theprjid, templateType), process3DTasks(thrDTaskList, result[2], theprjid, the3dtasktype), process3DTasks(["TEMPLATE"], result[2], theprjid, templateType)])
         } else {
-            setTimeout(function() {
-                fireAnim("stopAnim");
-            }, 500);
+            return Promise.all([processCompTasks([processCompTasks(["TEMPLATE"], result[0], theprjid, templateType), process3DTasks(["TEMPLATE"], result[2], theprjid, templateType)])
         }
-        
-        
 
-        
-    })
-    .catch(error => {
-        // Handle errors
-        console.error(error);
-        if (error == "MULTIPLE") {
-            //TRIGGERING ERROR FOR MULTIPLE TEAMS ITEMS
-            adjustTxtRuntimes("RunError", "A Teams Object already exists.");
-            adjustTxtRuntimes("RunSuccess", "Error: Multiple Teams Objects");
+            
 
-            setTimeout(() => {
-                fireAnim("stopAnim");
-                fireAnim("sendErr");
+            }).then(function(resp) {
                 
-            },1000);
-        }
-    });
+                console.log("PROCESSED ALL ENTRIES")
+
+                if (rejections.length != 0) {
+                    var therejects = rejections.join(" and ");
+                    var errtxt = "Run errors: " + therejects.toUpperCase();
+                    adjustTxtRuntimes("RunError", errtxt);
+                    adjustTxtRuntimes("RunSuccess", "Shots finished with errors");
+                }
+            
+                if (rejections.length > 0) {
+                    setTimeout(function() {
+                        fireAnim("stopAnim");
+                        fireAnim("sendErr");
+                        
+                    }, 500);
+                } else {
+                    setTimeout(function() {
+                        fireAnim("stopAnim");
+                    }, 500);
+                }
+                
+                
+
+                
+            })
+            .catch(error => {
+                // Handle errors
+                console.error(error);
+                if (error == "MULTIPLE") {
+                    //TRIGGERING ERROR FOR MULTIPLE TEAMS ITEMS
+                    adjustTxtRuntimes("RunError", "A Teams Object already exists.");
+                    adjustTxtRuntimes("RunSuccess", "Error: Multiple Teams Objects");
+
+                    setTimeout(() => {
+                        fireAnim("stopAnim");
+                        fireAnim("sendErr");
+                        
+                    },1000);
+                }
+            });
 
 }
 
