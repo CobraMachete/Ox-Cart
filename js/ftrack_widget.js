@@ -69,9 +69,7 @@ window.ftrackWidget = (function () {
         if (content.topic === 'ftrack.widget.load') {
             //Store credentials for later.
             window.credentials = content.data.credentials;
-            mypayload = content.data.payload;
             console.debug('STORED CREDENTIALS ARE: ', window.credentials);
-            console.debug('PAYLOAD IS: ', mypayload);
             onWidgetLoad(content);
         } else if (content.topic === 'ftrack.widget.update') {
             window.entities = content.data.selection;
