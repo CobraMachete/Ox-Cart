@@ -64,9 +64,9 @@ window.ftrackWidget = (function () {
     function onPostMessageReceived(event) {
         var content = event.data || {};
         console.debug('Got "' + content.topic + '" event.', content);
-
         if (content.topic === 'ftrack.widget.load') {
             //Store credentials for later.
+            console.debug(content);
             window.credentials = content.data.credentials;
             console.debug('STORED CREDENTIALS ARE: ', window.credentials);
             onWidgetLoad(content);
