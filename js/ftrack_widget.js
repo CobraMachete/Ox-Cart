@@ -38,6 +38,7 @@ window.ftrackWidget = (function () {
     function onWidgetLoad(content) {
         console.log('Widget loaded', content);
         credentials = content.data.credentials;
+        thepayload = content.data.payload;
         entity = content.data.selection[0];
         if (onWidgetLoadCallback) {
             onWidgetLoadCallback(content);
@@ -68,7 +69,9 @@ window.ftrackWidget = (function () {
         if (content.topic === 'ftrack.widget.load') {
             //Store credentials for later.
             window.credentials = content.data.credentials;
+            mypayload = content.data.payload;
             console.debug('STORED CREDENTIALS ARE: ', window.credentials);
+            console.debug('PAYLOAD IS: ', mypayload);
             onWidgetLoad(content);
         } else if (content.topic === 'ftrack.widget.update') {
             window.entities = content.data.selection;
