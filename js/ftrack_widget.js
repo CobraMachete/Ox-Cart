@@ -38,7 +38,6 @@ window.ftrackWidget = (function () {
     function onWidgetLoad(content) {
         console.log('Widget loaded', content);
         credentials = content.data.credentials;
-        thepayload = content.data.payload;
         entity = content.data.selection[0];
         if (onWidgetLoadCallback) {
             onWidgetLoadCallback(content);
