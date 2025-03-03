@@ -109,7 +109,41 @@ window.ftrackWidget = (function () {
 
     // RETURN CURRENT ENTITY
     function getEntity() {
-        return entity
+
+        // QUERY CURRENT ENTITY NAME
+        var entRequest = session.query(
+            'select name, parent from ' + entity.type + ' where id is "' + entity.id + '" limit 1' 
+        );
+
+        Promise.all([entRequest]).then(function (values) {
+
+            var parentCheck = values[0].data[0].parent.__entity_type__;
+
+            if (parentCheck == "Show_package") {
+
+                entity = {
+                    'id': values[0].data[0].id,
+                    'theshotname': "None",
+                    'type': "TypedContext"
+                };
+
+                console.log("Responding entity is", entity);
+
+                
+
+            } else if (parentCheck == "Production") {
+
+                entity = {
+                    'id': values[0].data[0].parent.id,
+                    'theshotname': values[0].data[0].name,
+                    'type': "TypedContext"
+                };
+
+                console.log("Responding entity is", entity);
+            }
+            return entity
+        })
+        
     }
 
     // RETURN API CREDENTIALS

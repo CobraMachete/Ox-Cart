@@ -247,6 +247,8 @@ function createShotAndTasks() {
     
     //GETTING BASE ENTITY
     var entity = ftrackWidget.getEntity();
+    // var entity = SESSION_ENTITY;
+
 
     //ESTABLISHING VARS FOR CREATED ENTITIES
     var theShotEnt;
