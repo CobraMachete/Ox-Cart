@@ -247,7 +247,7 @@ function createShotAndTasks() {
     
     //GETTING BASE ENTITY
     // var entity = ftrackWidget.getEntity();
-    var entity = parseEntity(ftrackWidget.getEntity(), session);
+    var entity = entityParse(ftrackWidget.getEntity(), session);
     console.log(entity);
     
 
