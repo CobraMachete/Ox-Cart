@@ -48,6 +48,41 @@ window.ftrackWidget = (function () {
         }
     }
 
+    function onCustomEventReceived(event) {
+        var content = event.data || {};
+        console.debug('Received event:', content);
+    
+        if (content.topic === 'tntsports.widget.shots_load') {
+            console.log("Custom Load Event Received");
+            console.log("Payload Data:", content.data);
+    
+            // Store credentials or other needed data
+            window.customData = content.data;
+            console.debug('Stored Custom Data:', window.customData);
+    
+            // Optionally, call a function to handle the data
+            if (onWidgetLoadCallback) {
+                onWidgetLoadCallback(content.data);
+            }
+        }
+    }
+    
+    // // Initialize and listen for custom messages
+    // function initialize(options) {
+    //     options = options || {};
+    //     if (options.onWidgetLoad) {
+    //         onWidgetLoadCallback = options.onWidgetLoad;
+    //     }
+    //     if (options.onWidgetUpdate) {
+    //         onWidgetUpdateCallback = options.onWidgetUpdate;
+    //     }
+    
+    //     // Listen to post messages
+    //     window.addEventListener('message', onCustomEventReceived, false);
+    //     window.parent.postMessage({ topic: 'ftrack.widget.ready' }, '*');
+    // }
+    
+
     // UPDATE ENTITY AND CALL CALLBACK WHEN WIGDET IS UPDATED
     function onWidgetUpdate(content) {
         console.debug('Widget updated', content);
