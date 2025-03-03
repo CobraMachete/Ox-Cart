@@ -22,12 +22,12 @@
 
     // QUERY API FOR NAME AND VERSIONS WHEN WIDGET HAS LOADED
     function onWidgetUpdate() {
-        var entity = ftrackWidget.getEntity(session);
+        var entity = ftrackWidget.getEntity();
         console.debug('Querying new data for entity', entity);
 
         // QUERY CURRENT ENTITY NAME
         var entNameRequest = session.query(
-            'select name from ' + entity.type + ' where id is "' + entity.id + '" limit 1' 
+            'select name, parent from ' + entity.type + ' where id is "' + entity.id + '" limit 1' 
         );
 
         
@@ -45,45 +45,36 @@
 
         // WAIT FOR BOTH REQUESTS TO FINISH, THEN UPDATE INTERFACE.
         Promise.all([entNameRequest, prjRequest, prjNameSearch]).then(function (values) {
-            
+            var selected_shot_name = "None";
+            var checkParent = values[0].data[0].parent.__entity_type__;
 
-            // if (checkParent == "Show_package") {
-            //     theproduction = values[0].data[0].id;
-            //     theprjid = values[1].data[0].project_id;
-            //     propName = values[2].data[0].ancestors[0].name;
+            if (checkParent == "Show_package") {
 
-            //     SESSION_ENTITY = {
-            //         'id': theproduction,
-            //         'type': "TypedContext"
-            //     };
+                theproduction = values[0].data[0].id;
+                theprjid = values[1].data[0].project_id;
+                propName = values[2].data[0].ancestors[0].name;
 
-            //     console.log("The current entity is", entity);
+                console.log("The current entity is", entity);
 
-            // } else if (checkParent == "Production") {
-            //     theproduction = values[0].data[0].parent.id;
-            //     theprjid = values[1].data[0].project_id;
-            //     propName = values[2].data[0].ancestors[0].name;
+            } else if (checkParent == "Production") {
+                theproduction = values[0].data[0].parent.id;
+                theprjid = values[1].data[0].project_id;
+                propName = values[2].data[0].ancestors[0].name;
 
-            //     selected_shot_name = values[0].data[0].name;
-            //     entity = {
-            //         'id': theproduction,
-            //         'type': "TypedContext"
-            //     };
+                selected_shot_name = values[0].data[0].name;
+                
+                entity = {
+                    'id': theproduction,
+                    'type': "TypedContext"
+                }
 
-            //     SESSION_ENTITY = {
-            //         'id': theproduction,
-            //         'type': "TypedContext"
-            //     };
-
-            //     console.log("The current entity is", entity);
-            // }
-
+                console.log("The current entity is", entity);
+            }
             console.log("=======================================================    THE SHOTNAME IS:     ====================================================================");
             console.log(selected_shot_name);
-
-            theproduction = values[0].data[0].id;
-            theprjid = values[1].data[0].project_id;
-            propName = values[2].data[0].ancestors[0].name;
+            // theproduction = values[0].data[0].id;
+            // theprjid = values[1].data[0].project_id;
+            // propName = values[2].data[0].ancestors[0].name;
             console.log("=======================================================    THE PRODUCTION IS:     ====================================================================");
             console.log(theproduction);
             console.log("=======================================================    THE PROJECT IS:     ====================================================================");
@@ -91,7 +82,7 @@
             console.log("=======================================================    THE PROPNAME IS:     ====================================================================");
             console.log(values[2].data[0]);
 
-            selected_shot_name = entity.theshotname;
+            
             updateInitShotname(selected_shot_name);
             ddFromCurrProp(values[2].data[0].ancestors[0].name);
             buildThumbList(values[2].data[0].ancestors[0].name);
