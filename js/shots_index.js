@@ -52,6 +52,9 @@
                 theproduction = values[0].data[0].id;
                 theprjid = values[1].data[0].project_id;
                 propName = values[2].data[0].ancestors[0].name;
+
+                console.log("The current entity is", entity);
+                
             } else if (checkParent == "Production") {
                 theproduction = values[0].data[0].parent.id;
                 theprjid = values[1].data[0].project_id;
@@ -62,6 +65,8 @@
                     'id': theproduction,
                     'type': "TypedContext"
                 }
+
+                console.log("The current entity is", entity);
             }
             console.log("=======================================================    THE SHOTNAME IS:     ====================================================================");
             console.log(selected_shot_name);
@@ -100,7 +105,7 @@
                 'select descendants from Folder where project_id is "' + ADMIN_PRJ_ID + '" and parent.name is "' + theworkingpropname + '" and name is "' + resthumbfoldermain + '" limit 1' 
             );
 
-            
+            console.log("The current entity is", entity);
             Promise.all([thumbFoldSearch, newThumbFoldSearch]).then(function (vals) {
                 
                 // if (vals[0].data.length !== 0) {
