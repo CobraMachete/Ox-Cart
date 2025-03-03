@@ -1,5 +1,5 @@
 'use strict';
-var init_shotname = "";
+init_shotname = "";
 (function (ftrack, ftrackWidget) {
     var session = null;
 
@@ -60,16 +60,17 @@ var init_shotname = "";
 
                 init_shotname = values[0].data[0].name;
             }
-
+            console.log("=======================================================    THE SHOTNAME IS:     ====================================================================");
+            console.log(init_shotname);
             // theproduction = values[0].data[0].id;
             // theprjid = values[1].data[0].project_id;
             // propName = values[2].data[0].ancestors[0].name;
             console.log("=======================================================    THE PRODUCTION IS:     ====================================================================");
-            console.log(theproduction)
+            console.log(theproduction);
             console.log("=======================================================    THE PROJECT IS:     ====================================================================");
-            console.log(values[1].data[0])
+            console.log(values[1].data[0]);
             console.log("=======================================================    THE PROPNAME IS:     ====================================================================");
-            console.log(values[2].data[0])
+            console.log(values[2].data[0]);
 
             
 
