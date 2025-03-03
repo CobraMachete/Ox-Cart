@@ -27,7 +27,7 @@
 
         // QUERY CURRENT ENTITY NAME
         var entNameRequest = session.query(
-            'select name from ' + entity.type + ' where id is "' + entity.id + '" limit 1' 
+            'select name, parent from ' + entity.type + ' where id is "' + entity.id + '" limit 1' 
         );
 
         
