@@ -120,6 +120,7 @@ window.ftrackWidget = (function () {
 
         // LISTEN TO POST MESSAGES.
         window.addEventListener('message', onPostMessageReceived, false);
+        window.parent.postMessage({ topic: 'tntsports.widget.ready' }, '*');
         window.parent.postMessage({ topic: 'ftrack.widget.ready' }, '*');
     }
 
