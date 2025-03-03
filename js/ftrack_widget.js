@@ -61,33 +61,62 @@ window.ftrackWidget = (function () {
         }
     }
 
+    // function onPostMessageReceived(event) {
+    //     var content = event.data || {};
+    //     console.debug('Received event:', content);
+    
+    //     if (content.topic === 'ftrack.widget.load') {
+    //         console.debug('Widget load event received:', content);
+    
+    //         // Extract credentials
+    //         window.credentials = content.data.credentials;
+    //         console.debug('Stored credentials:', window.credentials);
+    
+    //         // Extract original selection
+    //         window.entities = content.data.selection;
+    //         console.debug('Selected entities:', window.entities);
+    
+    //         // Extract custom appended data
+    //         if (content.data.custom_payload) {
+    //             window.customPayload = content.data.custom_payload;
+    //             console.debug('Custom Payload:', window.customPayload);
+    //         }
+    
+    //         // Call the callback if defined
+    //         if (onWidgetLoadCallback) {
+    //             onWidgetLoadCallback(content.data);
+    //         }
+    //     }
+    // }
+
     // HANDLE POST MESSAGES
     function onPostMessageReceived(event) {
         var content = event.data || {};
-        console.debug('Received event:', content);
-    
+        console.debug('Got "' + content.topic + '" event.', content);
         if (content.topic === 'ftrack.widget.load') {
-            console.debug('Widget load event received:', content);
-    
-            // Extract credentials
+            //Store credentials for later.
+            console.debug(content);
             window.credentials = content.data.credentials;
-            console.debug('Stored credentials:', window.credentials);
-    
-            // Extract original selection
-            window.entities = content.data.selection;
-            console.debug('Selected entities:', window.entities);
-    
-            // Extract custom appended data
+            console.debug('STORED CREDENTIALS ARE: ', window.credentials);
+
             if (content.data.custom_payload) {
                 window.customPayload = content.data.custom_payload;
                 console.debug('Custom Payload:', window.customPayload);
             }
-    
-            // Call the callback if defined
-            if (onWidgetLoadCallback) {
-                onWidgetLoadCallback(content.data);
+
+            onWidgetLoad(content);
+        } else if (content.topic === 'ftrack.widget.update') {
+            window.entities = content.data.selection;
+            console.debug('SELECTED ENTITIES ARE: ', window.entities);
+
+            if (content.data.custom_payload) {
+                window.customPayload = content.data.custom_payload;
+                console.debug('Custom Payload:', window.customPayload);
             }
+
+            onWidgetUpdate(content);
         }
+
     }
 
     // RETURN CURRENT ENTITY
