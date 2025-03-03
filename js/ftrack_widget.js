@@ -48,24 +48,24 @@ window.ftrackWidget = (function () {
         }
     }
 
-    function onCustomEventReceived(event) {
-        var content = event.data || {};
-        console.debug('Received event:', content);
+    // function onCustomEventReceived(event) {
+    //     var content = event.data || {};
+    //     console.debug('Received event:', content);
     
-        if (content.topic === 'tntsports.widget.shots_load') {
-            console.log("Custom Load Event Received");
-            console.log("Payload Data:", content.data);
+    //     if (content.topic === 'tntsports.widget.shots_load') {
+    //         console.log("Custom Load Event Received");
+    //         console.log("Payload Data:", content.data);
     
-            // Store credentials or other needed data
-            window.customData = content.data;
-            console.debug('Stored Custom Data:', window.customData);
+    //         // Store credentials or other needed data
+    //         window.customData = content.data;
+    //         console.debug('Stored Custom Data:', window.customData);
     
-            // Optionally, call a function to handle the data
-            if (onWidgetLoadCallback) {
-                onWidgetLoadCallback(content.data);
-            }
-        }
-    }
+    //         // Optionally, call a function to handle the data
+    //         if (onWidgetLoadCallback) {
+    //             onWidgetLoadCallback(content.data);
+    //         }
+    //     }
+    // }
     
     // // Initialize and listen for custom messages
     // function initialize(options) {
@@ -109,6 +109,18 @@ window.ftrackWidget = (function () {
             window.entities = content.data.selection;
             console.debug('SELECTED ENTITIES ARE: ', window.entities);
             onWidgetUpdate(content);
+        } else if (content.topic === 'tntsports.widget.shots_load') {
+            console.log("Custom Load Event Received");
+            console.log("Payload Data:", content.data);
+    
+            // Store credentials or other needed data
+            window.customData = content.data;
+            console.debug('Stored Custom Data:', window.customData);
+    
+            // Optionally, call a function to handle the data
+            if (onWidgetLoadCallback) {
+                onWidgetLoadCallback(content.data);
+            }
         }
 
     }
@@ -142,7 +154,6 @@ window.ftrackWidget = (function () {
 
         // LISTEN TO POST MESSAGES.
         window.addEventListener('message', onPostMessageReceived, false);
-        window.addEventListener('message', onCustomEventReceived, false);
         window.parent.postMessage({ topic: 'ftrack.widget.ready' }, '*');
     }
 
