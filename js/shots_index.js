@@ -1,5 +1,4 @@
 'use strict';
-init_shotname = "";
 (function (ftrack, ftrackWidget) {
     var session = null;
 
@@ -46,7 +45,7 @@ init_shotname = "";
 
         // WAIT FOR BOTH REQUESTS TO FINISH, THEN UPDATE INTERFACE.
         Promise.all([entNameRequest, prjRequest, prjNameSearch]).then(function (values) {
-            
+            var selected_shot_name = "None";
             var checkParent = values[0].data[0].parent.__entity_type__;
 
             if (checkParent == "Show_package") {
@@ -58,10 +57,10 @@ init_shotname = "";
                 theprjid = values[1].data[0].project_id;
                 propName = values[2].data[0].ancestors[0].name;
 
-                init_shotname = values[0].data[0].name;
+                selected_shot_name = values[0].data[0].name;
             }
             console.log("=======================================================    THE SHOTNAME IS:     ====================================================================");
-            console.log(init_shotname);
+            console.log(selected_shot_name);
             // theproduction = values[0].data[0].id;
             // theprjid = values[1].data[0].project_id;
             // propName = values[2].data[0].ancestors[0].name;
@@ -73,7 +72,7 @@ init_shotname = "";
             console.log(values[2].data[0]);
 
             
-
+            updateInitShotname(selected_shot_name);
             ddFromCurrProp(values[2].data[0].ancestors[0].name);
             buildThumbList(values[2].data[0].ancestors[0].name);
 

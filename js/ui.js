@@ -959,3 +959,9 @@ function findDupes(arr) {
     
     return filteredarr
 } 
+
+function updateInitShotname (thename) {
+    if (thename !== "None") {
+        init_shot_name = thename;
+    }
+}

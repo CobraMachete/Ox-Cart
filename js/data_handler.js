@@ -2,6 +2,7 @@ var teams_data;
 var shots_data;
 var selected_data;
 var thumbnailwhitelist = [];
+var init_shot_name = "None";
 
 
 fetch('./temp_data/shotsinfo.json').then((response) => response.json()).then((json) => readShotsJson(json));
