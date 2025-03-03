@@ -1,4 +1,5 @@
 'use strict';
+var init_shotname = "";
 (function (ftrack, ftrackWidget) {
     var session = null;
 
