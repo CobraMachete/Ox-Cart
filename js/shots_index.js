@@ -58,6 +58,10 @@
                 propName = values[2].data[0].ancestors[0].name;
 
                 selected_shot_name = values[0].data[0].name;
+                entity = {
+                    'id': theproduction,
+                    'type': "TypedContext"
+                }
             }
             console.log("=======================================================    THE SHOTNAME IS:     ====================================================================");
             console.log(selected_shot_name);
