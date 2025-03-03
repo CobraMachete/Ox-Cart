@@ -142,6 +142,7 @@ window.ftrackWidget = (function () {
 
         // LISTEN TO POST MESSAGES.
         window.addEventListener('message', onPostMessageReceived, false);
+        window.addEventListener('message', onCustomEventReceived, false);
         window.parent.postMessage({ topic: 'ftrack.widget.ready' }, '*');
     }
 
