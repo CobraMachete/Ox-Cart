@@ -246,8 +246,8 @@ function createShotAndTasks() {
     }
     
     //GETTING BASE ENTITY
-    // var entity = ftrackWidget.getEntity();
-    var entity = entityParse(ftrackWidget.getEntity(), session);
+    var baseentity = ftrackWidget.getEntity();
+    var entity = entityParse(baseentity, session);
     console.log(entity);
     
 
@@ -1648,4 +1648,42 @@ function triggerFailure(theerror) {
         fireAnim("stopAnim");
         fireAnim("sendErr");
     }, 2000);
+}
+
+
+function entityParse (inc_entity, session) {
+
+    // QUERY CURRENT ENTITY NAME
+    var entRequest = session.query(
+        'select name, parent from ' + inc_entity.type + ' where id is "' + inc_entity.id + '" limit 1' 
+    );
+
+    Promise.all([entRequest]).then(function (values) {
+
+        var newentity;
+        var parentCheck = values[0].data[0].parent.__entity_type__;
+
+        if (parentCheck == "Show_package") {
+
+            newentity = {
+                'id': values[0].data[0].id,
+                'type': "TypedContext"
+            };
+
+            console.log("Responding entity is", newentity);
+
+            
+
+        } else if (parentCheck == "Production") {
+
+            newentity = {
+                'id': values[0].data[0].parent.id,
+                'type': "TypedContext"
+            };
+
+            console.log("Responding entity is", newentity);
+        }
+
+        return newentity
+    })
 }
