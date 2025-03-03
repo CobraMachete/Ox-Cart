@@ -965,3 +965,10 @@ function updateInitShotname (thename) {
         init_shot_name = thename;
     }
 }
+
+function injectShotName() {
+
+    console.log(init_shot_name);
+    var snf = document.getElementById("searchbar");
+    snf.value = init_shot_name;
+}

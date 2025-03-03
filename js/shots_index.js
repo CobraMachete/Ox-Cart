@@ -76,6 +76,10 @@
             ddFromCurrProp(values[2].data[0].ancestors[0].name);
             buildThumbList(values[2].data[0].ancestors[0].name);
 
+            if (selected_shot_name !== "None") {
+                injectShotName();
+            }
+
             //  PATH STRUCTURE ---> ADMIN (Project) -> _RESOURCES -> Current Project (Lowercase) -> Property (Lowercase) -> _thumbnails
 
             var theworkingprjname = values[1].data[0].project.name.toLowerCase();
