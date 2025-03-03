@@ -44,16 +44,34 @@
         
 
         // WAIT FOR BOTH REQUESTS TO FINISH, THEN UPDATE INTERFACE.
-        Promise.all([entNameRequest, prjRequest, prjNameSearch]).then(function (values) {            
-            theproduction = values[0].data[0].id;
-            theprjid = values[1].data[0].project_id;
-            propName = values[2].data[0].ancestors[0].name;
+        Promise.all([entNameRequest, prjRequest, prjNameSearch]).then(function (values) {
+            
+            var checkParent = values[0].data[0].parent.__entity_type__;
+
+            if (checkParent == "Show_package") {
+                theproduction = values[0].data[0].id;
+                theprjid = values[1].data[0].project_id;
+                propName = values[2].data[0].ancestors[0].name;
+            } else if (checkParent == "Production") {
+                theproduction = values[0].data[0].parent.id;
+                theprjid = values[1].data[0].project_id;
+                propName = values[2].data[0].ancestors[0].name;
+
+                init_shotname = values[0].data[0].name;
+            }
+
+            // theproduction = values[0].data[0].id;
+            // theprjid = values[1].data[0].project_id;
+            // propName = values[2].data[0].ancestors[0].name;
             console.log("=======================================================    THE PRODUCTION IS:     ====================================================================");
-            console.log(values[0].data[0])
+            console.log(theproduction)
             console.log("=======================================================    THE PROJECT IS:     ====================================================================");
             console.log(values[1].data[0])
             console.log("=======================================================    THE PROPNAME IS:     ====================================================================");
             console.log(values[2].data[0])
+
+            
+
             ddFromCurrProp(values[2].data[0].ancestors[0].name);
             buildThumbList(values[2].data[0].ancestors[0].name);
 

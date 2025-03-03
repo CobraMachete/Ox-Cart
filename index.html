@@ -30,6 +30,8 @@
         <script>
             $(document).ready(function() {
 
+                var init_shotname = "";
+
                 console.log('document ready')
                 $('#shotstable').hide();
 
@@ -366,6 +368,9 @@
                 window.onresize = computeSize;
 
                 window.addEventListener("change", computeSize);
+
+                console.log("=============================    INITIAL SHOTNAME  ==============================");
+                console.log(init_shotname);
 
 
             });
