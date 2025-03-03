@@ -45,7 +45,7 @@
 
         // WAIT FOR BOTH REQUESTS TO FINISH, THEN UPDATE INTERFACE.
         Promise.all([entNameRequest, prjRequest, prjNameSearch]).then(function (values) {
-            
+
             var selected_shot_name = "None";
             var checkParent = values[0].data[0].parent.__entity_type__;
 
@@ -54,6 +54,8 @@
                 theproduction = values[0].data[0].id;
                 theprjid = values[1].data[0].project_id;
                 propName = values[2].data[0].ancestors[0].name;
+
+                SESSION_ENTITY = entity;
 
                 console.log("The current entity is", entity);
 
@@ -68,6 +70,8 @@
                     'id': theproduction,
                     'type': "TypedContext"
                 }
+
+                SESSION_ENTITY = entity;
 
                 console.log("The current entity is", entity);
             }
