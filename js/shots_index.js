@@ -22,7 +22,7 @@
 
     // QUERY API FOR NAME AND VERSIONS WHEN WIDGET HAS LOADED
     function onWidgetUpdate() {
-        var entity = ftrackWidget.getEntity();
+        var entity = ftrackWidget.getEntity(session);
         console.debug('Querying new data for entity', entity);
 
         // QUERY CURRENT ENTITY NAME

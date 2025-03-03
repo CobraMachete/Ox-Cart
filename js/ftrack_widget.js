@@ -108,7 +108,7 @@ window.ftrackWidget = (function () {
     }
 
     // RETURN CURRENT ENTITY
-    function getEntity() {
+    function getEntity(session) {
 
         // QUERY CURRENT ENTITY NAME
         var entRequest = session.query(
