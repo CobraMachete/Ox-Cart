@@ -64,31 +64,30 @@ window.ftrackWidget = (function () {
     // HANDLE POST MESSAGES
     function onPostMessageReceived(event) {
         var content = event.data || {};
-        console.debug('Got "' + content.topic + '" event.', content);
+        console.debug('Received event:', content);
+    
         if (content.topic === 'ftrack.widget.load') {
-            //Store credentials for later.
-            console.debug(content);
+            console.debug('Widget load event received:', content);
+    
+            // Extract credentials
             window.credentials = content.data.credentials;
-            console.debug('STORED CREDENTIALS ARE: ', window.credentials);
-            onWidgetLoad(content);
-        } else if (content.topic === 'ftrack.widget.update') {
+            console.debug('Stored credentials:', window.credentials);
+    
+            // Extract original selection
             window.entities = content.data.selection;
-            console.debug('SELECTED ENTITIES ARE: ', window.entities);
-            onWidgetUpdate(content);
-        } else if (content.topic === 'tntsports.widget.shots_load') {
-            console.log("Custom Load Event Received");
-            console.log("Payload Data:", content.data);
+            console.debug('Selected entities:', window.entities);
     
-            // Store credentials or other needed data
-            window.customData = content.data;
-            console.debug('Stored Custom Data:', window.customData);
+            // Extract custom appended data
+            if (content.data.custom_payload) {
+                window.customPayload = content.data.custom_payload;
+                console.debug('Custom Payload:', window.customPayload);
+            }
     
-            // Optionally, call a function to handle the data
+            // Call the callback if defined
             if (onWidgetLoadCallback) {
                 onWidgetLoadCallback(content.data);
             }
         }
-
     }
 
     // RETURN CURRENT ENTITY
