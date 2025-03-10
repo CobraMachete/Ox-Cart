@@ -567,9 +567,18 @@ function createShotAndTasks() {
 
         console.log(result);
         console.log(cmpTaskList);
+        var cmpUseItem;
+        var threedUseItem;
+
+        if (isTeamsObj == true) {
+            cmpUseItem = result[0];
+        } else if (isMulticompObj == true) {
+            cmpUseItem = result[1];
+        }
+        
 
         // return Promise.all([processCompTasks(cmpTaskList, result[0], theprjid, cmpType),processCompTasks(["TEMPLATE"], result[0], theprjid, templateType), process3DTasks(thrDTaskList, result[2], theprjid, the3dtasktype), process3DTasks(["TEMPLATE"], result[2], theprjid, templateType)])
-        return Promise.all([processCompTasks(cmpTaskList, result[0], theprjid, cmpType), processCompTasks(["TEMPLATE"], result[0], theprjid, templateType), process3DTasks(thrDTaskList, result[2], theprjid, the3dtasktype) ,process3DTasks(["TEMPLATE"], result[2], theprjid, templateType)])
+        return Promise.all([processCompTasks(cmpTaskList, cmpUseItem, theprjid, cmpType), processCompTasks(["TEMPLATE"], cmpUseItem, theprjid, templateType), process3DTasks(thrDTaskList, result[2], theprjid, the3dtasktype) ,process3DTasks(["TEMPLATE"], result[2], theprjid, templateType)])
         
 
     }).then(function(resp) {
