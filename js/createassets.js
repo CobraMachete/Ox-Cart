@@ -11,6 +11,10 @@ var entityCheckObj = [
         teamsobjectcmp_name: '',
         teamsobjectthrd_id: '',
         teamsobjectthrd_name: '',
+        multicompobjectcmp_id: '',
+        multicompobjectcmp_name: '',
+        multicompobjectthrd_id: '',
+        multicompobjectthrd_name: '',
 
         
     }
