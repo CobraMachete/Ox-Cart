@@ -1092,11 +1092,11 @@ function createMulticompObj(foldEntId, prjid, teamsName) {
                         }
     
                         if (foldEntId.name == "02_cmp") {
-                            entityCheckObj[0].multiobjectcmp_id = response.data[0].id;
-                            entityCheckObj[0].multiobjectcmp_name = response.data[0].name;
+                            entityCheckObj[0].multicompobjectcmp_id = response.data[0].id;
+                            entityCheckObj[0].multicompobjectcmp_name = response.data[0].name;
                         } else {
-                            entityCheckObj[0].multiobjectthrd_id = response.data[0].id;
-                            entityCheckObj[0].multiobjectthrd_name = response.data[0].name;
+                            entityCheckObj[0].multicompobjectthrd_id = response.data[0].id;
+                            entityCheckObj[0].multicompobjectthrd_name = response.data[0].name;
                         }
     
                         console.log(theObj);
