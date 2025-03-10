@@ -572,7 +572,7 @@ function createShotAndTasks() {
 
         if (isTeamsObj == true) {
             cmpUseItem = result[0];
-        } else if (isMulticompObj == true) {
+        } else if (isMultiObj == true) {
             cmpUseItem = result[1];
         }
         
