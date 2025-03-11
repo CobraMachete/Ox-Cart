@@ -576,6 +576,9 @@ function createShotAndTasks() {
         } else if (isMultiObj == true) {
             cmpUseItem = result[1];
             threedUseItem = result[3];
+        } else {
+            cmpUseItem = result[0];
+            threedUseItem = result[2];
         }
         
 
