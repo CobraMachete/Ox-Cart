@@ -881,6 +881,146 @@
       "name":"Vinyl"
     }
     
+  ],
+
+  "big_twelve": [
+    {
+      "id": 1,
+      "tricode":"ARI",
+      "city":"Arizona",
+      "division":"Big 12",
+      "full_name":"Arizona Wildcats",
+      "name":"Wildcats"
+    },
+    {
+      "id": 2,
+      "tricode":"ASU",
+      "city":"Arizona State University",
+      "division":"Big 12",
+      "full_name":"Arizona State Sun Devils",
+      "name":"Sun Devils"
+    },
+    {
+      "id": 3,
+      "tricode":"BAY",
+      "city":"Baylor University",
+      "division":"Big 12",
+      "full_name":"Baylor Bears",
+      "name":"Bears"
+    },
+    {
+      "id": 4,
+      "tricode":"BYU",
+      "city":"Brigham Young University",
+      "division":"Big 12",
+      "full_name":"Brigham Young Cougars",
+      "name":"Cougars"
+    },
+    {
+      "id": 5,
+      "tricode":"CIN",
+      "city":"Cincinatti University",
+      "division":"Big 12",
+      "full_name":"Cincinatti Bearcats",
+      "name":"Bearcats"
+    },
+    {
+      "id": 6,
+      "tricode":"COL",
+      "city":"University of Colorado",
+      "division":"Big 12",
+      "full_name":"Colorado Buffaloes",
+      "name":"Buffaloes"
+    },
+    {
+      "id": 7,
+      "tricode":"UH",
+      "city":"Houston",
+      "division":"Big 12",
+      "full_name":"Houston Cougars",
+      "name":"Cougars"
+    },
+    {
+      "id": 8,
+      "tricode":"ISU",
+      "city":"Iowa State University",
+      "division":"Big 12",
+      "full_name":"Iowa State Cyclones",
+      "name":"Cyclones"
+    },
+    {
+      "id": 9,
+      "tricode":"KAN",
+      "city":"Kansas",
+      "division":"Big 12",
+      "full_name":"Kansas Jayhawks",
+      "name":"Jayhawks"
+    },
+    {
+      "id": 10,
+      "tricode":"KENT",
+      "city":"Kent State",
+      "division":"Big 12",
+      "full_name":"Kent State Golden Flashes",
+      "name":"Golden Flashes"
+    },
+    {
+      "id": 11,
+      "tricode":"KSU",
+      "city":"Kansas State",
+      "division":"Big 12",
+      "full_name":"Kansas State Wildcats",
+      "name":"Wildcats"
+    },
+    {
+      "id": 12,
+      "tricode":"OKST",
+      "city":"Oklahoma State",
+      "division":"Big 12",
+      "full_name":"Oklahoma State Cowboys",
+      "name":"Cowboys"
+    },
+    {
+      "id": 13,
+      "tricode":"TCU",
+      "city":"Texas Christian",
+      "division":"Big 12",
+      "full_name":"Texas Christian Horned Frogs",
+      "name":"Horned Frogs"
+    },
+    {
+      "id": 14,
+      "tricode":"TTU",
+      "city":"Texas Tech",
+      "division":"Big 12",
+      "full_name":"Texas Tech Red Raiders",
+      "name":"Red Raiders"
+    },
+    {
+      "id": 15,
+      "tricode":"TXST",
+      "city":"Texas State",
+      "division":"Big 12",
+      "full_name":"Texas State Bobcats",
+      "name":"Bobcats"
+    },
+    {
+      "id": 16,
+      "tricode":"UTAH",
+      "city":"Utah",
+      "division":"Big 12",
+      "full_name":"Utah Utes",
+      "name":"Utes"
+    },
+    {
+      "id": 17,
+      "tricode":"WVU",
+      "city":"West Virginia",
+      "division":"Big 12",
+      "full_name":"West Virginia Mountaineers",
+      "name":"Mountaineers"
+    }
+    
   ]
   
 }
