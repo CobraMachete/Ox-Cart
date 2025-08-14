@@ -125,6 +125,7 @@
                     thumbResFold = vals[1].data[0].id;
                     console.log("=======================================================    THE NEW THUMBNAIL FOLDER ID IS:    ====================================================================");
                     console.log(thumbResFold);
+                    console.log(vals[1].data[0])
                 }
 
 
