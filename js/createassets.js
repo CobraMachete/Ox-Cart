@@ -1267,7 +1267,7 @@ function createCompTask(parentEntId, prjid, currTaskName, typeid) {
 
                             console.log(data);
                             var tskThumbId = data.data[0].thumbnail_id
-                            console.log(tskThumbId)
+                            
                             
                             //CREATE NEW TASK
                             const newFold = session.create('Task', {

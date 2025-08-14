@@ -109,7 +109,7 @@
             );
 
             var newThumbFoldSearch = session.query(
-                'select descendants from Folder where project_id is "' + ADMIN_PRJ_ID + '" and parent.name is "' + theworkingpropname + '" and name is "' + resthumbfoldermain + '" limit 1' 
+                'select descendants from Folder where project_id is "' + ADMIN_PRJ_ID + '" and parent.parent.name is "' + theworkingprjname + '" and parent.name is "' + theworkingpropname + '" and name is "' + resthumbfoldermain + '" limit 1' 
             );
 
             console.log("The current entity is", entity);
