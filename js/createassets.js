@@ -1222,7 +1222,7 @@ function createMulticompObj(foldEntId, prjid, teamsName) {
                         
                         
                     } else {
-
+                        console.log("fetching entity")
                         // FETCH PARENT ENTITY
                         session.query('select id, name from TypedContext where id is "' + foldEntId.id + '"')
                         .then(function (entityResponse) {
