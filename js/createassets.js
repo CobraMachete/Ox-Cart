@@ -391,9 +391,10 @@ function createShotAndTasks() {
                                 .then(function(data) {
                                     console.log(data)
 
-                                    var tskThumbId = data.data[0].thumbnail_id;
+                                    
 
                                     if (data.data[0].thumbnail_id) {
+                                        var tskThumbId = data.data[0].thumbnail_id;
                                         session.update("Teams", [tmid], {
                                             thumbnail_id: tskThumbId,
                                         })
@@ -471,9 +472,10 @@ function createShotAndTasks() {
                                 .then(function(data) {
                                     console.log(data)
 
-                                    var tskThumbId = data.data[0].thumbnail_id;
+                                    
 
                                     if (data.data[0].thumbnail_id) {
+                                        var tskThumbId = data.data[0].thumbnail_id;
                                         session.update("Multicomp", [multicmpid], {
                                             thumbnail_id: tskThumbId,
                                         })
@@ -1184,7 +1186,7 @@ function createMulticompObj(foldEntId, prjid, teamsName) {
 
                     } else {
 
-                        console.log('Fetching parent entity.');
+                       
                         // FETCH PARENT ENTITY
                         session.query('select id, name from TypedContext where id is "' + foldEntId.id + '"')
                         .then(function (entityResponse) {
@@ -1197,62 +1199,17 @@ function createMulticompObj(foldEntId, prjid, teamsName) {
                             const entity = entityResponse.data[0];
                             console.log(entity);
 
-                            if (thumbnailwhitelist.includes(teamsName)) {
-
-                                var thmbNameJoin = teamsName.toUpperCase() + "_THUMBNAIL";
-                                console.log(thmbNameJoin);
-
-                                session.query('select thumbnail_id from TypedContext where parent_id is "' + thumbResFold + '" and name is "' + thmbNameJoin + '"')
-                                .then(function(data) {
-                                    console.log(data)
-
-                                    if (data.data.length > 0) {
-
-                                        var tskThumbId = data.data[0].thumbnail_id;
-
-                                        // CREATE NEW MULTICOMP
-                                        const newFold = session.create('Multicomp', {
-                                            name: teamsName,
-                                            parent_id: entity.id,
-                                            project_id: prjid,
-                                            thumbnail_id: tskThumbId
-                                        }).then(function (res) {
-                                            
-                                            resolve(res);
-                                            
-                                        });
-
-                                    } else {
-
-                                        // CREATE NEW MULTICOMP
-                                        const newFold = session.create('Multicomp', {
-                                            name: teamsName,
-                                            parent_id: entity.id,
-                                            project_id: prjid,
-                                        }).then(function (res) {
-                                            
-                                            resolve(res);
-                                            
-                                        });
-
-                                    }
-                                    
-                                })
-                            } else {
+                            // CREATE NEW MULTICOMP
+                            const newFold = session.create('Multicomp', {
+                                name: teamsName,
+                                parent_id: entity.id,
+                                project_id: prjid
+                            }).then(function (res) {
                                 
-                                // CREATE NEW MULTICOMP
-                                const newFold = session.create('Multicomp', {
-                                    name: teamsName,
-                                    parent_id: entity.id,
-                                    project_id: prjid,
-                                }).then(function (res) {
-                                    
-                                    resolve(res);
-                                    
-                                });
-                            }
-    
-                            
+                                resolve(res);
+                                
+                            });
+
                             
                         })
                         .catch(function (error) {
