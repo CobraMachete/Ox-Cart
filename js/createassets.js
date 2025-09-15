@@ -1127,6 +1127,7 @@ function createMulticompObj(foldEntId, prjid, teamsName) {
                         throw new Error(ERROR_MULTIPLE_MULTICOMP_OBJ);
                     }
                     
+                    console.log('Checking return.');
                     if (ret !== "None") {
 
                         resolve(ret);
@@ -1147,7 +1148,10 @@ function createMulticompObj(foldEntId, prjid, teamsName) {
                             console.log(entity);
 
                             if (thumbnailwhitelist.includes(teamsName)) {
+
                                 var thmbNameJoin = teamsName.toUpperCase() + "_THUMBNAIL";
+                                console.log(thmbNameJoin);
+
                                 session.query('select thumbnail_id from TypedContext where parent_id is "' + thumbResFold + '" and name is "' + thmbNameJoin + '"')
                                 .then(function(data) {
                                     console.log(data)
