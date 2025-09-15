@@ -448,12 +448,17 @@ function createShotAndTasks() {
 
                                     var tskThumbId = data.data[0].thumbnail_id;
 
-                                    session.update("Multicomp", [multicmpid], {
-                                        thumbnail_id: tskThumbId,
-                                    })
-                                    .then(() => {
+                                    if (data.data[0].thumbnail_id) {
+                                        session.update("Multicomp", [multicmpid], {
+                                            thumbnail_id: tskThumbId,
+                                        })
+                                        .then(() => {
+                                            resolve(thecmpMulticompObjEnt);
+                                        })
+                                    } else {
                                         resolve(thecmpMulticompObjEnt);
-                                    })
+                                    }
+                                    
                                 })
                                 
                             }
