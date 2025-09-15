@@ -583,8 +583,9 @@ function createShotAndTasks() {
         
 
         // return Promise.all([processCompTasks(cmpTaskList, result[0], theprjid, cmpType),processCompTasks(["TEMPLATE"], result[0], theprjid, templateType), process3DTasks(thrDTaskList, result[2], theprjid, the3dtasktype), process3DTasks(["TEMPLATE"], result[2], theprjid, templateType)])
-        return Promise.all([processCompTasks(cmpTaskList, cmpUseItem, theprjid, cmpType), processCompTasks(["TEMPLATE"], cmpUseItem, theprjid, templateType), process3DTasks(thrDTaskList, threedUseItem, theprjid, the3dtasktype) ,process3DTasks(["TEMPLATE"], threedUseItem, theprjid, templateType)])
-        
+        // return Promise.all([processCompTasks(cmpTaskList, cmpUseItem, theprjid, cmpType), processCompTasks(["TEMPLATE"], cmpUseItem, theprjid, templateType), process3DTasks(thrDTaskList, threedUseItem, theprjid, the3dtasktype) ,process3DTasks(["TEMPLATE"], threedUseItem, theprjid, templateType)])
+        return Promise.all([processCompTasks(cmpTaskList, cmpUseItem, theprjid, cmpType), process3DTasks(thrDTaskList, threedUseItem, theprjid, the3dtasktype)])
+
 
     }).then(function(resp) {
         
