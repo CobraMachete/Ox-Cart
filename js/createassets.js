@@ -434,9 +434,28 @@ function createShotAndTasks() {
                                 } else {
                                     thecmpMulticompObjEnt = resMultiObjEnt;
                                 }
-                                console.log(thecmpMulticompObjEnt);
-                                resolve(thecmpMulticompObjEnt);
 
+                                console.log(thecmpMulticompObjEnt);
+                                var multicmpname = thecmpMulticompObjEnt.name;
+                                var multicmpid = thecmpMulticompObjEnt.id;
+
+
+                                var thmbNameJoin = multicmpname.toUpperCase() + "_THUMBNAIL";
+
+                                session.query('select thumbnail_id from TypedContext where parent_id is "' + thumbResFold + '" and name is "' + thmbNameJoin + '"')
+                                .then(function(data) {
+                                    console.log(data)
+
+                                    var tskThumbId = data.data[0].thumbnail_id;
+
+                                    session.update("Multicomp", [multicmpid], {
+                                        thumbnail_id: tskThumbId,
+                                    })
+                                    .then(() => {
+                                        resolve(thecmpMulticompObjEnt);
+                                    })
+                                })
+                                
                             }
 
                             
@@ -1190,7 +1209,7 @@ function createMulticompObj(foldEntId, prjid, teamsName) {
                                     
                                 })
                             } else {
-                                console.log("Thumnail not in whitelist");
+                                
                                 // CREATE NEW MULTICOMP
                                 const newFold = session.create('Multicomp', {
                                     name: teamsName,
@@ -1222,7 +1241,7 @@ function createMulticompObj(foldEntId, prjid, teamsName) {
                         
                         
                     } else {
-                        console.log("fetching entity")
+                        
                         // FETCH PARENT ENTITY
                         session.query('select id, name from TypedContext where id is "' + foldEntId.id + '"')
                         .then(function (entityResponse) {
