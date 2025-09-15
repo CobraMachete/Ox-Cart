@@ -393,7 +393,7 @@ function createShotAndTasks() {
 
                                     
 
-                                    if (data.data[0].thumbnail_id !== undefined) {
+                                    if (data.data[0].thumbnail_id != undefined && data.data[0].thumbnail_id != "undefined") {
                                         var tskThumbId = data.data[0].thumbnail_id;
                                         session.update("Teams", [tmid], {
                                             thumbnail_id: tskThumbId,
@@ -474,7 +474,7 @@ function createShotAndTasks() {
 
                                     
 
-                                    if (data.data[0].thumbnail_id !== undefined) {
+                                    if (data.data[0].thumbnail_id != undefined && data.data[0].thumbnail_id != "undefined") {
                                         var tskThumbId = data.data[0].thumbnail_id;
                                         session.update("Multicomp", [multicmpid], {
                                             thumbnail_id: tskThumbId,
