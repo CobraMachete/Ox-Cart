@@ -380,7 +380,32 @@ function createShotAndTasks() {
                                     thecmpTeamsObjEnt = resteamObjEnt;
                                 }
                                 console.log(thecmpTeamsObjEnt);
-                                resolve(thecmpTeamsObjEnt);
+
+                                var tmname = thecmpTeamsObjEnt.name;
+                                var tmid = thecmpTeamsObjEnt.id;
+
+
+                                var thmbNameJoin = tmname.toUpperCase() + "_THUMBNAIL";
+
+                                session.query('select thumbnail_id from TypedContext where parent_id is "' + thumbResFold + '" and name is "' + thmbNameJoin + '"')
+                                .then(function(data) {
+                                    console.log(data)
+
+                                    var tskThumbId = data.data[0].thumbnail_id;
+
+                                    if (data.data[0].thumbnail_id) {
+                                        session.update("Teams", [tmid], {
+                                            thumbnail_id: tskThumbId,
+                                        })
+                                        .then(() => {
+                                            resolve(thecmpTeamsObjEnt);
+                                        })
+                                    } else {
+                                        resolve(thecmpTeamsObjEnt);
+                                    }
+                                    
+                                })
+                                
 
                             }
 
