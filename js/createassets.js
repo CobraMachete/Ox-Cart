@@ -1123,6 +1123,7 @@ function createMulticompObj(foldEntId, prjid, teamsName) {
                     }
                 }).then(function (ret) {
 
+                    console.log(ret);
                     if (ret == ERROR_MULTIPLE_MULTICOMP_OBJ){
                         throw new Error(ERROR_MULTIPLE_MULTICOMP_OBJ);
                     }
