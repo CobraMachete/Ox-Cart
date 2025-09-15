@@ -1136,62 +1136,74 @@ function createMulticompObj(foldEntId, prjid, teamsName) {
                         
                         // FETCH PARENT ENTITY
                         session.query('select id, name from TypedContext where id is "' + foldEntId.id + '"')
-                            .then(function (entityResponse) {
-                                
-                                if (entityResponse.data.length === 0) {
-                                    console.error('Entity not found.');
-                                    reject('Entity not found.');
-                                }
-        
-                                const entity = entityResponse.data[0];
+                        .then(function (entityResponse) {
+                            
+                            if (entityResponse.data.length === 0) {
+                                console.error('Entity not found.');
+                                reject('Entity not found.');
+                            }
+    
+                            const entity = entityResponse.data[0];
+                            console.log(entity);
+                            if (thumbnailwhitelist.includes(teamsName)) {
+                                var thmbNameJoin = teamsName.toUpperCase() + "_THUMBNAIL";
+                                session.query('select thumbnail_id from TypedContext where parent_id is "' + thumbResFold + '" and name is "' + thmbNameJoin + '"')
+                                .then(function(data) {
+                                    console.log(data)
 
-                                if (thumbnailwhitelist.includes(teamsName)) {
-                                    var thmbNameJoin = teamsName.toUpperCase() + "_THUMBNAIL";
-                                    session.query('select thumbnail_id from TypedContext where parent_id is "' + thumbResFold + '" and name is "' + thmbNameJoin + '"')
-                                    .then(function(data) {
-                                        console.log(data)
+                                    if (data.data.length > 0) {
 
-                                        if (data.data.length > 0) {
+                                        var tskThumbId = data.data[0].thumbnail_id;
 
-                                            var tskThumbId = data.data[0].thumbnail_id;
+                                        // CREATE NEW MULTICOMP
+                                        const newFold = session.create('Multicomp', {
+                                            name: teamsName,
+                                            parent_id: entity.id,
+                                            project_id: prjid,
+                                            thumbnail_id: tskThumbId
+                                        }).then(function (res) {
+                                            
+                                            resolve(res);
+                                            
+                                        });
 
-                                            // CREATE NEW MULTICOMP
-                                            const newFold = session.create('Multicomp', {
-                                                name: teamsName,
-                                                parent_id: entity.id,
-                                                project_id: prjid,
-                                                thumbnail_id: tskThumbId
-                                            }).then(function (res) {
-                                                
-                                                resolve(res);
-                                                
-                                            });
+                                    } else {
 
-                                        } else {
+                                        // CREATE NEW MULTICOMP
+                                        const newFold = session.create('Multicomp', {
+                                            name: teamsName,
+                                            parent_id: entity.id,
+                                            project_id: prjid,
+                                        }).then(function (res) {
+                                            
+                                            resolve(res);
+                                            
+                                        });
 
-                                            // CREATE NEW MULTICOMP
-                                            const newFold = session.create('Multicomp', {
-                                                name: teamsName,
-                                                parent_id: entity.id,
-                                                project_id: prjid,
-                                            }).then(function (res) {
-                                                
-                                                resolve(res);
-                                                
-                                            });
-
-                                        }
-                                        
-                                    })
-                                }
-        
-                                
-                                
-                            })
-                            .catch(function (error) {
-                                console.error('ERROR FETCHING ENTITY:', error);
-                                reject('Error fetching entity:', error);
-                            });
+                                    }
+                                    
+                                })
+                            } else {
+                                console.log("Thumnail not in whitelist");
+                                // CREATE NEW MULTICOMP
+                                const newFold = session.create('Multicomp', {
+                                    name: teamsName,
+                                    parent_id: entity.id,
+                                    project_id: prjid,
+                                }).then(function (res) {
+                                    
+                                    resolve(res);
+                                    
+                                });
+                            }
+    
+                            
+                            
+                        })
+                        .catch(function (error) {
+                            console.error('ERROR FETCHING ENTITY:', error);
+                            reject('Error fetching entity:', error);
+                        });
                     }
 
                 })
