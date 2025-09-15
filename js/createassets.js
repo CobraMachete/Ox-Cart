@@ -1133,7 +1133,7 @@ function createMulticompObj(foldEntId, prjid, teamsName) {
 
                     } else {
 
-                        
+                        console.log('Fetching parent entity.');
                         // FETCH PARENT ENTITY
                         session.query('select id, name from TypedContext where id is "' + foldEntId.id + '"')
                         .then(function (entityResponse) {
@@ -1145,6 +1145,7 @@ function createMulticompObj(foldEntId, prjid, teamsName) {
     
                             const entity = entityResponse.data[0];
                             console.log(entity);
+
                             if (thumbnailwhitelist.includes(teamsName)) {
                                 var thmbNameJoin = teamsName.toUpperCase() + "_THUMBNAIL";
                                 session.query('select thumbnail_id from TypedContext where parent_id is "' + thumbResFold + '" and name is "' + thmbNameJoin + '"')
