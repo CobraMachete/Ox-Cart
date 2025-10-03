@@ -34,6 +34,9 @@
 
                 var shotsearchbox = document.getElementById("awaysearchbar");
 
+                console.log(window.MATCHMAKER_BOOT.teams)
+                console.log(window.MATCHMAKER_BOOT.structure)
+
                 // INITIAL JSON DATA RETRIEVAL FOR STRUCTURE AND TEAMS
                 window.addEventListener('message', (e) => {
                     // ftrack posts an object that typically looks like { topic, data }
