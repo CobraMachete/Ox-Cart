@@ -1,4 +1,16 @@
 'use strict';
+(function debugSeed() {
+  console.log('[Widget boot] href:', location.href);
+  const p = Object.fromEntries(new URLSearchParams(location.hash.slice(1)));
+  console.log('[Widget boot] hash params:', p);
+
+  window.addEventListener('message', (e) => {
+    // You should see credentials + selection here
+    if (e?.data?.topic === 'ftrack.widget.load') {
+      console.log('[Widget boot] ftrack.widget.load payload:', e.data);
+    }
+  });
+})();
 
 //  FTRACKWIDGET MODULE
 //  Handles communication with the ftrack web app via postMessage.
