@@ -3,18 +3,19 @@
 	let session = null;
 	let booted  = false;
 	
-	// Vars you referenced under 'use strict' need declarations.
+	// Globals you referenced under strict mode.
 	let theproduction = null;
 	let theprjid      = null;
 	let propName      = null;
 	let thumbResFold  = null;
 	
-	// -------- Helpers --------
+	const REQUEST_TOPIC = 'tntsports.matchmaker.request';
+	const SEED_TOPIC    = 'tntsports.matchmaker.seed';
+	
+	// ---------- Utils ----------
 	function normalizeEntity(e) {
 		if (!e) return null;
-		// Already normalized?
 		if (e.id && e.type) return e;
-		// Selection-shaped payload { entityId, entityType }
 		const id   = e.entityId || e.id || null;
 		const type = e.type || e.entityType || 'TypedContext';
 		return id ? { id, type } : null;
@@ -44,14 +45,13 @@
 		});
 	}
 	
-	function genCorrelationId() {
-		return (crypto && crypto.randomUUID)
-		? crypto.randomUUID()
+	function correlationId() {
+		return (crypto && crypto.randomUUID) ? crypto.randomUUID()
 		: (Math.random().toString(36).slice(2) + Date.now());
 	}
 	
-	// -------- Event Hub handshake --------
-	async function bootSeedViaEventHub(jsSession, rawEntity) {
+	// ---------- Event Hub handshake ----------
+	async function requestSeedViaEventHub(jsSession, rawEntity) {
 		const entity = normalizeEntity(rawEntity);
 		const eid = entity?.id;
 		if (!eid) {
@@ -59,12 +59,25 @@
 			return;
 		}
 		
-		const correlationId = genCorrelationId();
+		// Ensure the JS event hub is connected.
+		if (!jsSession.eventHub) {
+			console.error('[MatchMaker] session.eventHub not available — wrong API object?');
+			return;
+		}
+		// Connect once (idempotent).
+		try {
+			await jsSession.eventHub.connect();
+		} catch (e) {
+			console.error('[MatchMaker] eventHub.connect() failed:', e);
+			return;
+		}
 		
-		// 1) Subscribe FIRST so we cannot miss the server reply.
-		await jsSession.event_hub.subscribe('topic=tntsports.matchmaker.seed', function (event) {
-			const d = event && event.data || {};
-			if (d.correlation_id !== correlationId) return; // only accept our reply
+		const corr = correlationId();
+		
+		// 1) Subscribe BEFORE publishing so we don’t miss the response.
+		jsSession.eventHub.subscribe(`topic=${SEED_TOPIC}`, function (event) {
+			const d = (event && event.data) || {};
+			if (d.correlation_id !== corr) return;   // only our reply
 			if (d.entity_id !== eid) return;
 			
 			console.debug('[MatchMaker] seed received:', d);
@@ -73,44 +86,44 @@
 				teams:     d.allteamsdata || null,
 				structure: d.allstructuredata || null,
 				projectId: d.project_id || (window.MATCHMAKER_BOOT && window.MATCHMAKER_BOOT.projectId) || null,
-				entityId:  d.entity_id || (window.MATCHMAKER_BOOT && window.MATCHMAKER_BOOT.entityId) || eid
+				entityId:  d.entity_id || eid
 			});
 			
-			// If you want to kick your UI here, do it; otherwise your existing flow can read MATCHMAKER_BOOT.
 			if (typeof window.initMatchMaker === 'function') {
 				window.initMatchMaker({
 					teams:     window.MATCHMAKER_BOOT.teams,
 					structure: window.MATCHMAKER_BOOT.structure,
-					entity:    entity,
+					entity,
 					projectId: window.MATCHMAKER_BOOT.projectId
 				});
 			}
 		});
 		
-		// 2) Publish the request
-		jsSession.event_hub.publish({
-			topic: 'tntsports.matchmaker.request',
-			data: {
-				correlation_id: correlationId,
+		// 2) Publish the request (IMPORTANT: JS API uses new ftrack.Event(topic, data))
+		try {
+			const ev = new ftrack.Event(REQUEST_TOPIC, {
+				correlation_id: corr,
 				entity_id: eid,
-				// optional: project_id (server can derive from entity_id). If you have one, include it:
 				project_id: (window.MATCHMAKER_BOOT && window.MATCHMAKER_BOOT.projectId) || null
-			}
-		});
+			});
+			jsSession.eventHub.publish(ev);
+			console.debug('[MatchMaker] seed request published', { corr, eid });
+		} catch (e) {
+			console.error('[MatchMaker] eventHub.publish failed:', e);
+		}
 	}
 	
-	// -------- Main load/update handlers --------
+	// ---------- Main load/update ----------
 	async function onWidgetLoad(payload) {
-		// payload provided by your ftrackWidget bridge
+		// From your ftrackWidget bridge
 		const creds = (payload && payload.credentials) || (ftrackWidget.getCredentials && ftrackWidget.getCredentials());
 		const opts  = (payload && payload.options)     || (ftrackWidget.getOptions && ftrackWidget.getOptions());
 		const entRaw = (payload && payload.entity)     || (ftrackWidget.getEntity && ftrackWidget.getEntity());
 		const entity = normalizeEntity(entRaw);
 		
-		// Merge any injected options (if your action ever supplies them in the future).
 		hydrateFromOptions(opts);
 		
-		// Start session once
+		// Create JS session once
 		if (!session) {
 			if (!creds?.serverUrl || !creds?.apiUser || !creds?.apiKey) {
 				console.error('[MatchMaker] Missing credentials; cannot init ftrack session.', creds);
@@ -127,10 +140,10 @@
 			}
 		}
 		
-		// Ask server for seed (teams/structure). This is robust to CORS and options forwarding.
-		await bootSeedViaEventHub(session, entity);
+		// Ask server for seed (reliable path; no CORS/options assumptions)
+		await requestSeedViaEventHub(session, entity);
 		
-		// Then run your existing query logic (cleaned).
+		// Your original query logic
 		await queryAndBootFromEntity(entity);
 	}
 	
@@ -140,7 +153,7 @@
 		void queryAndBootFromEntity(entity);
 	}
 	
-	// -------- Your original query logic, cleaned/guarded --------
+	// ---------- Queries (cleaned/guarded) ----------
 	async function queryAndBootFromEntity(entity) {
 		if (!session) return;
 		const eid   = entity?.id;
@@ -183,7 +196,7 @@
 			let normalizedEntity = entity;
 			
 			if (checkParent === 'Show_package') {
-				theproduction = entRow.id; // we selected id above
+				theproduction = entRow.id;
 				theprjid      = prjRow.project_id ?? prjRow.project?.id ?? null;
 				propName      = ancRow.ancestors?.[0]?.name ?? null;
 				
@@ -211,7 +224,7 @@
 			console.log('=================== THE ANCESTORS ==================');
 			console.log(ancRow);
 			
-			// Your existing UI hooks — optional-chained so this file doesn’t crash if they’re not defined yet.
+			// UI hooks (optional-chained)
 			window.updateInitShotname?.(selected_shot_name);
 			window.ddFromCurrProp?.(propName);
 			window.buildThumbList?.(propName);
@@ -252,7 +265,7 @@
 		}
 	}
 	
-	// -------- Wire up --------
+	// ---------- Wire up ----------
 	function onDomContentLoaded() {
 		console.debug('DOM content loaded, initializing widget.');
 		ftrackWidget.initialize({
