@@ -34,8 +34,8 @@
 
                 var shotsearchbox = document.getElementById("awaysearchbar");
 
-                console.log(window.MATCHMAKER_BOOT.teams)
-                console.log(window.MATCHMAKER_BOOT.structure)
+                console.log(TEAMS_JSON_DATA)
+                console.log(STRUCTURE_JSON_DATA)
 
                 // INITIAL JSON DATA RETRIEVAL FOR STRUCTURE AND TEAMS
                 window.addEventListener('message', (e) => {
@@ -92,6 +92,8 @@
 
                 // });
             });
+
+            
         </script>
         
         <div id="widget">

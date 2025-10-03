@@ -21,6 +21,7 @@
       objectType: partial.objectType ?? prev.objectType ?? null
     };
     console.debug('[MatchMaker] boot merged:', window.MATCHMAKER_BOOT);
+	
   }
 
   // ---------- Hash helpers ----------
