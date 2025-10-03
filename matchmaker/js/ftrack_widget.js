@@ -31,10 +31,20 @@ window.ftrackWidget = (function () {
     const data = content && content.data ? content.data : content || {};
     const creds = data.credentials || credentials;
     const sel = Array.isArray(data.selection) ? data.selection : selection || [];
-    const ent =
-      data.entity ||
-      (sel && sel.length ? sel[0] : entity) ||
-      null;
+    
+
+    function normalizeEntity(e) {
+    if (!e) return null;
+    // Already normalized?
+    if (e.id && e.type) return e;
+        // Selection-shaped { entityId, entityType }
+        const id = e.entityId || e.id || null;
+        const type = e.type || e.entityType || 'TypedContext';
+        return id ? { id, type } : null;
+    }
+    const ent = normalizeEntity(
+        data.entity || (sel && sel.length ? sel[0] : entity)
+    );
 
     // Prefer standard 'options'; fall back to your older 'custom_payload' if present.
     const opts = data.options != null ? data.options : (data.custom_payload || options);
