@@ -3,17 +3,82 @@
     <head>
         <title>MatchMaker</title>
         <!-- <link rel="stylesheet" type="text/css" href="css/style.css"> -->
-        <link rel="preconnect" href="https://rsms.me/">
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+        <link rel="preconnect" href="https://cdn.fonts.net/kit/b0386608-2665-4bdb-9fbd-a444e77360a7/b0386608-2665-4bdb-9fbd-a444e77360a7_enhanced.js" crossorigin>
+	    <script type="text/javascript" src="https://cdn.fonts.net/kit/b0386608-2665-4bdb-9fbd-a444e77360a7/b0386608-2665-4bdb-9fbd-a444e77360a7_enhanced.js" async></script>
+
+        <link rel="stylesheet" type="text/css" href="css/etc.min.css">
+        <link rel="stylesheet" type="text/css" href="css/ext.min.css">
+        <link rel="stylesheet" type="text/css" href="css/ftrack-theme-dark-vars.min.css">
+        <link rel="stylesheet" type="text/css" href="css/ftrack-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="css/material-icons.css">
+        <link rel="stylesheet" type="text/css" href="css/normalize.min.css">
+        <link rel="stylesheet" type="text/css" href="css/theme-dark.css">
+        <link rel="stylesheet" type="text/css" href="css/nice-select.css">
+
+        <!-- <script type="text/javascript" src="js/rive.js"></script> -->
+        <script src="https://unpkg.com/@rive-app/canvas@2.20.0"></script>
+        <script type="text/javascript" src="js/jquery-3.7.1.slim.min.js"></script>
+        <script type="text/javascript" src="js/jquery.nice-select.js"></script>
+
+        <script type="text/javascript" src="js/ui.js"></script>
+        <script type="text/javascript" src="js/data_handler.js"></script>
+        <script type="text/javascript" src="js/endscreen.js"></script>
+        <script type="text/javascript" src="js/mousetrap.min.js"></script>
         
         
     </head>
     <body>
+        <script>
+            $(document).ready(function() {
+                $('#shotstable').hide();
+            })
+        </script>
         
         <div id="widget">
             <div class="master-container" id="mastercontainer">
-                <!------------------------ SHOTS CREATOR ------------------------>
-                <div> HOWDY</div>
+                <div class="main-container" id="maincontainer">
+                    <div class="main-col-container">
+                        <div class="main-row-container">
+                            <div class="awayteam-container">
+                                <div class="title-row">Away Team</div>
+                                <div class="shot-search-bar" id="shotsearch">
+                                    <input id="awaysearchbar" type="text" name="search" placeholder="Search Away Teams...">
+                                </div>
+                                <table class="custom-table" id="shotstable">
+                                    <thead id="shottableheader">
+                                        <tr>
+                                        <th scope="col">Available Shots</th>
+                                        </tr>
+                                    </thead>
+                                
+                                    <tbody class="custom-table custom-table-body" id="shottablebody">
+                                    
+                                    </tbody>
+                                </table>
+                                <div class="tricode-row">ASU</div>
+                                <div class="school-row">Arizona State</div>
+                            </div>
+                            <div class="vs-container">
+                                <div class="vs-row">vs</div>
+                            </div>
+                            <div class="hometeam-container">
+                                <div class="title-row">Home Team</div>
+                                <div class="shot-search-bar" id="shotsearch">
+                                    <input id="homesearchbar" type="text" name="search" placeholder="Search Home Teams...">
+                                </div>
+                                <div class="tricode-row">HAW</div>
+                                <div class="school-row">University of Hawaii</div>
+                            </div>
+                            
+                        </div>
+                        <div class="bottom-row-container">
+                            <div class="select-icon-moon"></div>
+                            <div class="select-icon-sunny"></div>
+                            <div class="select-icon-moon"></div>
+                            
+                        </div>
+                    </div>
+                </div>
                 
                 
             </div>

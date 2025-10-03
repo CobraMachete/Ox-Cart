@@ -1,0 +1,27 @@
+@font-face {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 300;
+    src: url(Light/Roboto-Light.woff2?v=1.1.0) format("woff2"), url(Light/Roboto-Light.woff?v=1.1.0) format("woff"), url(Light/Roboto-Light.ttf?v=1.1.0) format("truetype")
+}
+
+@font-face {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 400;
+    src: url(Regular/Roboto-Regular.woff2?v=1.1.0) format("woff2"), url(Regular/Roboto-Regular.woff?v=1.1.0) format("woff"), url(Regular/Roboto-Regular.ttf?v=1.1.0) format("truetype")
+}
+
+@font-face {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 500;
+    src: url(Medium/Roboto-Medium.woff2?v=1.1.0) format("woff2"), url(Medium/Roboto-Medium.woff?v=1.1.0) format("woff"), url(Medium/Roboto-Medium.ttf?v=1.1.0) format("truetype")
+}
+
+@font-face {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 700;
+    src: url(Bold/Roboto-Bold.woff2?v=1.1.0) format("woff2"), url(Bold/Roboto-Bold.woff?v=1.1.0) format("woff"), url(Bold/Roboto-Bold.ttf?v=1.1.0) format("truetype")
+}
