@@ -486,7 +486,7 @@ body {
     margin-top: 0;
     margin-right: 0;
     margin-left: 0;
-    width: 100%;
+    width: 85%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -498,11 +498,11 @@ body {
 
 .main-row-container {
     max-width: 100%;
-    padding-right: 1rem;
-    padding-left: 1rem;
+    padding-right: 0rem;
+    padding-left: 0rem;
     margin-top: 1.5rem;
-    margin-right: 1rem;
-    margin-left: 1rem;
+    margin-right: 0rem;
+    margin-left: 0rem;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -570,6 +570,23 @@ body {
     transition: .3s all ease;
 }
 
+.header-container {
+    display: flex;
+    width: 15%;
+    padding-right: 0rem;
+    padding-left: 0rem;
+    padding-top: 0rem;
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+    margin-right: 0;
+    margin-left: 0rem;
+}
+
+.header-image {
+    width: 100%;
+    aspect-ratio: 1.97 / 1;
+}
+
 
 .secondary-container {
     max-width: 600px;
@@ -634,7 +651,7 @@ body {
 }
 
 .vs-container {
-    width: 10%;
+    width: 8%;
     max-width: 20%;
     padding-right: 0;
     padding-left: 0;
@@ -647,14 +664,27 @@ body {
     
 }
 
+.swap-row {
+    width: 3.5rem;
+    height: 3.5rem;
+    padding-right: 0rem;
+    padding-left: 0rem;
+    padding-top: 0rem;
+    padding-bottom: 1rem;
+    margin: 0;
+    opacity: 0.40;
+    content: url("../img/swap_horiz.svg");
+    
+}
+
 .vs-row {
-    padding-right: 0px;
-    padding-left: 0px;
-    padding-top: 1rem;
-    padding-bottom: 1.5rem;
+    padding-right: 0rem;
+    padding-left: 0rem;
+    padding-top: 0rem;
+    padding-bottom: 2rem;
     margin: 0;
     font-weight: 700;
-    font-size: 6rem;
+    font-size: 5rem;
     opacity: 0.20;
     letter-spacing: 1.2px;
     

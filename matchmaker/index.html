@@ -31,13 +31,79 @@
         <script>
             $(document).ready(function() {
                 $('#shotstable').hide();
-            })
+
+                var shotsearchbox = document.getElementById("awaysearchbar");
+
+                // INITIAL JSON DATA RETRIEVAL FOR STRUCTURE AND TEAMS
+                window.addEventListener('message', (e) => {
+                    // ftrack posts an object that typically looks like { topic, data }
+                    const msg = e.data || {};
+                    const payload = msg.data || msg; // depending on ftrack shell version
+                    const opts = payload.options || {};
+
+                    // Access your injected data:
+                    const teams = opts.allteamsdata;
+                    const structure = opts.allstructuredata;
+
+                    // You may also want project/entity metadata:
+                    const entityId = opts.entityId;
+                    const projectId = opts.projectId;
+
+                    // Do your widget bootstrapping here...
+                    console.log('MatchMaker boot options:', opts);
+                });
+
+                //EVENT LISTENER FOR SHOT SEARCH BOX
+                // shotsearchbox.addEventListener('input', function(e) {
+                    
+                //     var targinput = event.target.value;
+                //     var sanshot = sanitizeshot(targinput);
+                    
+                //     var myinput = sanshot.toLowerCase();
+
+                //     // PUSHING THE SANITIZED TEXT BACK TO FIELD
+                //     shotsearchbox.value = myinput;
+
+                //     $('#shottablebody').empty();
+                //     if (myinput.length > 0) {
+                //         var suggestions = shots_data.filter(function(item) {
+                //             return item.toLowerCase().includes(myinput);
+                //         });
+                //         if (suggestions.length > 0) {
+                            
+                //             for (var i = 0; i < suggestions.length; i++) {
+
+                //                 var info = "<tr onclick='addToShotField(this)'><td>" + suggestions[i] + "<td><tr>";
+                //                 $(datatable).append(info);
+                                
+                //             }
+
+                //             $('#shotstable').show();
+                            
+                //         } else {
+                //             $('#shotstable').hide();
+                //         }
+                //     } else {
+                //         $('#shotstable').hide();
+                //     }
+
+                // });
+            });
         </script>
         
         <div id="widget">
             <div class="master-container" id="mastercontainer">
                 <div class="main-container" id="maincontainer">
+
+                    <!-- HEADER WIDGET WORDMARK IMAGE -->
+                    <div class="header-container">
+                        <div class="header-image"><img src="./img/matchmaker_wordmark.svg"></div>
+                    </div>
+
+                    <!-- FULL ROW STARTS HERE THAT CONTAINS ALL OF THE ROW COMPONENTS -->
                     <div class="main-col-container">
+
+                        <!-- MATCHUP UI HERE -->
                         <div class="main-row-container">
                             <div class="awayteam-container">
                                 <div class="title-row">Away Team</div>
@@ -59,6 +125,7 @@
                                 <div class="school-row">Arizona State</div>
                             </div>
                             <div class="vs-container">
+                                <div class="swap-row"></div>
                                 <div class="vs-row">vs</div>
                             </div>
                             <div class="hometeam-container">
@@ -69,8 +136,9 @@
                                 <div class="tricode-row">HAW</div>
                                 <div class="school-row">University of Hawaii</div>
                             </div>
-                            
                         </div>
+
+                        <!-- SPECIAL FIELDS UI HERE -->
                         <div class="bottom-row-container">
                             <div class="select-icon-moon"></div>
                             <div class="select-icon-sunny"></div>
