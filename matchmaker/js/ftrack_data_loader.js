@@ -8,6 +8,45 @@
 	let theprjid      = null;
 	let propName      = null;
 	let thumbResFold  = null;
+
+	// --- Seed bus: event + promise + callback registry ---
+	const __seedListeners = new Set();
+	
+	// Promise any script can await
+	if (!window.MATCHMAKER_SEED) {
+		window.MATCHMAKER_SEED = new Promise(resolve => { window.__resolveMatchmakerSeed = resolve; });
+	}
+	
+	// Optional: register a callback (fires immediately if seed already ready)
+	window.onMatchMakerSeedReady = (fn) => {
+		if (typeof fn !== 'function') return;
+		__seedListeners.add(fn);
+		if (window.MATCHMAKER_BOOT?.teams && window.MATCHMAKER_BOOT?.structure) {
+			try { fn(structuredClone?.(window.MATCHMAKER_BOOT) || JSON.parse(JSON.stringify(window.MATCHMAKER_BOOT))); } catch {}
+		}
+	};
+	
+	// Snapshot getter (read-only copy)
+	window.getMatchMakerSeed = () => (
+		window.MATCHMAKER_BOOT ? (structuredClone?.(window.MATCHMAKER_BOOT) || JSON.parse(JSON.stringify(window.MATCHMAKER_BOOT))) : null
+	);
+	
+	// Internal notifier — call this once seed is complete
+	function __notifySeedReady() {
+		const payload = window.getMatchMakerSeed();
+		if (!payload) return;
+		
+		// 1) fire DOM event
+		window.dispatchEvent(new CustomEvent('matchmaker:seed', { detail: payload }));
+		
+		// 2) resolve the promise (once)
+		if (window.__resolveMatchmakerSeed) { window.__resolveMatchmakerSeed(payload); window.__resolveMatchmakerSeed = null; }
+		
+		// 3) call any registered callbacks
+		for (const fn of __seedListeners) {
+			try { fn(payload); } catch (e) { console.error('[MatchMaker] seed listener failed:', e); }
+		}
+	}
 	
 	// ---------- Boot state helpers ----------
 	function mergeBoot(partial) {
@@ -113,44 +152,7 @@
 		}
 	}
 	
-	// --- Seed bus: event + promise + callback registry ---
-	const __seedListeners = new Set();
 	
-	// Promise any script can await
-	if (!window.MATCHMAKER_SEED) {
-		window.MATCHMAKER_SEED = new Promise(resolve => { window.__resolveMatchmakerSeed = resolve; });
-	}
-	
-	// Optional: register a callback (fires immediately if seed already ready)
-	window.onMatchMakerSeedReady = (fn) => {
-		if (typeof fn !== 'function') return;
-		__seedListeners.add(fn);
-		if (window.MATCHMAKER_BOOT?.teams && window.MATCHMAKER_BOOT?.structure) {
-			try { fn(structuredClone?.(window.MATCHMAKER_BOOT) || JSON.parse(JSON.stringify(window.MATCHMAKER_BOOT))); } catch {}
-		}
-	};
-	
-	// Snapshot getter (read-only copy)
-	window.getMatchMakerSeed = () => (
-		window.MATCHMAKER_BOOT ? (structuredClone?.(window.MATCHMAKER_BOOT) || JSON.parse(JSON.stringify(window.MATCHMAKER_BOOT))) : null
-	);
-	
-	// Internal notifier — call this once seed is complete
-	function __notifySeedReady() {
-		const payload = window.getMatchMakerSeed();
-		if (!payload) return;
-		
-		// 1) fire DOM event
-		window.dispatchEvent(new CustomEvent('matchmaker:seed', { detail: payload }));
-		
-		// 2) resolve the promise (once)
-		if (window.__resolveMatchmakerSeed) { window.__resolveMatchmakerSeed(payload); window.__resolveMatchmakerSeed = null; }
-		
-		// 3) call any registered callbacks
-		for (const fn of __seedListeners) {
-			try { fn(payload); } catch (e) { console.error('[MatchMaker] seed listener failed:', e); }
-		}
-	}
 	
 	
 	// ---------- Widget lifecycle ----------
