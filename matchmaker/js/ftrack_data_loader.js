@@ -252,8 +252,8 @@
       }
 
       if (propName) {
-        window.ddFromCurrProp?.(propName);
-        window.buildThumbList?.(propName);
+        //window.ddFromCurrProp?.(propName);
+        //window.buildThumbList?.(propName);
       } else {
         console.warn('[MatchMaker] No propName derived; skipping ddFromCurrProp/buildThumbList.');
       }
