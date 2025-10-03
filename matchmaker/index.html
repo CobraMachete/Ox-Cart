@@ -35,8 +35,23 @@
                 var shotsearchbox = document.getElementById("awaysearchbar");
 
                 // INITIAL JSON DATA RETRIEVAL FOR STRUCTURE AND TEAMS
-                const params = Object.fromEntries(new URLSearchParams(location.hash.slice(1)));
-                console.log('[seed params]', params);
+                window.addEventListener('message', (e) => {
+                    // ftrack posts an object that typically looks like { topic, data }
+                    const msg = e.data || {};
+                    const payload = msg.data || msg; // depending on ftrack shell version
+                    const opts = payload.options || {};
+
+                    // Access your injected data:
+                    const teams = opts.allteamsdata;
+                    const structure = opts.allstructuredata;
+
+                    // You may also want project/entity metadata:
+                    const entityId = opts.entityId;
+                    const projectId = opts.projectId;
+
+                    // Do your widget bootstrapping here...
+                    console.log('MatchMaker boot options:', opts);
+                });
 
                 //EVENT LISTENER FOR SHOT SEARCH BOX
                 // shotsearchbox.addEventListener('input', function(e) {
