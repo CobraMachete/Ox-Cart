@@ -4,15 +4,9 @@ var selected_data;
 var thumbnailwhitelist = [];
 var init_shot_name = "None";
 
-let TEAMS_JSON_DATA;
-let STRUCTURE_JSON_DATA;
-
 
 // fetch('./temp_data/shotsinfo.json').then((response) => response.json()).then((json) => readShotsJson(json));
 // fetch('./temp_data/teamsinfo.json').then((response) => response.json()).then((json) => readTeamsJson(json));
-
-TEAMS_JSON_DATA = window.MATCHMAKER_BOOT.teams;
-STRUCTURE_JSON_DATA = window.MATCHMAKER_BOOT.structure;
 
 
 function readShotsJson(jsonfile) {
