@@ -1,151 +1,147 @@
 'use strict';
 
-
 //  FTRACKWIDGET MODULE
- 
-// HANDLE COMMUNICATION WITH THE FTRACK WEB APPLICATION.
- 
+//  Handles communication with the ftrack web app via postMessage.
 window.ftrackWidget = (function () {
-    var credentials = null;
-    var entity = null;
-    var onWidgetLoadCallback, onWidgetUpdateCallback;
+  /** @type {null | { serverUrl: string, [k:string]: any }} */
+  let credentials = null;
+  /** @type {null | any} */
+  let entity = null;
+  /** @type {any[] | null} */
+  let selection = null;
+  /** @type {any} */
+  let options = null;
 
-    // OPEN SIDEBAR FOR *ENTITYTYPE*, *ENTITYID*.
-    function openSidebar(entityType, entityId) {
-        console.debug('Opening sidebar', entityType, entityId);
-        window.parent.postMessage({
-            topic: 'ftrack.application.open-sidebar',
-            data: {
-                type: entityType,
-                id: entityId
-            }
-        }, credentials.serverUrl);
+  let onWidgetLoadCallback;
+  let onWidgetUpdateCallback;
+
+  // ---- Helpers ----
+  function sameOriginAsServer(urlA, urlB) {
+    try {
+      const a = new URL(urlA);
+      const b = new URL(urlB);
+      return a.origin === b.origin;
+    } catch {
+      return false;
+    }
+  }
+
+  function normalizePayload(content) {
+    // ftrack usually posts { topic, data: { credentials, selection, entity, options } }
+    const data = content && content.data ? content.data : content || {};
+    const creds = data.credentials || credentials;
+    const sel = Array.isArray(data.selection) ? data.selection : selection || [];
+    const ent =
+      data.entity ||
+      (sel && sel.length ? sel[0] : entity) ||
+      null;
+
+    // Prefer standard 'options'; fall back to your older 'custom_payload' if present.
+    const opts = data.options != null ? data.options : (data.custom_payload || options);
+
+    return { credentials: creds, selection: sel, entity: ent, options: opts };
+  }
+
+  // ---- Public actions ----
+  function openSidebar(entityType, entityId) {
+    if (!credentials) return;
+    window.parent.postMessage({
+      topic: 'ftrack.application.open-sidebar',
+      data: { type: entityType, id: entityId }
+    }, credentials.serverUrl);
+  }
+
+  function navigate(entityType, entityId) {
+    if (!credentials) return;
+    window.parent.postMessage({
+      topic: 'ftrack.application.navigate',
+      data: { type: entityType, id: entityId }
+    }, credentials.serverUrl);
+  }
+
+  // ---- Event handlers ----
+  function onWidgetLoad(content) {
+    const payload = normalizePayload(content);
+    credentials = payload.credentials || credentials;
+    selection  = payload.selection || selection;
+    entity     = payload.entity || entity;
+    options    = payload.options != null ? payload.options : options;
+
+    console.debug('Widget loaded (normalized):', payload);
+
+    if (onWidgetLoadCallback) {
+      // Pass a tidy object to your app code:
+      onWidgetLoadCallback(payload);
+    }
+  }
+
+  function onWidgetUpdate(content) {
+    const payload = normalizePayload(content);
+    // On update, ftrack may send a new selection/entity; options may or may not be re-sent.
+    selection  = payload.selection || selection;
+    entity     = payload.entity || entity;
+    if (payload.options != null) options = payload.options;
+
+    console.debug('Widget updated (normalized):', payload);
+
+    if (onWidgetUpdateCallback) {
+      onWidgetUpdateCallback(payload);
+    }
+  }
+
+  function onPostMessageReceived(event) {
+    const content = event.data || {};
+    // Basic sanity
+    if (!content || typeof content !== 'object' || !content.topic) return;
+
+    // After first load, enforce origin checks
+    if (credentials && credentials.serverUrl) {
+      if (!sameOriginAsServer(event.origin, credentials.serverUrl)) {
+        // Ignore messages not from ftrack
+        return;
+      }
+    } else {
+      // Before first load we can’t verify origin; we accept the first ftrack message.
     }
 
-    //  NAVIGATE WEB APP TO *ENTITYTYPE*, *ENTITYID*
-    function navigate(entityType, entityId) {
-        console.debug('Navigating', entityType, entityId);
-        window.parent.postMessage({
-            topic: 'ftrack.application.navigate',
-            data: {
-                type: entityType,
-                id: entityId
-            }
-        }, credentials.serverUrl);
+    console.debug(`Got "${content.topic}" event.`, content);
+
+    if (content.topic === 'ftrack.widget.load') {
+      onWidgetLoad(content);
+    } else if (content.topic === 'ftrack.widget.update') {
+      onWidgetUpdate(content);
     }
+  }
 
-    // UPDATE CREDENTIALS AND ENTITY, CALL CALLBACK WHEN WIGDET LOADS
-    function onWidgetLoad(content) {
-        console.log('Widget loaded', content);
-        credentials = content.data.credentials;
-        entity = content.data.selection[0];
-        if (onWidgetLoadCallback) {
-            onWidgetLoadCallback(content);
-            console.log(content)
-            console.log("Inside Callback in Load");
-        } else {
-            console.log("Skipped Callback in Load");
-        }
-    }
+  // ---- Accessors ----
+  function getEntity() { return entity; }
+  function getCredentials() { return credentials; }
+  function getOptions() { return options; }
 
+  /**
+   * Initialize module with *options*.
+   * options.onWidgetLoad(payload)
+   * options.onWidgetUpdate(payload)
+   */
+  function initialize(initOptions) {
+    initOptions = initOptions || {};
+    if (initOptions.onWidgetLoad) onWidgetLoadCallback = initOptions.onWidgetLoad;
+    if (initOptions.onWidgetUpdate) onWidgetUpdateCallback = initOptions.onWidgetUpdate;
 
-    // UPDATE ENTITY AND CALL CALLBACK WHEN WIGDET IS UPDATED
-    function onWidgetUpdate(content) {
-        console.debug('Widget updated', content);
-        entity = content.data.entity;
-        if (onWidgetUpdateCallback) {
-            onWidgetUpdateCallback(content);
-            console.log("Inside Callback in Update");
-        } else {
-            console.log("Skipped Callback in Update");
-        }
-    }
+    // Listen to postMessage from ftrack
+    window.addEventListener('message', onPostMessageReceived, false);
 
-    function onPostMessageReceived(event) {
-        var content = event.data || {};
-        console.debug('Received event:', content);
-    
-        if (content.topic === 'ftrack.widget.load') {
-            console.debug('Widget load event received:', content);
-    
-            // Extract credentials
-            window.credentials = content.data.credentials;
-            console.debug('Stored credentials:', window.credentials);
-    
-            // Extract original selection
-            window.entities = content.data.selection;
-            console.debug('Selected entities:', window.entities);
-    
-            // Extract custom appended data
-            if (content.data.custom_payload) {
-                window.customPayload = content.data.custom_payload;
-                console.debug('Custom Payload:', window.customPayload);
-            }
-    
-            // Call the callback if defined
-            if (onWidgetLoadCallback) {
-                onWidgetLoadCallback(content.data);
-            }
-        }
-    }
+    // Announce ready (use '*' until we learn serverUrl)
+    window.parent.postMessage({ topic: 'tntsports.widget.ready' }, '*');
+    window.parent.postMessage({ topic: 'ftrack.widget.ready' }, '*');
+  }
 
-    // HANDLE POST MESSAGES
-    function onPostMessageReceived(event) {
-        var content = event.data || {};
-        console.debug('Got "' + content.topic + '" event.', content);
-        if (content.topic === 'ftrack.widget.load') {
-            //Store credentials for later.
-            console.debug(content);
-            window.credentials = content.data.credentials;
-            console.debug('STORED CREDENTIALS ARE: ', window.credentials);
-            onWidgetLoad(content);
-        } else if (content.topic === 'ftrack.widget.update') {
-            window.entities = content.data.selection;
-            console.debug('SELECTED ENTITIES ARE: ', window.entities);
-            onWidgetUpdate(content);
-        }
-
-    }
-
-    // RETURN CURRENT ENTITY
-    function getEntity() {
-        return entity
-    }
-
-    // RETURN API CREDENTIALS
-    function getCredentials() {
-        return credentials;
-    }
-
-    /**
-     * Initialize module with *options*.
-     *
-     * Should be called after `DOMContentLoaded` has fired.
-     *
-     * Specify *onWidgetLoad* to receive a callback when widget has loaded.
-     * Specify *onWidgetLoad* to receive a callback when widget has updated.
-     */
-    function initialize(options) {
-        options = options || {};
-        if (options.onWidgetLoad) {
-            onWidgetLoadCallback = options.onWidgetLoad;
-        }
-        if (options.onWidgetUpdate) {
-            onWidgetUpdateCallback = options.onWidgetUpdate;
-        }
-
-        // LISTEN TO POST MESSAGES.
-        window.addEventListener('message', onPostMessageReceived, false);
-        window.parent.postMessage({ topic: 'tntsports.widget.ready' }, '*');
-        window.parent.postMessage({ topic: 'ftrack.widget.ready' }, '*');
-    }
-
-    // RETURN PUBLIC API
-    return {
-        initialize: initialize,
-        getEntity: getEntity,
-        getCredentials: getCredentials,
-        openSidebar: openSidebar,
-        navigate: navigate,
-    }
+  return {
+    initialize,
+    getEntity,
+    getCredentials,
+    getOptions,
+    openSidebar,
+    navigate
+  };
 }());
