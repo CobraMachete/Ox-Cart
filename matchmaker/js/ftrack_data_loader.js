@@ -1,13 +1,13 @@
 'use strict';
 (function (ftrack, ftrackWidget) {
   let session = null;
-  let booted = false;
+  let booted  = false;
 
   // Vars you referenced under 'use strict' need declarations.
   let theproduction = null;
-  let theprjid = null;
-  let propName = null;
-  let thumbResFold = null;
+  let theprjid      = null;
+  let propName      = null;
+  let thumbResFold  = null;
 
   // ---------- Boot state helpers ----------
   function mergeBoot(partial) {
@@ -23,217 +23,125 @@
     console.debug('[MatchMaker] boot merged:', window.MATCHMAKER_BOOT);
   }
 
-  function hydrateFromOptions(opts) {
-    if (!opts) {
-      console.warn('[MatchMaker] options missing; will fall back to URL hash or EventHub.');
-      return;
-    }
-    const teams = opts.allteamsdata ?? null;
-    const structure = opts.allstructuredata ?? null;
-    const projectId = opts.projectId ?? null;
-    const entityId  = opts.entityId ?? null;
-    const objectType = opts.objectType ?? null;
-
-    mergeBoot({ teams, structure, projectId, entityId, objectType });
-
-    if (!teams || !structure) {
-      console.warn('[MatchMaker] options missing teams/structure; falling back.', {
-        hasTeams: !!teams, hasStructure: !!structure, opts
-      });
-    } else {
-      console.debug('[MatchMaker] options hydrated.');
-    }
-  }
-
-  // ---------- URL-hash seeding (fallback) ----------
+  // ---------- Hash helpers ----------
   function getHashParams() {
     const out = {};
-    const hash = (location.hash || '').replace(/^#/, '');
-    if (!hash) return out;
-    for (const part of hash.split('&')) {
+    const raw = (location.hash || '').replace(/^#/, '');
+    if (!raw) return out;
+    for (const part of raw.split('&')) {
       if (!part) continue;
       const [k, v] = part.split('=');
-      if (k) out[decodeURIComponent(k)] = decodeURIComponent(v || '');
+      if (!k) continue;
+      out[decodeURIComponent(k)] = decodeURIComponent(v || '');
     }
     return out;
   }
 
-  async function fetchSeedFromHash() {
-    const p = getHashParams();
-    const teamsUrl = p.teams_url;
-    const structureUrl = p.structure_url;
-
-    let teams = null, structure = null;
-
+  // ---------- JSON fetch helpers ----------
+  async function tryFetchJson(url) {
+    if (!url) return null;
     try {
-      if (teamsUrl) {
-        const res = await fetch(teamsUrl, { credentials: 'omit' });
-        if (res.ok) teams = await res.json();
-        else console.warn('[MatchMaker] teams_url fetch not ok:', res.status);
+      const res = await fetch(url, { credentials: 'omit' });
+      if (!res.ok) {
+        console.warn('[MatchMaker] fetch not ok:', url, res.status);
+        return null;
       }
-      if (structureUrl) {
-        const res = await fetch(structureUrl, { credentials: 'omit' });
-        if (res.ok) structure = await res.json();
-        else console.warn('[MatchMaker] structure_url fetch not ok:', res.status);
+      return await res.json();
+    } catch (e) {
+      console.warn('[MatchMaker] fetch failed:', url, e);
+      return null;
+    }
+  }
+
+  async function resolveComponentUrlViaApi(compId) {
+    if (!session || !compId) return null;
+    try {
+      // Ask the API for a direct URL the same way the server did.
+      // Many deployments expose component_locations.url.value via the API.
+      const q = `select id, component_locations.url.value from Component where id is "${compId}" limit 1`;
+      const r = await session.query(q);
+      const row = r?.data?.[0];
+      const locs = row?.component_locations || [];
+      // If API returns as objects, normalize to array of objects with {url:{value}}
+      const firstUrl =
+        (Array.isArray(locs) && locs.length && locs[0]?.url?.value) ? locs[0].url.value :
+        // Some builds may flatten the selection into a field; keep a couple guards:
+        row?.['component_locations.url.value'] || null;
+
+      if (!firstUrl) {
+        console.warn('[MatchMaker] No component_locations.url.value for component', compId);
+        return null;
       }
+      return firstUrl;
     } catch (err) {
-      console.error('[MatchMaker] Error fetching seed URLs:', err);
+      console.error('[MatchMaker] resolveComponentUrlViaApi error for', compId, err);
+      return null;
+    }
+  }
+
+  async function loadSeedDataFromHashAndApi() {
+    const hp = getHashParams();
+
+    // Prefer direct URLs if present
+    let teams = await tryFetchJson(hp.teams_url);
+    let structure = await tryFetchJson(hp.structure_url);
+
+    // Fall back to resolving a URL via the JS API by component id
+    if (!teams && hp.teams_comp) {
+      const u = await resolveComponentUrlViaApi(hp.teams_comp);
+      if (u) teams = await tryFetchJson(u);
+    }
+    if (!structure && hp.struct_comp) {
+      const u = await resolveComponentUrlViaApi(hp.struct_comp);
+      if (u) structure = await tryFetchJson(u);
     }
 
-    return {
+    if (!teams || !structure) {
+      console.warn('[MatchMaker] Seed still incomplete after URL/API attempts.', {
+        hasTeams: !!teams, hasStructure: !!structure, hash: hp
+      });
+    } else {
+      console.debug('[MatchMaker] Seed loaded from URL/API.');
+    }
+
+    mergeBoot({
       teams,
       structure,
-      entityId:  p.entity_id  || null,
-      projectId: p.project_id || null
-    };
-  }
-
-  // ---------- EventHub seeding ----------
-  function attachSeedListenerOnce(session, correlationId, expectedEntityId) {
-    // Subscribe server-side for the topic (no callback per SDK)
-    session.eventHub.subscribe('topic=tntsports.matchmaker.seed')
-      .catch(err => console.warn('[MatchMaker] subscribe failed:', err));
-
-    // Listen to raw socket events and filter to our topic/correlation/entity
-    const sock = session.eventHub && session.eventHub._socketIo;
-    if (!sock) {
-      console.warn('[MatchMaker] No socket available on eventHub; cannot attach listener yet.');
-      return;
-    }
-
-    const handler = (evt) => {
-      try {
-        if (!evt || evt.topic !== 'tntsports.matchmaker.seed') return;
-        const d = evt.data || {};
-        if (correlationId && d.correlation_id !== correlationId) return;
-        if (expectedEntityId && d.entity_id !== expectedEntityId) return;
-
-        console.debug('[MatchMaker] seed received:', d);
-
-        mergeBoot({
-          teams: d.allteamsdata || null,
-          structure: d.allstructuredata || null,
-          projectId: d.project_id || null,
-          entityId: d.entity_id || null
-        });
-
-        // Kick your UI
-        window.initMatchMaker?.({
-          teams: window.MATCHMAKER_BOOT.teams,
-          structure: window.MATCHMAKER_BOOT.structure,
-          entity: { id: expectedEntityId, type: 'TypedContext' },
-          projectId: window.MATCHMAKER_BOOT.projectId
-        });
-
-        // One-shot: remove listener after first good seed
-        sock.off && sock.off('ftrack.event', handler);
-      } catch (e) {
-        console.error('[MatchMaker] error in seed handler:', e);
-      }
-    };
-
-    sock.on('ftrack.event', handler);
-  }
-
-  function publishSeedRequest(session, correlationId, entityId, projectId) {
-    try {
-      if (typeof ftrack?.Event !== 'function') {
-        console.warn('[MatchMaker] ftrack.Event not available; cannot publish request.');
-        return;
-      }
-      const ev = new ftrack.Event('tntsports.matchmaker.request', {
-        correlation_id: correlationId,
-        entity_id: entityId,
-        project_id: projectId || null
-      });
-      // publish expects an Event; reply not needed
-      session.eventHub.publish(ev, { reply: false, timeout: 10 })
-        .catch(err => console.warn('[MatchMaker] publish failed:', err));
-    } catch (err) {
-      console.error('[MatchMaker] event publish threw:', err);
-    }
-  }
-
-  async function bootSeedViaEventHub(session, entity) {
-    if (!entity?.id) return;
-    // Ensure the hub is connected
-    session.eventHub.connect();
-
-    const doRequest = () => {
-      const correlationId =
-        (crypto.randomUUID?.() || (Math.random().toString(36).slice(2) + Date.now()));
-
-      attachSeedListenerOnce(session, correlationId, entity.id);
-      publishSeedRequest(session, correlationId, entity.id, (window.MATCHMAKER_BOOT && window.MATCHMAKER_BOOT.projectId) || null);
-    };
-
-    // If socket is already available, go now; otherwise wait for connect event.
-    const sock = session.eventHub && session.eventHub._socketIo;
-    if (sock && (sock.connected || sock.socket)) {
-      doRequest();
-    } else {
-      const tryOnce = () => { doRequest(); };
-      // fire after first connect
-      // (The SDK hooks this in connect(): it emits 'connect' when ready)
-      const safeSock = session.eventHub._socketIo;
-      if (safeSock && typeof safeSock.on === 'function') {
-        safeSock.on('connect', tryOnce);
-      } else {
-        // last resort: delay a little and try
-        setTimeout(tryOnce, 800);
-      }
-    }
+      entityId:  hp.entity_id || (window.MATCHMAKER_BOOT && window.MATCHMAKER_BOOT.entityId) || null,
+      projectId: hp.project_id || (window.MATCHMAKER_BOOT && window.MATCHMAKER_BOOT.projectId) || null
+    });
   }
 
   // ---------- Widget lifecycle ----------
   async function onWidgetLoad(payload) {
-    // payload from ftrackWidget shim: { credentials, selection, entity, options }
-    const creds = payload?.credentials || ftrackWidget.getCredentials?.();
-    const opts  = payload?.options     || ftrackWidget.getOptions?.();
-    const entityFromPayload = payload?.entity || ftrackWidget.getEntity?.();
+    // payload from ftrackWidget shim: { credentials, selection, entity }
+    const creds  = payload?.credentials || ftrackWidget.getCredentials?.();
+    const entity = payload?.entity      || ftrackWidget.getEntity?.();
 
-    // 1) Use options first if present
-    hydrateFromOptions(opts);
-
-    // 2) Start ftrack session once
+    // Start ftrack session once (needed for API fallback)
     if (!session) {
       if (!creds?.serverUrl || !creds?.apiUser || !creds?.apiKey) {
         console.error('[MatchMaker] Missing credentials; cannot init ftrack session.', creds);
         return;
       }
       console.debug('[MatchMaker] Initializing API session…', creds.serverUrl);
-      // IMPORTANT: we’ll manually connect the event hub
       session = new ftrack.Session(creds.serverUrl, creds.apiUser, creds.apiKey);
       try {
         await session.initializing;
         console.debug('[MatchMaker] Session initialized.');
-
-        // Kick off EventHub-based seed (server will respond if you add the Python listener below)
-        await bootSeedViaEventHub(session, entityFromPayload);
-
-        // 3) Fallback: pull seed from URL hash and merge (won’t override existing non-null values).
-        try {
-          const seed = await fetchSeedFromHash();
-          if (!seed.teams || !seed.structure) {
-            console.warn('[MatchMaker] Seed URLs missing or fetch failed.', {
-              hasTeams: !!seed.teams, hasStructure: !!seed.structure
-            });
-          }
-          mergeBoot(seed);
-        } catch (err) {
-          console.error('[MatchMaker] Error fetching seed from hash:', err);
-        }
       } catch (err) {
         console.error('[MatchMaker] Failed to initialize session:', err);
         return;
       }
     }
 
-    // 4) Your prior “update” logic runs here.
-    await queryAndBootFromEntity(entityFromPayload);
+    // Pull seed from hash (URLs) and, if needed, via API by component id
+    await loadSeedDataFromHashAndApi();
+
+    // Then run your existing query logic
+    await queryAndBootFromEntity(entity);
   }
 
-  // Keep updates DRY: reuse the same logic used on load.
   function onWidgetUpdate() {
     const entity = ftrackWidget.getEntity();
     void queryAndBootFromEntity(entity);
@@ -281,16 +189,16 @@
 
       if (checkParent === 'Show_package') {
         theproduction = entRow.id;
-        theprjid = prjRow.project_id ?? prjRow.project?.id ?? null;
-        propName = ancRow.ancestors?.[0]?.name ?? null;
+        theprjid      = prjRow.project_id ?? prjRow.project?.id ?? null;
+        propName      = ancRow.ancestors?.[0]?.name ?? null;
 
         window.SESSION_ENTITY = entity;
         console.log('The current entity is', entity);
 
       } else if (checkParent === 'Production') {
         theproduction = entRow.parent?.id ?? null;
-        theprjid = prjRow.project_id ?? prjRow.project?.id ?? null;
-        propName = ancRow.ancestors?.[0]?.name ?? null;
+        theprjid      = prjRow.project_id ?? prjRow.project?.id ?? null;
+        propName      = ancRow.ancestors?.[0]?.name ?? null;
 
         selected_shot_name = entRow.name;
 
@@ -319,7 +227,7 @@
       }
 
       // Thumbnails lookup (new style you were using)
-      const theworkingprjname = (prjRow.project?.name || '').toLowerCase();
+      const theworkingprjname  = (prjRow.project?.name || '').toLowerCase();
       const theworkingpropname = (propName || '').toLowerCase();
       const resthumbfoldermain = '_thumbnails';
 
