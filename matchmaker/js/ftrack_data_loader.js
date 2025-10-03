@@ -56,16 +56,12 @@
   async function resolveComponentUrlViaApi(compId) {
     if (!session || !compId) return null;
     try {
-      // Ask the API for a direct URL the same way the server did.
-      // Many deployments expose component_locations.url.value via the API.
       const q = `select id, component_locations.url.value from Component where id is "${compId}" limit 1`;
       const r = await session.query(q);
-      const row = r?.data?.[0];
+      const row  = r?.data?.[0];
       const locs = row?.component_locations || [];
-      // If API returns as objects, normalize to array of objects with {url:{value}}
       const firstUrl =
         (Array.isArray(locs) && locs.length && locs[0]?.url?.value) ? locs[0].url.value :
-        // Some builds may flatten the selection into a field; keep a couple guards:
         row?.['component_locations.url.value'] || null;
 
       if (!firstUrl) {
@@ -83,7 +79,7 @@
     const hp = getHashParams();
 
     // Prefer direct URLs if present
-    let teams = await tryFetchJson(hp.teams_url);
+    let teams     = await tryFetchJson(hp.teams_url);
     let structure = await tryFetchJson(hp.structure_url);
 
     // Fall back to resolving a URL via the JS API by component id
@@ -107,7 +103,7 @@
     mergeBoot({
       teams,
       structure,
-      entityId:  hp.entity_id || (window.MATCHMAKER_BOOT && window.MATCHMAKER_BOOT.entityId) || null,
+      entityId:  hp.entity_id  || (window.MATCHMAKER_BOOT && window.MATCHMAKER_BOOT.entityId) || null,
       projectId: hp.project_id || (window.MATCHMAKER_BOOT && window.MATCHMAKER_BOOT.projectId) || null
     });
   }
@@ -147,7 +143,29 @@
     void queryAndBootFromEntity(entity);
   }
 
-  // ---------- Query logic (your previous onWidgetUpdate body, cleaned) ----------
+  // ---------- Helpers for safer derivation ----------
+  function derivePropName(ancRow, entRow) {
+    const ancestors = ancRow?.ancestors || [];
+    if (!Array.isArray(ancestors) || !ancestors.length) return null;
+
+    // 1) Prefer an ancestor whose object_type.name looks like a Property/Production node
+    const preferred = ancestors.find(a => {
+      const t = a?.object_type?.name;
+      return t === 'Property' || t === 'Production' || t === 'Show_Package' || t === 'Show_package';
+    });
+    if (preferred?.name) return preferred.name;
+
+    // 2) Otherwise, pick the last ancestor that has a name (closest in the tree)
+    for (let i = ancestors.length - 1; i >= 0; i--) {
+      const n = ancestors[i]?.name;
+      if (n) return n;
+    }
+
+    // 3) Last resort: entity's own name (if available)
+    return entRow?.name || null;
+  }
+
+  // ---------- Query logic (your previous onWidgetUpdate body, hardened) ----------
   async function queryAndBootFromEntity(entity) {
     if (!session) return;
     if (!entity?.type || !entity?.id) {
@@ -184,21 +202,26 @@
       const prjRow = prjRes.data[0];
       const ancRow = ancRes.data[0];
 
-      const checkParent = entRow?.parent?.__entity_type__;
+      // Robust propName derivation
+      propName = derivePropName(ancRow, entRow);
+
+      const parentType = entRow?.parent?.__entity_type__;
       let normalizedEntity;
 
-      if (checkParent === 'Show_package') {
+      // Be lenient with casing of Show_package / Show_Package
+      const isShowPackage = (parentType === 'Show_package' || parentType === 'Show_Package');
+      const isProduction  = (parentType === 'Production');
+
+      if (isShowPackage) {
         theproduction = entRow.id;
         theprjid      = prjRow.project_id ?? prjRow.project?.id ?? null;
-        propName      = ancRow.ancestors?.[0]?.name ?? null;
 
         window.SESSION_ENTITY = entity;
         console.log('The current entity is', entity);
 
-      } else if (checkParent === 'Production') {
+      } else if (isProduction) {
         theproduction = entRow.parent?.id ?? null;
         theprjid      = prjRow.project_id ?? prjRow.project?.id ?? null;
-        propName      = ancRow.ancestors?.[0]?.name ?? null;
 
         selected_shot_name = entRow.name;
 
@@ -206,6 +229,10 @@
         normalizedEntity = { id: theproduction, type: 'TypedContext' };
         window.SESSION_ENTITY = normalizedEntity;
         console.log('The current entity is', normalizedEntity);
+      } else {
+        // Unknown parent type; keep SESSION_ENTITY as-is and warn
+        console.warn('[MatchMaker] Unhandled parent type:', parentType);
+        window.SESSION_ENTITY = entity;
       }
 
       console.log('=================== THE SHOTNAME ===================');
@@ -216,34 +243,52 @@
       console.log(prjRow);
       console.log('=================== THE ANCESTORS ==================');
       console.log(ancRow);
+      console.log('=================== DERIVED PROP NAME ==============');
+      console.log(propName);
 
-      // Your existing UI hooks (optional chaining ensures no crash if missing)
-      window.updateInitShotname?.(selected_shot_name);
-      window.ddFromCurrProp?.(propName);
-      window.buildThumbList?.(propName);
+      // ---- Guarded UI calls ----
+      if (typeof window.updateInitShotname === 'function') {
+        window.updateInitShotname(selected_shot_name);
+      }
+
+      if (propName) {
+        window.ddFromCurrProp?.(propName);
+        window.buildThumbList?.(propName);
+      } else {
+        console.warn('[MatchMaker] No propName derived; skipping ddFromCurrProp/buildThumbList.');
+      }
 
       if (selected_shot_name !== 'None') {
         window.injectShotName?.();
       }
 
-      // Thumbnails lookup (new style you were using)
-      const theworkingprjname  = (prjRow.project?.name || '').toLowerCase();
-      const theworkingpropname = (propName || '').toLowerCase();
-      const resthumbfoldermain = '_thumbnails';
+      // Thumbnails lookup (requires ADMIN project id)
+      const adminPrjId = window.ADMIN_PRJ_ID;
+      if (adminPrjId) {
+        const theworkingprjname  = (prjRow.project?.name || '').toLowerCase();
+        const theworkingpropname = (propName || '').toLowerCase();
+        const resthumbfoldermain = '_thumbnails';
 
-      const newThumbFoldSearch = session.query(
-        `select descendants from Folder where project_id is "${window.ADMIN_PRJ_ID}" ` +
-        `and parent.parent.name is "${theworkingprjname}" ` +
-        `and parent.name is "${theworkingpropname}" ` +
-        `and name is "${resthumbfoldermain}" limit 1`
-      );
+        if (theworkingprjname && theworkingpropname) {
+          const newThumbFoldSearch = session.query(
+            `select descendants from Folder where project_id is "${adminPrjId}" ` +
+            `and parent.parent.name is "${theworkingprjname}" ` +
+            `and parent.name is "${theworkingpropname}" ` +
+            `and name is "${resthumbfoldermain}" limit 1`
+          );
 
-      const vals = await Promise.all([newThumbFoldSearch]);
-      if (vals[0]?.data?.length) {
-        thumbResFold = vals[0].data[0].id;
-        console.log('==== THE NEW THUMBNAIL FOLDER ID IS: ====');
-        console.log(thumbResFold);
-        console.log(vals[0].data[0]);
+          const vals = await Promise.all([newThumbFoldSearch]);
+          if (vals[0]?.data?.length) {
+            thumbResFold = vals[0].data[0].id;
+            console.log('==== THE NEW THUMBNAIL FOLDER ID IS: ====');
+            console.log(thumbResFold);
+            console.log(vals[0].data[0]);
+          }
+        } else {
+          console.debug('[MatchMaker] Missing working project/property names; skip thumbnail lookup.');
+        }
+      } else {
+        console.debug('[MatchMaker] ADMIN_PRJ_ID not set; skipping thumbnail folder lookup.');
       }
 
       booted = true;
