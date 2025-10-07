@@ -48,42 +48,42 @@
                 //         console.log(boot.teams, boot.structure, boot.projectId, boot.entityId);
                 // }
 
-
+                console.log(shots_data);
                 //EVENT LISTENER FOR SHOT SEARCH BOX
-                // shotsearchbox.addEventListener('input', function(e) {
+                shotsearchbox.addEventListener('input', function(e) {
                     
-                //     var targinput = event.target.value;
-                //     var sanshot = sanitizeshot(targinput);
+                    var targinput = event.target.value;
+                    var sanshot = sanitizeshot(targinput);
                     
-                //     var myinput = sanshot.toLowerCase();
+                    var myinput = sanshot.toLowerCase();
 
-                //     // PUSHING THE SANITIZED TEXT BACK TO FIELD
-                //     shotsearchbox.value = myinput;
+                    // PUSHING THE SANITIZED TEXT BACK TO FIELD
+                    shotsearchbox.value = myinput;
 
-                //     $('#shottablebody').empty();
-                //     if (myinput.length > 0) {
-                //         var suggestions = shots_data.filter(function(item) {
-                //             return item.toLowerCase().includes(myinput);
-                //         });
-                //         if (suggestions.length > 0) {
+                    $('#shottablebody').empty();
+                    if (myinput.length > 0) {
+                        var suggestions = shots_data.filter(function(item) {
+                            return item.toLowerCase().includes(myinput);
+                        });
+                        if (suggestions.length > 0) {
                             
-                //             for (var i = 0; i < suggestions.length; i++) {
+                            for (var i = 0; i < suggestions.length; i++) {
 
-                //                 var info = "<tr onclick='addToShotField(this)'><td>" + suggestions[i] + "<td><tr>";
-                //                 $(datatable).append(info);
+                                var info = "<tr onclick='addToShotField(this)'><td>" + suggestions[i] + "<td><tr>";
+                                $(datatable).append(info);
                                 
-                //             }
+                            }
 
-                //             $('#shotstable').show();
+                            $('#shotstable').show();
                             
-                //         } else {
-                //             $('#shotstable').hide();
-                //         }
-                //     } else {
-                //         $('#shotstable').hide();
-                //     }
+                        } else {
+                            $('#shotstable').hide();
+                        }
+                    } else {
+                        $('#shotstable').hide();
+                    }
 
-                // });
+                });
             });
 
             //ADMIN PROJECT WITH THUMBNAIL RESOURCES

@@ -8,10 +8,13 @@ var init_shot_name = "None";
 // fetch('./temp_data/shotsinfo.json').then((response) => response.json()).then((json) => readShotsJson(json));
 // fetch('./temp_data/teamsinfo.json').then((response) => response.json()).then((json) => readTeamsJson(json));
 
+fetch('./temp_data/ALL_TEAMS.json').then((response) => response.json()).then((json) => readShotsJson(json));
+
 
 function readShotsJson(jsonfile) {
 
-    shots_data = jsonfile.shotswhitelist;
+    // shots_data = jsonfile.shotswhitelist;
+    shots_data = jsonfile;
     
 }
 
