@@ -1,0 +1,996 @@
+[
+  {
+    "id":1,
+    "tricode":"AAC",
+    "college_name":"AMERICAN ATHLETIC",
+    "nickname":"CONFERENCE",
+    "full":"AMERICAN ATHLETIC CONFERENCE"
+  },
+  {
+    "id":2,
+    "tricode":"ACC",
+    "college_name":"ATLANTIC COAST",
+    "nickname":"CONFERENCE",
+    "full":"ATLANTIC COAST CONFERENCE"
+  },
+  {
+    "id":3,
+    "tricode":"AFA",
+    "college_name":"AIR FORCE",
+    "nickname":"FALCONS",
+    "full":"AIR FORCE FALCONS"
+  },
+  {
+    "id":4,
+    "tricode":"AKRON",
+    "college_name":"AKRON",
+    "nickname":"ZIPS",
+    "full":"AKRON ZIPS"
+  },
+  {
+    "id":5,
+    "tricode":"ALA",
+    "college_name":"ALABAMA",
+    "nickname":"CRIMSON TIDE",
+    "full":"ALABAMA CRIMSON TIDE"
+  },
+  {
+    "id":6,
+    "tricode":"APP",
+    "college_name":"APP STATE",
+    "nickname":"MOUNTAINEERS",
+    "full":"APP STATE MOUNTAINEERS"
+  },
+  {
+    "id":7,
+    "tricode":"ARI",
+    "college_name":"ARIZONA",
+    "nickname":"WILDCATS",
+    "full":"ARIZONA WILDCATS"
+  },
+  {
+    "id":8,
+    "tricode":"ARK",
+    "college_name":"ARKANSAS",
+    "nickname":"RAZORBACKS",
+    "full":"ARKANSAS RAZORBACKS"
+  },
+  {
+    "id":9,
+    "tricode":"ARMY",
+    "college_name":"ARMY",
+    "nickname":"BLACK KNIGHTS",
+    "full":"ARMY BLACK KNIGHTS"
+  },
+  {
+    "id":10,
+    "tricode":"ARST",
+    "college_name":"ARKANSAS STATE",
+    "nickname":"RED WOLVES",
+    "full":"ARKANSAS STATE RED WOLVES"
+  },
+  {
+    "id":11,
+    "tricode":"ASU",
+    "college_name":"ARIZONA STATE",
+    "nickname":"SUN DEVILS",
+    "full":"ARIZONA STATE SUN DEVILS"
+  },
+  {
+    "id":12,
+    "tricode":"AUB",
+    "college_name":"AUBURN",
+    "nickname":"TIGERS",
+    "full":"AUBURN TIGERS"
+  },
+  {
+    "id":13,
+    "tricode":"BALL",
+    "college_name":"BALL STATE",
+    "nickname":"CARDINALS",
+    "full":"BALL STATE CARDINALS"
+  },
+  {
+    "id":14,
+    "tricode":"BAY",
+    "college_name":"BAYLOR",
+    "nickname":"BEARS",
+    "full":"BAYLOR BEARS"
+  },
+  {
+    "id":15,
+    "tricode":"BC",
+    "college_name":"BOSTON COLLEGE",
+    "nickname":"EAGLES",
+    "full":"BOSTON COLLEGE EAGLES"
+  },
+  {
+    "id":16,
+    "tricode":"BG",
+    "college_name":"BOWLING GREEN",
+    "nickname":"FALCONS",
+    "full":"BOWLING GREEN FALCONS"
+  },
+  {
+    "id":17,
+    "tricode":"BIG10",
+    "college_name":"BIG TEN",
+    "nickname":"CONFERENCE",
+    "full":"BIG TEN CONFERENCE"
+  },
+  {
+    "id":18,
+    "tricode":"BIG12",
+    "college_name":"BIG 12",
+    "nickname":"CONFERENCE",
+    "full":"BIG 12 CONFERENCE"
+  },
+  {
+    "id":19,
+    "tricode":"BOISE",
+    "college_name":"BOISE STATE",
+    "nickname":"BRONCOS",
+    "full":"BOISE STATE BRONCOS"
+  },
+  {
+    "id":20,
+    "tricode":"BUFF",
+    "college_name":"BUFFALO",
+    "nickname":"BULLS",
+    "full":"BUFFALO BULLS"
+  },
+  {
+    "id":21,
+    "tricode":"BYU",
+    "college_name":"BYU",
+    "nickname":"COUGARS",
+    "full":"BYU COUGARS"
+  },
+  {
+    "id":22,
+    "tricode":"CAL",
+    "college_name":"CALIFORNIA",
+    "nickname":"GOLDEN BEARS",
+    "full":"CALIFORNIA GOLDEN BEARS"
+  },
+  {
+    "id":23,
+    "tricode":"CCU",
+    "college_name":"COASTAL CAROLINA",
+    "nickname":"CHANTICLEERS",
+    "full":"COASTAL CAROLINA CHANTICLEERS"
+  },
+  {
+    "id":24,
+    "tricode":"CHA",
+    "college_name":"CHARLOTTE",
+    "nickname":"49ERS",
+    "full":"CHARLOTTE 49ERS"
+  },
+  {
+    "id":25,
+    "tricode":"CIN",
+    "college_name":"CINCINNATI",
+    "nickname":"BEARCATS",
+    "full":"CINCINNATI BEARCATS"
+  },
+  {
+    "id":26,
+    "tricode":"CLEM",
+    "college_name":"CLEMSON",
+    "nickname":"TIGERS",
+    "full":"CLEMSON TIGERS"
+  },
+  {
+    "id":27,
+    "tricode":"CMU",
+    "college_name":"CENTRAL MICHIGAN",
+    "nickname":"CHIPPEWAS",
+    "full":"CENTRAL MICHIGAN CHIPPEWAS"
+  },
+  {
+    "id":28,
+    "tricode":"COL",
+    "college_name":"COLORADO",
+    "nickname":"BUFFALOES",
+    "full":"COLORADO BUFFALOES"
+  },
+  {
+    "id":29,
+    "tricode":"CSU",
+    "college_name":"COLORADO STATE",
+    "nickname":"RAMS",
+    "full":"COLORADO STATE RAMS"
+  },
+  {
+    "id":30,
+    "tricode":"CUSA",
+    "college_name":"CONFERENCE",
+    "nickname":"USA",
+    "full":"CONFERENCE USA"
+  },
+  {
+    "id":31,
+    "tricode":"DEL",
+    "college_name":"DELAWARE",
+    "nickname":"BLUE HENS",
+    "full":"DELAWARE BLUE HENS"
+  },
+  {
+    "id":32,
+    "tricode":"DUKE",
+    "college_name":"DUKE",
+    "nickname":"BLUE DEVILS",
+    "full":"DUKE BLUE DEVILS"
+  },
+  {
+    "id":33,
+    "tricode":"ECU",
+    "college_name":"EAST CAROLINA",
+    "nickname":"PIRATES",
+    "full":"EAST CAROLINA PIRATES"
+  },
+  {
+    "id":34,
+    "tricode":"EMU",
+    "college_name":"EASTERN MICHIGAN",
+    "nickname":"EAGLES",
+    "full":"EASTERN MICHIGAN EAGLES"
+  },
+  {
+    "id":35,
+    "tricode":"FAU",
+    "college_name":"FLORIDA ATLANTIC",
+    "nickname":"OWLS",
+    "full":"FLORIDA ATLANTIC OWLS"
+  },
+  {
+    "id":36,
+    "tricode":"FIU",
+    "college_name":"FLORIDA INTERNATIONAL",
+    "nickname":"PANTHERS",
+    "full":"FLORIDA INTERNATIONAL PANTHERS"
+  },
+  {
+    "id":37,
+    "tricode":"FLA",
+    "college_name":"FLORIDA",
+    "nickname":"GATORS",
+    "full":"FLORIDA GATORS"
+  },
+  {
+    "id":38,
+    "tricode":"FRES",
+    "college_name":"FRESNO STATE",
+    "nickname":"BULLDOGS",
+    "full":"FRESNO STATE BULLDOGS"
+  },
+  {
+    "id":39,
+    "tricode":"FSU",
+    "college_name":"FLORIDA STATE",
+    "nickname":"SEMINOLES",
+    "full":"FLORIDA STATE SEMINOLES"
+  },
+  {
+    "id":40,
+    "tricode":"GASO",
+    "college_name":"GEORGIA SOUTHERN",
+    "nickname":"EAGLES",
+    "full":"GEORGIA SOUTHERN EAGLES"
+  },
+  {
+    "id":41,
+    "tricode":"GAST",
+    "college_name":"GEORGIA STATE",
+    "nickname":"PANTHERS",
+    "full":"GEORGIA STATE PANTHERS"
+  },
+  {
+    "id":42,
+    "tricode":"GT",
+    "college_name":"GEORGIA TECH",
+    "nickname":"YELLOW JACKETS",
+    "full":"GEORGIA TECH YELLOW JACKETS"
+  },
+  {
+    "id":43,
+    "tricode":"HAW",
+    "college_name":"HAWAI'I",
+    "nickname":"RAINBOW WARRIORS",
+    "full":"HAWAI'I RAINBOW WARRIORS"
+  },
+  {
+    "id":44,
+    "tricode":"ILL",
+    "college_name":"ILLINOIS",
+    "nickname":"FIGHTING ILLINI",
+    "full":"ILLINOIS FIGHTING ILLINI"
+  },
+  {
+    "id":45,
+    "tricode":"IOWA",
+    "college_name":"IOWA",
+    "nickname":"HAWKEYES",
+    "full":"IOWA HAWKEYES"
+  },
+  {
+    "id":46,
+    "tricode":"ISU",
+    "college_name":"IOWA STATE",
+    "nickname":"CYCLONES",
+    "full":"IOWA STATE CYCLONES"
+  },
+  {
+    "id":47,
+    "tricode":"IU",
+    "college_name":"INDIANA",
+    "nickname":"HOOSIERS",
+    "full":"INDIANA HOOSIERS"
+  },
+  {
+    "id":48,
+    "tricode":"JMU",
+    "college_name":"JAMES MADISON",
+    "nickname":"DUKES",
+    "full":"JAMES MADISON DUKES"
+  },
+  {
+    "id":49,
+    "tricode":"JVST",
+    "college_name":"JACKSONVILLE STATE",
+    "nickname":"GAMECOCKS",
+    "full":"JACKSONVILLE STATE GAMECOCKS"
+  },
+  {
+    "id":50,
+    "tricode":"KAN",
+    "college_name":"KANSAS",
+    "nickname":"JAYHAWKS",
+    "full":"KANSAS JAYHAWKS"
+  },
+  {
+    "id":51,
+    "tricode":"KENT",
+    "college_name":"KENT STATE",
+    "nickname":"GOLDEN FLASHES",
+    "full":"KENT STATE GOLDEN FLASHES"
+  },
+  {
+    "id":52,
+    "tricode":"KNSAW",
+    "college_name":"KENNESAW STATE",
+    "nickname":"OWLS",
+    "full":"KENNESAW STATE OWLS"
+  },
+  {
+    "id":53,
+    "tricode":"KSU",
+    "college_name":"KANSAS STATE",
+    "nickname":"WILDCATS",
+    "full":"KANSAS STATE WILDCATS"
+  },
+  {
+    "id":54,
+    "tricode":"LIB",
+    "college_name":"LIBERTY",
+    "nickname":"FLAMES",
+    "full":"LIBERTY FLAMES"
+  },
+  {
+    "id":55,
+    "tricode":"LOU",
+    "college_name":"LOUISVILLE",
+    "nickname":"CARDINALS",
+    "full":"LOUISVILLE CARDINALS"
+  },
+  {
+    "id":56,
+    "tricode":"LSU",
+    "college_name":"LSU",
+    "nickname":"TIGERS",
+    "full":"LSU TIGERS"
+  },
+  {
+    "id":57,
+    "tricode":"LT",
+    "college_name":"LOUISIANA TECH",
+    "nickname":"BULLDOGS",
+    "full":"LOUISIANA TECH BULLDOGS"
+  },
+  {
+    "id":58,
+    "tricode":"MAC",
+    "college_name":"MID-AMERICAN",
+    "nickname":"CONFERENCE",
+    "full":"MID-AMERICAN CONFERENCE"
+  },
+  {
+    "id":59,
+    "tricode":"MARSH",
+    "college_name":"MARSHALL",
+    "nickname":"THUNDERING HERD",
+    "full":"MARSHALL THUNDERING HERD"
+  },
+  {
+    "id":60,
+    "tricode":"MD",
+    "college_name":"MARYLAND",
+    "nickname":"TERRAPINS",
+    "full":"MARYALND TERRAPINS"
+  },
+  {
+    "id":61,
+    "tricode":"MEM",
+    "college_name":"MEMPHIS",
+    "nickname":"TIGERS",
+    "full":"MEMPHIS TIGERS"
+  },
+  {
+    "id":62,
+    "tricode":"MIAFL",
+    "college_name":"MIAMI",
+    "nickname":"HURRICANES",
+    "full":"MIAMI HURRICANES"
+  },
+  {
+    "id":63,
+    "tricode":"MIAOH",
+    "college_name":"MIAMI (OH)",
+    "nickname":"REDHAWKS",
+    "full":"MIAMI (OH) REDHAWKS"
+  },
+  {
+    "id":64,
+    "tricode":"MICH",
+    "college_name":"MICHIGAN",
+    "nickname":"WOLVERINES",
+    "full":"MICHIGAN WOLVERINES"
+  },
+  {
+    "id":65,
+    "tricode":"MINN",
+    "college_name":"MINNESOTA",
+    "nickname":"GOLDEN GOPHERS",
+    "full":"MINNESOTA GOLDEN GOPHERS"
+  },
+  {
+    "id":66,
+    "tricode":"MISS",
+    "college_name":"OLE MISS",
+    "nickname":"REBELS",
+    "full":"OLE MISS REBELS"
+  },
+  {
+    "id":67,
+    "tricode":"MIZZ",
+    "college_name":"MISSOURI",
+    "nickname":"TIGERS",
+    "full":"MISSOURI TIGERS"
+  },
+  {
+    "id":68,
+    "tricode":"MOSU",
+    "college_name":"MISSOURI STATE",
+    "nickname":"BEARS",
+    "full":"MISSOURI STATE BEARS"
+  },
+  {
+    "id":69,
+    "tricode":"MSST",
+    "college_name":"MISSISSIPPI STATE",
+    "nickname":"BULLDOGS",
+    "full":"MISSISSIPPI STATE BULLDOGS"
+  },
+  {
+    "id":70,
+    "tricode":"MSU",
+    "college_name":"MICHIGAN STATE",
+    "nickname":"SPARTANS",
+    "full":"MICHIGAN STATE SPARTANS"
+  },
+  {
+    "id":71,
+    "tricode":"MTSU",
+    "college_name":"MIDDLE TENNESSEE STATE",
+    "nickname":"BLUE RAIDERS",
+    "full":"MIDDLE TENNESSEE STATE BLUE RAIDERS"
+  },
+  {
+    "id":72,
+    "tricode":"MWC",
+    "college_name":"MOUNTAIN WEST",
+    "nickname":"CONFERENCE",
+    "full":"MOUNTAIN WEST CONFERENCE"
+  },
+  {
+    "id":73,
+    "tricode":"NAVY",
+    "college_name":"NAVY",
+    "nickname":"MIDSHIPMEN",
+    "full":"NAVY MIDSHIPMEN"
+  },
+  {
+    "id":74,
+    "tricode":"NCST",
+    "college_name":"NORTH CAROLINA STATE",
+    "nickname":"WOLFPACK",
+    "full":"NORTH CAROLINA STATE WOLFPACK"
+  },
+  {
+    "id":75,
+    "tricode":"ND",
+    "college_name":"NOTRE DAME",
+    "nickname":"FIGHTING IRISH",
+    "full":"NOTRE DAME FIGHTING IRISH"
+  },
+  {
+    "id":76,
+    "tricode":"NEB",
+    "college_name":"NEBRASKA",
+    "nickname":"CORNHUSKERS",
+    "full":"NEBRASKA CORNHUSKERS"
+  },
+  {
+    "id":77,
+    "tricode":"NEV",
+    "college_name":"NEVADA",
+    "nickname":"WOLF PACK",
+    "full":"NEVADA WOLF PACK"
+  },
+  {
+    "id":78,
+    "tricode":"NIU",
+    "college_name":"NORTHERN ILLINOIS",
+    "nickname":"HUSKIES",
+    "full":"NORTHERN ILLINOIS HUSKIES"
+  },
+  {
+    "id":79,
+    "tricode":"NM",
+    "college_name":"NEW MEXICO",
+    "nickname":"LOBOS",
+    "full":"NEW MEXICO LOBOS"
+  },
+  {
+    "id":80,
+    "tricode":"NMST",
+    "college_name":"NEW MEXICO STATE",
+    "nickname":"AGGIES",
+    "full":"NEW MEXICO STATE AGGIES"
+  },
+  {
+    "id":81,
+    "tricode":"NT",
+    "college_name":"NORTH TEXAS",
+    "nickname":"MEAN GREEN",
+    "full":"NORTH TEXAS MEAN GREEN"
+  },
+  {
+    "id":82,
+    "tricode":"NW",
+    "college_name":"NORTHWESTERN",
+    "nickname":"WILDCATS",
+    "full":"NORTHWESTERN WILDCATS"
+  },
+  {
+    "id":83,
+    "tricode":"ODU",
+    "college_name":"OLD DOMINION",
+    "nickname":"MONARCHS",
+    "full":"OLD DOMINION MONARCHS"
+  },
+  {
+    "id":84,
+    "tricode":"OHIO",
+    "college_name":"OHIO",
+    "nickname":"BOBCATS",
+    "full":"OHIO BOBCATS"
+  },
+  {
+    "id":85,
+    "tricode":"OKLA",
+    "college_name":"OKLAHOMA",
+    "nickname":"SOONERS",
+    "full":"OKLAHOMA SOONERS"
+  },
+  {
+    "id":86,
+    "tricode":"OKST",
+    "college_name":"OKLAHOMA STATE",
+    "nickname":"COWBOYS",
+    "full":"OKLAHOMA STATE COWBOYS"
+  },
+  {
+    "id":87,
+    "tricode":"ORE",
+    "college_name":"OREGON",
+    "nickname":"DUCKS",
+    "full":"OREGON DUCKS"
+  },
+  {
+    "id":88,
+    "tricode":"OSU",
+    "college_name":"OHIO STATE",
+    "nickname":"BUCKEYES",
+    "full":"OHIO STATE BUCKEYES"
+  },
+  {
+    "id":89,
+    "tricode":"PITT",
+    "college_name":"PITTSBURGH",
+    "nickname":"PANTHERS",
+    "full":"PITTSBURGH PANTHERS"
+  },
+  {
+    "id":90,
+    "tricode":"PSU",
+    "college_name":"PENN STATE",
+    "nickname":"NITTANY LIONS",
+    "full":"PENN STATE NITTANY LIONS"
+  },
+  {
+    "id":91,
+    "tricode":"PUR",
+    "college_name":"PURDUE",
+    "nickname":"BOILERMAKERS",
+    "full":"PURDUE BOILERMAKERS"
+  },
+  {
+    "id":92,
+    "tricode":"RICE",
+    "college_name":"RICE",
+    "nickname":"OWLS",
+    "full":"RICE OWLS"
+  },
+  {
+    "id":93,
+    "tricode":"RUT",
+    "college_name":"RUTGERS",
+    "nickname":"SCARLET KNIGHTS",
+    "full":"RUTGERS SCARLET KNIGHTS"
+  },
+  {
+    "id":94,
+    "tricode":"SCAR",
+    "college_name":"SOUTH CAROLINA",
+    "nickname":"GAMECOCKS",
+    "full":"SOUTH CAROLINA GAMECOCKS"
+  },
+  {
+    "id":95,
+    "tricode":"SDSU",
+    "college_name":"SAN DIEGO STATE",
+    "nickname":"AZTECS",
+    "full":"SAN DIEGO STATE AZTECS"
+  },
+  {
+    "id":96,
+    "tricode":"SEC",
+    "college_name":"SOUTHEASTERN",
+    "nickname":"CONFERENCE",
+    "full":"SOUTHEASTERN CONFERENCE"
+  },
+  {
+    "id":97,
+    "tricode":"SHSU",
+    "college_name":"SAM HOUSTON",
+    "nickname":"BEARKATS",
+    "full":"SAM HOUSTON BEARKATS"
+  },
+  {
+    "id":98,
+    "tricode":"SJSU",
+    "college_name":"SAN JOSÉ STATE",
+    "nickname":"SPARTANS",
+    "full":"SAN JOSÉ STATE SPARTANS"
+  },
+  {
+    "id":99,
+    "tricode":"SMU",
+    "college_name":"SMU",
+    "nickname":"MUSTANGS",
+    "full":"SMU MUSTANGS"
+  },
+  {
+    "id":100,
+    "tricode":"SOAL",
+    "college_name":"SOUTH ALABAMA",
+    "nickname":"JAGUARS",
+    "full":"SOUTH ALABAMA JAGUARS"
+  },
+  {
+    "id":101,
+    "tricode":"STAN",
+    "college_name":"STANFORD",
+    "nickname":"CARDINAL",
+    "full":"STANFORD CARDINAL"
+  },
+  {
+    "id":102,
+    "tricode":"SUNBELT",
+    "college_name":"SUN BELT",
+    "nickname":"CONFERENCE",
+    "full":"SUN BELT CONFERENCE"
+  },
+  {
+    "id":103,
+    "tricode":"SYR",
+    "college_name":"SYRACUSE",
+    "nickname":"ORANGE",
+    "full":"SYRACUSE ORANGE"
+  },
+  {
+    "id":104,
+    "tricode":"TAMU",
+    "college_name":"TEXAS A&M",
+    "nickname":"AGGIES",
+    "full":"TEXAS A&M AGGIES"
+  },
+  {
+    "id":105,
+    "tricode":"TCU",
+    "college_name":"TCU",
+    "nickname":"HORNED FROGS",
+    "full":"TCU HORNED FROGS"
+  },
+  {
+    "id":106,
+    "tricode":"TEM",
+    "college_name":"TEMPLE",
+    "nickname":"OWLS",
+    "full":"TEMPLE OWLS"
+  },
+  {
+    "id":107,
+    "tricode":"TENN",
+    "college_name":"TENNESSEE",
+    "nickname":"VOLUNTEERS",
+    "full":"TENNESSE VOLUNTEERS"
+  },
+  {
+    "id":108,
+    "tricode":"TEX",
+    "college_name":"TEXAS",
+    "nickname":"LONGHORNS",
+    "full":"TEXAS LONGHORNS"
+  },
+  {
+    "id":109,
+    "tricode":"TOL",
+    "college_name":"TOLEDO",
+    "nickname":"ROCKETS",
+    "full":"TOLEDO ROCKETS"
+  },
+  {
+    "id":110,
+    "tricode":"TROY",
+    "college_name":"TROY",
+    "nickname":"TROJANS",
+    "full":"TROY TROJANS"
+  },
+  {
+    "id":111,
+    "tricode":"TTU",
+    "college_name":"TEXAS TECH",
+    "nickname":"RED RAIDERS",
+    "full":"TEXAS TECH RED RAIDERS"
+  },
+  {
+    "id":112,
+    "tricode":"TULN",
+    "college_name":"TULANE",
+    "nickname":"GREEN WAVE",
+    "full":"TULANE GREEN WAVE"
+  },
+  {
+    "id":113,
+    "tricode":"TULSA",
+    "college_name":"TULSA",
+    "nickname":"GOLDEN HURRICANE",
+    "full":"TULSA GOLDEN HURRICANE"
+  },
+  {
+    "id":114,
+    "tricode":"TXST",
+    "college_name":"TEXAS STATE",
+    "nickname":"BOBCATS",
+    "full":"TEXAS STATE BOBCATS"
+  },
+  {
+    "id":115,
+    "tricode":"UAB",
+    "college_name":"UAB",
+    "nickname":"BLAZERS",
+    "full":"UAB BLAZERS"
+  },
+  {
+    "id":116,
+    "tricode":"UCF",
+    "college_name":"UCF",
+    "nickname":"KNIGHTS",
+    "full":"UCF KNIGHTS"
+  },
+  {
+    "id":117,
+    "tricode":"UCLA",
+    "college_name":"UCLA",
+    "nickname":"BRUINS",
+    "full":"UCLA BRUINS"
+  },
+  {
+    "id":118,
+    "tricode":"UGA",
+    "college_name":"GEORGIA",
+    "nickname":"BULLDOGS",
+    "full":"GEORGIA BULLDOGS"
+  },
+  {
+    "id":119,
+    "tricode":"UH",
+    "college_name":"HOUSTON",
+    "nickname":"COUGARS",
+    "full":"HOUSTON COUGARS"
+  },
+  {
+    "id":120,
+    "tricode":"UK",
+    "college_name":"KENTUCKY",
+    "nickname":"WILDCATS",
+    "full":"KENTUCKY WILDCATS"
+  },
+  {
+    "id":121,
+    "tricode":"ULL",
+    "college_name":"LOUISIANA",
+    "nickname":"RAGIN' CAJUNS",
+    "full":"LOUISIANA RAGIN' CAJUNS"
+  },
+  {
+    "id":122,
+    "tricode":"ULM",
+    "college_name":"UL MONROE",
+    "nickname":"WARHAWKS",
+    "full":"UL MONROE WARHAWKS"
+  },
+  {
+    "id":123,
+    "tricode":"UMASS",
+    "college_name":"MASSACHUSETTS",
+    "nickname":"MINUTEMEN",
+    "full":"MASSACHUSETTS MINUTEMEN"
+  },
+  {
+    "id":124,
+    "tricode":"UNC",
+    "college_name":"NORTH CAROLINA",
+    "nickname":"TAR HEELS",
+    "full":"NORTH CAROLINA TAR HEELS"
+  },
+  {
+    "id":125,
+    "tricode":"UNLV",
+    "college_name":"UNLV",
+    "nickname":"REBELS",
+    "full":"UNLV REBELS"
+  },
+  {
+    "id":126,
+    "tricode":"USC",
+    "college_name":"USC",
+    "nickname":"TROJANS",
+    "full":"USC TROJANS"
+  },
+  {
+    "id":127,
+    "tricode":"USF",
+    "college_name":"SOUTH FLORIDA",
+    "nickname":"BULLS",
+    "full":"SOUTH FLORIDA BULLS"
+  },
+  {
+    "id":128,
+    "tricode":"USM",
+    "college_name":"SOUTHERN MISS",
+    "nickname":"GOLDEN EAGLES",
+    "full":"SOUTHERN MISS GOLDEN EAGLES"
+  },
+  {
+    "id":129,
+    "tricode":"UTAH",
+    "college_name":"UTAH",
+    "nickname":"UTES",
+    "full":"UTAH UTES"
+  },
+  {
+    "id":130,
+    "tricode":"UTEP",
+    "college_name":"UTEP",
+    "nickname":"MINERS",
+    "full":"UTEP MINERS"
+  },
+  {
+    "id":131,
+    "tricode":"UTSA",
+    "college_name":"UTSA",
+    "nickname":"ROADRUNNERS",
+    "full":"UTSA ROADRUNNERS"
+  },
+  {
+    "id":132,
+    "tricode":"UTST",
+    "college_name":"UTAH STATE",
+    "nickname":"AGGIES",
+    "full":"UTAH STATE AGGIES"
+  },
+  {
+    "id":133,
+    "tricode":"UVA",
+    "college_name":"VIRGINIA",
+    "nickname":"CAVALIERS",
+    "full":"VIRGINIA CAVALIERS"
+  },
+  {
+    "id":134,
+    "tricode":"VANDY",
+    "college_name":"VANDERBILT",
+    "nickname":"COMMODORES",
+    "full":"VANDERBILT COMMODORES"
+  },
+  {
+    "id":135,
+    "tricode":"VT",
+    "college_name":"VIRGINIA TECH",
+    "nickname":"HOKIES",
+    "full":"VIRGINIA TECH HOKIES"
+  },
+  {
+    "id":136,
+    "tricode":"WAKE",
+    "college_name":"WAKE FOREST",
+    "nickname":"DEMON DEACONS",
+    "full":"WAKE FOREST DEMON DEACONS"
+  },
+  {
+    "id":137,
+    "tricode":"WASH",
+    "college_name":"WASHINGTON",
+    "nickname":"HUSKIES",
+    "full":"WASHINGTON HUSKIES"
+  },
+  {
+    "id":138,
+    "tricode":"WISC",
+    "college_name":"WISCONSIN",
+    "nickname":"BADGERS",
+    "full":"WISCONSIN BADGERS"
+  },
+  {
+    "id":139,
+    "tricode":"WKU",
+    "college_name":"WESTERN KENTUCKY",
+    "nickname":"HILLTOPPERS",
+    "full":"WESTERN KENTUCKY HILLTOPPERS"
+  },
+  {
+    "id":140,
+    "tricode":"WMU",
+    "college_name":"WESTERN MICHIGAN",
+    "nickname":"BRONCOS",
+    "full":"WESTERN MICHIGAN BRONCOS"
+  },
+  {
+    "id":141,
+    "tricode":"WVU",
+    "college_name":"WEST VIRGINIA",
+    "nickname":"MOUNTAINEERS",
+    "full":"WEST VIRGINIA MOUNTAINEERS"
+  },
+  {
+    "id":142,
+    "tricode":"WYO",
+    "college_name":"WYOMING",
+    "nickname":"COWBOYS",
+    "full":"WYOMING COWBOYS"
+  }
+]

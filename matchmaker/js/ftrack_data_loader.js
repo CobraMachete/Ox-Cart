@@ -9,7 +9,7 @@
 	let propName      = null;
 	let thumbResFold  = null;
 	
-	// Cache server location id (the ftrack *server* location, not your CDN)
+	// CACHE SERVER LOCATION ID
 	let __serverLocationId = null;
 	
 	async function getServerLocationId() {
@@ -58,7 +58,7 @@
 	}
 	
 	
-	// ---------- Boot state helpers ----------
+	// ---------- BOOT STATE HELPERS ----------
 	function mergeBoot(partial) {
 		if (!partial) return;
 		const prev = window.MATCHMAKER_BOOT || {};
@@ -73,7 +73,7 @@
 		
 	}
 	
-	// ---------- Hash helpers ----------
+	// ---------- HASH HELPERS ----------
 	function getHashParams() {
 		const out = {};
 		const raw = (location.hash || '').replace(/^#/, '');
@@ -87,7 +87,7 @@
 		return out;
 	}
 	
-	// ---------- JSON fetch helpers ----------
+	// ---------- JSON FETCH HELPERS ----------
 	async function tryFetchJson(url) {
 		if (!url) return null;
 		try {
@@ -168,45 +168,7 @@
 		});
 	}
 	
-	
-	
-	
-	// ---------- Widget lifecycle ----------
-	async function onWidgetLoad(payload) {
-		// payload from ftrackWidget shim: { credentials, selection, entity }
-		const creds  = payload?.credentials || ftrackWidget.getCredentials?.();
-		const entity = payload?.entity      || ftrackWidget.getEntity?.();
-		
-		// Start ftrack session once (needed for API fallback)
-		if (!session) {
-			if (!creds?.serverUrl || !creds?.apiUser || !creds?.apiKey) {
-				console.error('[MatchMaker] Missing credentials; cannot init ftrack session.', creds);
-				return;
-			}
-			console.debug('[MatchMaker] Initializing API session…', creds.serverUrl);
-			session = new ftrack.Session(creds.serverUrl, creds.apiUser, creds.apiKey);
-			try {
-				await session.initializing;
-				console.debug('[MatchMaker] Session initialized.');
-			} catch (err) {
-				console.error('[MatchMaker] Failed to initialize session:', err);
-				return;
-			}
-		}
-		
-		// Pull seed from hash (URLs) and, if needed, via API by component id
-		await loadSeedDataFromHashAndApi();
-		
-		// Then run your existing query logic
-		await queryAndBootFromEntity(entity);
-	}
-	
-	function onWidgetUpdate() {
-		const entity = ftrackWidget.getEntity();
-		void queryAndBootFromEntity(entity);
-	}
-	
-	// ---------- Helpers for safer derivation ----------
+	// ---------- HELPERS FOR SAFER DERIVATION ----------
 	function derivePropName(ancRow, entRow) {
 		const ancestors = ancRow?.ancestors || [];
 		if (!Array.isArray(ancestors) || !ancestors.length) return null;
@@ -228,7 +190,7 @@
 		return entRow?.name || null;
 	}
 	
-	// ---------- Query logic (your previous onWidgetUpdate body, hardened) ----------
+	// ---------- QUERY LOGIC (previous onWidgetUpdate body, hardened) ----------
 	async function queryAndBootFromEntity(entity) {
 		if (!session) return;
 		if (!entity?.type || !entity?.id) {
@@ -361,7 +323,44 @@
 		}
 	}
 	
-	// ---------- Wire up ----------
+	
+
+	// ---------- WIDGET LIFECYCLE ----------
+	async function onWidgetLoad(payload) {
+		// payload from ftrackWidget shim: { credentials, selection, entity }
+		const creds  = payload?.credentials || ftrackWidget.getCredentials?.();
+		const entity = payload?.entity      || ftrackWidget.getEntity?.();
+		
+		// Start ftrack session once (needed for API fallback)
+		if (!session) {
+			if (!creds?.serverUrl || !creds?.apiUser || !creds?.apiKey) {
+				console.error('[MatchMaker] Missing credentials; cannot init ftrack session.', creds);
+				return;
+			}
+			console.debug('[MatchMaker] Initializing API session…', creds.serverUrl);
+			session = new ftrack.Session(creds.serverUrl, creds.apiUser, creds.apiKey);
+			try {
+				await session.initializing;
+				console.debug('[MatchMaker] Session initialized.');
+			} catch (err) {
+				console.error('[MatchMaker] Failed to initialize session:', err);
+				return;
+			}
+		}
+		
+		// Pull seed from hash (URLs) and, if needed, via API by component id
+		await loadSeedDataFromHashAndApi();
+		
+		// Then run your existing query logic
+		await queryAndBootFromEntity(entity);
+	}
+	
+	function onWidgetUpdate() {
+		const entity = ftrackWidget.getEntity();
+		void queryAndBootFromEntity(entity);
+	}
+
+	// ---------- WIRE UP ----------
 	function onDomContentLoaded() {
 		console.debug('DOM content loaded, initializing widget.');
 		ftrackWidget.initialize({

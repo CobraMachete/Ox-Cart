@@ -86,7 +86,9 @@
                 // });
             });
 
-            
+            //ADMIN PROJECT WITH THUMBNAIL RESOURCES
+            var ADMIN_PRJ_ID = "249a98cd-b296-46cd-b6e2-0c9c61608b6c";
+            var RESOURCE_FOLDER_ID = "14ede329-6b72-43e1-b458-6ff31196c089";
         </script>
         
         <div id="widget">
@@ -138,11 +140,49 @@
 
                         <!-- SPECIAL FIELDS UI HERE -->
                         <div class="bottom-row-container">
-                            <div class="select-icon-moon"></div>
-                            <div class="select-icon-sunny"></div>
-                            <div class="select-icon-moon"></div>
+
+                            <div class="specials-container-spacer">
+                                <div class="specials-container">
+                                    <div class="specials-icon"></div>
+                                    <div class="specials-title">Time of Day</div>
+                                </div>
+                            </div>
+                            
+                            <div class="specials-container-spacer">
+                                <div class="specials-field-main-container">
+                                    <div class="specials-field-icon-txt-combo">
+                                        <div class="specials-field-icon"></div>
+                                        <div class="specials-text-bar">
+                                            <input id="cal-text-input" type="text" placeholder="Ex: 1025">
+                                            <script>
+                                                const el = document.getElementById('cal-text-input');
+                                                const extra = '2rem';                         // your cushion
+                                                const len = (el.placeholder || '').length;    // count chars
+
+                                                // set width once
+                                                const w = `calc(${len}ch + ${extra})`;
+                                                el.style.width = w;
+                                                el.style.minWidth = w;   // lock it
+                                                el.style.maxWidth = w;   // lock it
+
+                                                // do NOT add an 'input' listener; we want it fixed
+                                            </script>
+
+                                        </div>
+                                    </div>
+                                    <div class="specials-title">Game Date</div>
+                                </div>
+                            </div>
+                            
+                            
                             
                         </div>
+                    </div>
+
+                    <!-- BUTTON ROW -->
+                    <div class="button-row-container">
+                        <div class="add-row-btn"></div>
+                        <div class="submit-button">Make Matches</div>
                     </div>
                 </div>
                 
