@@ -13,10 +13,7 @@ var init_shot_name = "None";
 // fetch('./temp_data/shotsinfo.json').then((response) => response.json()).then((json) => readShotsJson(json));
 // fetch('./temp_data/teamsinfo.json').then((response) => response.json()).then((json) => readTeamsJson(json));
 
-// fetch('./temp_data/ALL_TEAMS.json')
-//   .then(r => r.json())
-//   .then(readShotsJson)
-//   .catch(console.error);
+// fetch('./temp_data/ALL_TEAMS.json').then(r => r.json()).then(readShotsJson).catch(console.error);
 
 function readTeamsData(jsonfile) {
 	shots_data = Array.isArray(jsonfile) ? jsonfile : [];
@@ -38,16 +35,17 @@ function readStructuredData(data) {
 	for (var i=0; i < specials_src.length; i++) {
 		specials_data.push(specials_src[i]);
 	}
-	console.log('specials_data:', specials_data);
+	// console.log('specials_data:', specials_data);
 
 	window.specials_data = specials_data;
 
 	
 	structure_src = Array.isArray(data) ? data : [];
+	//START AT INDEX 1.  INDEX 0 IS SPECIALS DATA
 	for (var j=1; j < structure_src.length; j++) {
 		structure_data.push(structure_src[j]);
 	}
-	console.log('structure_data:', structure_data);
+	// console.log('structure_data:', structure_data);
 
 	window.structure_data = structure_data;
 	
