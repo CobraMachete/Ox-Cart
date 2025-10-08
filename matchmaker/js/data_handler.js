@@ -1,6 +1,7 @@
 var teams_data;
 var shots_data;
 var curated_teams = [];
+var structure_data = [];
 var selected_data;
 var thumbnailwhitelist = [];
 var init_shot_name = "None";
@@ -15,14 +16,7 @@ fetch('./temp_data/ALL_TEAMS.json')
   .catch(console.error);
 
 
-// function readShotsJson(jsonfile) {
 
-//     const shots_data = Array.isArray(jsonfile) ? jsonfile : [];
-//     const curated_teams = shots_data.map(({ full = '', tricode = '' }) => `${full} (${tricode})`);
-//     console.log(curated_teams)
-//     return curated_teams
-    
-// }
 
 function readShotsJson(jsonfile) {
   // assign to the GLOBALS (no const/let here)
@@ -34,15 +28,13 @@ function readShotsJson(jsonfile) {
   window.dispatchEvent(new CustomEvent('curatedTeams:ready'));
 }
 
-// function readShotsJson(jsonfile) {
+function readStructuredData(data) {
 
-//     const shots_data = Array.isArray(jsonfile) ? jsonfile : [];
-//     const teams = shots_data.map(({ full = '', tricode = '' }) => `${full} (${tricode})`);
-//     window.curated_teams = teams;
-//     console.log(curated_teams)
-//     window.dispatchEvent(new CustomEvent('curatedTeams:ready'));
-    
-// }
+    console.log('Received Structured Data: ', data);
+    console.log('Special Fields: ', data.specialfields);
+
+}
+
 
 function readTeamsJson(jsonfile) {
 

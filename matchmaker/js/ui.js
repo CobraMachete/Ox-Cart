@@ -1,6 +1,4 @@
-// ui_bootstrap.js (or anywhere in your widget bundle)
-
-// Listen once the loader has parsed & merged the seed
+// LISTEN ONCE THE LOADER HAS PARSED & MERGED THE SEED
 window.addEventListener('matchmaker:seed', (e) => {
   // e.detail is the payload your loader built
   const { teams, structure, projectId, entityId, objectType } = e.detail || {};
@@ -21,7 +19,7 @@ function initMatchMakerUI({ teams, structure, projectId, entityId }) {
 
   // Example: safely map to options
   const teamOptions = Array.isArray(teams) ? teams.map(t => ({
-    label: t.name ?? t.displayName ?? String(t.id),
+    label: t.full ?? t.college_name ?? String(t.id),
     value: t.id
   })) : [];
 
@@ -34,12 +32,14 @@ function initMatchMakerUI({ teams, structure, projectId, entityId }) {
     structure?.name ||
     null;
 
-  if (prop) {
-    window.ddFromCurrProp?.(prop);
-    window.buildThumbList?.(prop);
-  }
+//   if (prop) {
+//     window.ddFromCurrProp?.(prop);
+//     window.buildThumbList?.(prop);
+//   }
 
-  // …the rest of your UI setup using `teams` & `structure`
+  readStructuredData(structure)
+
+  
 }
 
 function getcontainerwidth() {
