@@ -119,140 +119,140 @@
 		
 		    console.log("Document is ready...")
 		
-		    var awaysearchbox = document.getElementById("awaysearchbar");
-		    var homesearchbox = document.getElementById("homesearchbar");
+		    // var awaysearchbox = document.getElementById("awaysearchbar");
+		    // var homesearchbox = document.getElementById("homesearchbar");
 		
-		    var swapper = document.getElementById("swapbtn");
+		    // var swapper = document.getElementById("swapbtn");
 		
-		    const $bodyaway = $('#shotstableaway');
-		    const $tableaway = $('#shottablebodyaway');
+		    // const $bodyaway = $('#shotstableaway');
+		    // const $tableaway = $('#shottablebodyaway');
 		
-		    const $bodyhome = $('#shotstablehome');
-		    const $tablehome = $('#shottablebodyhome');
+		    // const $bodyhome = $('#shotstablehome');
+		    // const $tablehome = $('#shottablebodyhome');
 		
-		    swapper.addEventListener('click', function (e) {
-		        var awaybox = document.getElementById("awaysearchbar");
-		        var homebox = document.getElementById("homesearchbar");
+		    // swapper.addEventListener('click', function (e) {
+		    //     var awaybox = document.getElementById("awaysearchbar");
+		    //     var homebox = document.getElementById("homesearchbar");
 		
-		        if (awaybox.value.length > 0 && homebox.value.length > 0) {
+		    //     if (awaybox.value.length > 0 && homebox.value.length > 0) {
 		
-		            console.log("Both fields have items");
+		    //         console.log("Both fields have items");
 		
-		            awayval = awaybox.value;
-		            homeval = homebox.value;
+		    //         awayval = awaybox.value;
+		    //         homeval = homebox.value;
 		
-		            awaybox.value = homeval;
-		            homebox.value = awayval;
+		    //         awaybox.value = homeval;
+		    //         homebox.value = awayval;
 		
-		            parseTeamString(homeval)
-		            .then((info) => {
+		    //         parseTeamString(homeval)
+		    //         .then((info) => {
 		
-		                var awaytricodetxt = document.getElementById("tricode-row-away");
-		                var awayschooltxt = document.getElementById("school-row-away");
+		    //             var awaytricodetxt = document.getElementById("tricode-row-away");
+		    //             var awayschooltxt = document.getElementById("school-row-away");
 		
-		                awaytricodetxt.innerText = info.code;
-		                awayschooltxt.innerText = info.name;
+		    //             awaytricodetxt.innerText = info.code;
+		    //             awayschooltxt.innerText = info.name;
 		
-		                console.log(awaybox.value);
-		            });
-		
-		
-		            parseTeamString(awayval)
-		            .then((info) => {
-		
-		                var hometricodetxt = document.getElementById("tricode-row-home");
-		                var homeschooltxt = document.getElementById("school-row-home");
-		
-		                hometricodetxt.innerText = info.code;
-		                homeschooltxt.innerText = info.name;
-		
-		                console.log(homebox.value);
-		            });
+		    //             console.log(awaybox.value);
+		    //         });
 		
 		
+		    //         parseTeamString(awayval)
+		    //         .then((info) => {
 		
-		        } else {
-		            console.log("Fields missing items");
-		            console.log(awaybox.value);
-		            console.log(homebox.value);
-		        }
+		    //             var hometricodetxt = document.getElementById("tricode-row-home");
+		    //             var homeschooltxt = document.getElementById("school-row-home");
+		
+		    //             hometricodetxt.innerText = info.code;
+		    //             homeschooltxt.innerText = info.name;
+		
+		    //             console.log(homebox.value);
+		    //         });
 		
 		
-		    });
+		
+		    //     } else {
+		    //         console.log("Fields missing items");
+		    //         console.log(awaybox.value);
+		    //         console.log(homebox.value);
+		    //     }
 		
 		
-		    //EVENT LISTENER FOR SHOT SEARCH BOX
-		    awaysearchbox.addEventListener('input', function (e) {
-		        const myinput = (sanitizeshot(e.target.value) || '').toLowerCase();
-		        e.target.value = myinput;
+		    // });
 		
-		        const $tableaway = $('#shotstableaway');
-		        const $bodyaway  = $('#shottablebodyaway');
 		
-		        $bodyaway.empty();
+		    // //EVENT LISTENER FOR SHOT SEARCH BOX
+		    // awaysearchbox.addEventListener('input', function (e) {
+		    //     const myinput = (sanitizeshot(e.target.value) || '').toLowerCase();
+		    //     e.target.value = myinput;
 		
-		        if (!myinput.length) {
-		            $tableaway.removeClass('is-open');
-		            // also clear inline display if it was ever set elsewhere
-		            $tableaway[0].style.removeProperty('display');
-		            return;
-		        }
+		    //     const $tableaway = $('#shotstableaway');
+		    //     const $bodyaway  = $('#shottablebodyaway');
 		
-		        const list = Array.isArray(window.curated_teams) ? window.curated_teams : [];
-		        const suggestions = list.filter(s => s.toLowerCase().includes(myinput));
+		    //     $bodyaway.empty();
 		
-		        if (!suggestions.length) {
-		            $tableaway.removeClass('is-open');
-		            $tableaway[0].style.removeProperty('display');
-		            return;
-		        }
+		    //     if (!myinput.length) {
+		    //         $tableaway.removeClass('is-open');
+		    //         // also clear inline display if it was ever set elsewhere
+		    //         $tableaway[0].style.removeProperty('display');
+		    //         return;
+		    //     }
 		
-		        const rows = suggestions
-		            .map(s => `<tr onclick="addToShotFieldAway(this)"><td>${s}</td></tr>`)
-		            .join('');
+		    //     const list = Array.isArray(window.curated_teams) ? window.curated_teams : [];
+		    //     const suggestions = list.filter(s => s.toLowerCase().includes(myinput));
 		
-		        $bodyaway.append(rows);
+		    //     if (!suggestions.length) {
+		    //         $tableaway.removeClass('is-open');
+		    //         $tableaway[0].style.removeProperty('display');
+		    //         return;
+		    //     }
 		
-		        // clear any inline display:none, then show via class
-		        $tableaway[0].style.removeProperty('display');
-		        $tableaway.addClass('is-open');
-		    });
+		    //     const rows = suggestions
+		    //         .map(s => `<tr onclick="addToShotFieldAway(this)"><td>${s}</td></tr>`)
+		    //         .join('');
 		
-		    homesearchbox.addEventListener('input', function (e) {
-		        const myinput = (sanitizeshot(e.target.value) || '').toLowerCase();
-		        e.target.value = myinput;
+		    //     $bodyaway.append(rows);
 		
-		        const $tablehome = $('#shotstablehome');
-		        const $bodyhome  = $('#shottablebodyhome');
+		    //     // clear any inline display:none, then show via class
+		    //     $tableaway[0].style.removeProperty('display');
+		    //     $tableaway.addClass('is-open');
+		    // });
 		
-		        $bodyhome.empty();
+		    // homesearchbox.addEventListener('input', function (e) {
+		    //     const myinput = (sanitizeshot(e.target.value) || '').toLowerCase();
+		    //     e.target.value = myinput;
 		
-		        if (!myinput.length) {
-		            $tablehome.removeClass('is-open');
-		            // also clear inline display if it was ever set elsewhere
-		            $tablehome[0].style.removeProperty('display');
-		            return;
-		        }
+		    //     const $tablehome = $('#shotstablehome');
+		    //     const $bodyhome  = $('#shottablebodyhome');
 		
-		        const list = Array.isArray(window.curated_teams) ? window.curated_teams : [];
-		        const suggestions = list.filter(s => s.toLowerCase().includes(myinput));
+		    //     $bodyhome.empty();
 		
-		        if (!suggestions.length) {
-		            $tablehome.removeClass('is-open');
-		            $tablehome[0].style.removeProperty('display');
-		            return;
-		        }
+		    //     if (!myinput.length) {
+		    //         $tablehome.removeClass('is-open');
+		    //         // also clear inline display if it was ever set elsewhere
+		    //         $tablehome[0].style.removeProperty('display');
+		    //         return;
+		    //     }
 		
-		        const rows = suggestions
-		            .map(s => `<tr onclick="addToShotFieldHome(this)"><td>${s}</td></tr>`)
-		            .join('');
+		    //     const list = Array.isArray(window.curated_teams) ? window.curated_teams : [];
+		    //     const suggestions = list.filter(s => s.toLowerCase().includes(myinput));
 		
-		        $bodyhome.append(rows);
+		    //     if (!suggestions.length) {
+		    //         $tablehome.removeClass('is-open');
+		    //         $tablehome[0].style.removeProperty('display');
+		    //         return;
+		    //     }
 		
-		        // clear any inline display:none, then show via class
-		        $tablehome[0].style.removeProperty('display');
-		        $tablehome.addClass('is-open');
-		    });
+		    //     const rows = suggestions
+		    //         .map(s => `<tr onclick="addToShotFieldHome(this)"><td>${s}</td></tr>`)
+		    //         .join('');
+		
+		    //     $bodyhome.append(rows);
+		
+		    //     // clear any inline display:none, then show via class
+		    //     $tablehome[0].style.removeProperty('display');
+		    //     $tablehome.addClass('is-open');
+		    // });
 		
 		
 		
@@ -260,9 +260,6 @@
 		
 		// LISTENING FOR TEAMS DATA EVENT DISPATCH
 		document.addEventListener('DOMContentLoaded', async () => {
-
-			
-  			
 
 			const onCuratedReady = (e) => {
 				const teams = e.detail?.curated_teams ?? window.curated_teams ?? [];
