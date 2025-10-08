@@ -34,93 +34,80 @@
 <body>
 	<script>
 
+		// Sync: parse "Name (CODE)" or best-effort fallbacks
 		function chopTeamString(str) {
-			// Match: "NAME (CODE)" with flexible spaces
-			return new Promise((resolve) => {
-				
-				const m = String(str).match(/^\s*(.*?)\s*\(\s*([^)]+)\s*\)\s*$/);
-				if (m) {
-					resolve( { name: m[1].trim(), code: m[2].trim() } );
-				}
-				
-				// Fallbacks: try last (...) if formatting is a bit off, else no code
-				const t = String(str).trim();
-				const open = t.lastIndexOf('(');
-				const close = t.lastIndexOf(')');
-				if (open !== -1 && close !== -1 && close > open) {
-					resolve ({ name: t.slice(0, open).trim(), code: t.slice(open + 1, close).trim() }) ;
-				}
-				
-				// No parentheses present
-				resolve ( { name: t, code: '' });
-			})
-			
+			const t = String(str ?? '').trim();
+
+			// Exact "Name (CODE)"
+			const m = t.match(/^(.*?)\s*\(\s*([^)]+)\s*\)$/);
+			if (m) return { name: m[1].trim(), code: m[2].trim() };
+
+			// Fallback: last (...) pair if formatting is off
+			const open = t.lastIndexOf('('), close = t.lastIndexOf(')');
+			if (open !== -1 && close > open) {
+				return { name: t.slice(0, open).trim(), code: t.slice(open + 1, close).trim() };
+			}
+
+			// No parentheses present
+			return { name: t, code: '' };
 		}
 
-		//INITIALIZE MATCHUP ROW
-		window.initMatchupRow = function initMatchupRow(target, options = {}) {
+		// Async: initialize the row and seed initial values from two random teams
+		window.initMatchupRow = async function initMatchupRow(target, options = {}) {
+			const row = (typeof target === 'string') ? document.querySelector(target) : target;
+			if (!row) throw new Error('initMatchupRow: target element not found');
 
-			let randomPairing = twoRandomDistinct(window.curated_teams);
-			
-			let tempawayparsed = chopTeamString(randomPairing[0]);
-			let temphomeparsed = chopTeamString(randomPairing[1]);
+			const teams = options.curatedTeams ?? window.curated_teams ?? [];
+			if (teams.length < 2) throw new Error('initMatchupRow: need at least 2 curated teams');
 
-			Promise.all([tempawayparsed, temphomeparsed])
-			.then(() => {
+			const [awayStr, homeStr] = twoRandomDistinct(teams);
+			const tempawayparsed = chopTeamString(awayStr);
+			const temphomeparsed = chopTeamString(homeStr);
 
-				console.log(tempawayparsed);
-				console.log(temphomeparsed);
+			const {
+				specialsData    = (window.specials_data ?? null),
+				structureData   = (window.structure_data ?? null),
+				parseTeamString = async (s) => {
+				const m = /\b([A-Z]{2,4})\b/.exec(s || '');
+				return { code: m?.[1] || '', name: s };
+				},
+				icons = [
+				{ icon: './img/sunny.svg',      state: 'Day'   },
+				{ icon: './img/moon_stars.svg', state: 'Night' },
+				],
+				onChange = (detail) => console.log('Row changed:', detail),
+			} = options;
 
-				const {
-					curatedTeams    = (window.curated_teams ?? []),
-					specialsData    = (window.specials_data ?? null),
-					structureData   = (window.structure_data ?? null),
-					parseTeamString = async (s) => {
-						const m = /\b([A-Z]{2,4})\b/.exec(s || '');
-						return { code: m?.[1] || '', name: s };
-					},
-					icons = [
-					{ icon: './img/sunny.svg',      state: 'Day'   },
-					{ icon: './img/moon_stars.svg', state: 'Night' },
-					],
-					initialValue = {
-						awaysearchbar: '',
-						homesearchbar: '',
-						'tricode-row-away': tempawayparsed.code,
-						'school-row-away': tempawayparsed.name,
-						'tricode-row-home': temphomeparsed.code,
-						'school-row-home': temphomeparsed.name,
-						'cal-text-input': '',
-						currentIcon: { index: 0 },
-					},
-					onChange = (detail) => console.log('Row changed:', detail),
-				} = options || {};
-				
-				const row = (typeof target === 'string') ? document.querySelector(target) : target;
-				if (!row) throw new Error('initMatchupRow: target element not found');
-				
-				// Provide datasets / hooks
-				row.curatedTeams  = curatedTeams;
-				row.specialsData  = specialsData;
-				row.structureData = structureData;
-				row.parseTeamString = parseTeamString;
-				row.icons = icons;
-				
-				// Listen for updates
-				const handler = (e) => onChange?.(e.detail, e);
-				row.addEventListener('rowchange', handler);
-				
-				// Seed initial values (merge icons so you can override them if desired)
-				row.value = { ...initialValue, icons };
-				
-				// Tiny API
-				return {
-					row,
-					get value() { return row.value; },
-					set value(v) { row.value = v; },
-					destroy() { row.removeEventListener('rowchange', handler); },
-				};
-			});
+			// Provide datasets / hooks
+			row.curatedTeams    = teams;
+			row.specialsData    = specialsData;
+			row.structureData   = structureData;
+			row.parseTeamString = parseTeamString;
+			row.icons           = icons;
+
+			// Listen for updates
+			const handler = (e) => onChange?.(e.detail, e);
+			row.addEventListener('rowchange', handler);
+
+			// Seed initial values
+			row.value = {
+				awaysearchbar: '',
+				homesearchbar: '',
+				'tricode-row-away': tempawayparsed.code,
+				'school-row-away':  tempawayparsed.name,
+				'tricode-row-home': temphomeparsed.code,
+				'school-row-home':  temphomeparsed.name,
+				'cal-text-input': '',
+				icons,
+				currentIcon: { index: 0 },
+			};
+
+			return {
+				row,
+				get value() { return row.value; },
+				set value(v) { row.value = v; },
+				destroy() { row.removeEventListener('rowchange', handler); },
+			};
 		};
 
 		//MOUNT INITIAL ROW
