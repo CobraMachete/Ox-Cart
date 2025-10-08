@@ -36,6 +36,14 @@
 
 		//INITIALIZE MATCHUP ROW
 		window.initMatchupRow = function initMatchupRow(target, options = {}) {
+
+			console.log(options);
+			console.log(window.curated_teams);
+
+			let randomPairing = twoRandomDistinct(window.curated_teams);
+			console.log(randomPairing);
+			// let tempaway = randomItem[0]
+
 			const {
 				curatedTeams    = (window.curated_teams ?? []),
 				specialsData    = (window.specials_data ?? null),
@@ -108,8 +116,8 @@
 		function waitForCuratedTeams() {
 			return new Promise((resolve) => {
 				if (Array.isArray(window.curated_teams) && window.curated_teams.length) {
-				resolve(window.curated_teams);
-				return;
+					resolve(window.curated_teams);
+					return;
 				}
 				window.addEventListener(
 				'curatedTeams:ready',
@@ -302,11 +310,11 @@
 			row.curatedTeams = teams;
 
 			const api = window.initMatchupRow(row, {
-			curatedTeams: teams || [],
-			onChange(detail) {
-				console.log('rowchange:', detail);
-			},
-			// initialValue, icons, parseTeamString, etc. can be passed here too
+				curatedTeams: teams || [],
+				onChange(detail) {
+					console.log('rowchange:', detail);
+				},
+				// initialValue, icons, parseTeamString, etc. can be passed here too
 			});
 
 			const onCuratedReady = (e) => {

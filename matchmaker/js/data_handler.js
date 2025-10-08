@@ -60,6 +60,17 @@ function readStructuredData(data) {
 	}));
 }
 
+function twoRandomDistinct(arr) {
+  const n = arr.length;
+  if (n < 2) throw new Error('Need at least 2 items');
+
+  const i = Math.floor(Math.random() * n);
+  let j = Math.floor(Math.random() * (n - 1));
+  if (j >= i) j++;           // skip over i to ensure distinct indices
+
+  return [arr[i], arr[j]];
+}
+
 //OLD METHOD FOR JSON ON GITHUB
 // function readShotsJson(jsonfile) {
 // 	// assign to the GLOBALS (no const/let here)
