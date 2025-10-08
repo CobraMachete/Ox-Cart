@@ -17,7 +17,7 @@ TEMPLATE.innerHTML = `
     :host{ display:block }
     /* Ensure our container inherits your existing layout classes */
     /* Minimal safe defaults if external CSS fails */
-    .main-col-container{ display: flex; flex-direction: column; align-items: center; justify-content: center; max-width:1280px; width:calc(1280px*.85); margin:0; border-radius:2rem; border:1px solid rgba(255,255,255,.2); }
+    .main-col-container{ width:85%; margin:0 auto; border-radius:2rem; border:1px solid rgba(255,255,255,.2); }
     .main-row-container{ display:flex; gap:1rem; justify-content:center; align-items:stretch; margin:.5rem 0 1rem; }
     .awayteam-container,.hometeam-container{ width:25%; display:flex; flex-direction:column; align-items:center; }
     .vs-container{ width:8%; display:flex; flex-direction:column; align-items:center; }
@@ -35,19 +35,20 @@ TEMPLATE.innerHTML = `
     table.custom-table thead th{ position:sticky; top:0; background:#192129; color:rgba(235,235,235,.9); font-weight:800; font-size:16px; text-align:left; padding:12px 15px; user-select:none; z-index:1; }
     table.custom-table tbody td{ color:rgba(235,235,235,.6); font-weight:400; font-size:1.25rem; text-align:left; vertical-align:middle; padding:1rem 15px; background:transparent; border-bottom:1px solid rgba(217,217,217,.1); }
     table.custom-table tbody tr:hover td{ color:rgba(235,235,235,.9); background:rgba(217,217,217,.05); border-bottom-color:rgba(147,91,162,.9); }
+    /* keyboard navigation highlight */
+    table.custom-table tbody tr.is-active td{ color:rgba(235,235,235,.95); background:rgba(217,217,217,.08); border-bottom-color:rgba(147,91,162,.9); }
 
     .swap-row{ width:3.5rem; height:3.5rem; opacity:.4; content:url("./img/swap_horiz.svg"); cursor:pointer; margin-top:3.2rem; }
     .swap-row:hover{ opacity:.8 }
     .swap-row:active{ transform: scale(.95) }
 
-    .shot-search-bar input[type="text"]{ width:22rem; height:3rem; padding:0 1rem 0 2.5rem; border:1px solid #5E5E5E; border-radius:10px; background: rgba(82,82,82,.1) url("./img/search_icon_24.png") no-repeat 5% 4px / 24px; font-family: Gilroy, system-ui, sans-serif; margin-left: 1rem; }
+    .shot-search-bar input[type="text"]{ width:22rem; height:3rem; padding:0 1rem 0 2.5rem; border:1px solid #5E5E5E; border-radius:10px; background: rgba(82,82,82,.1) url("./img/search_icon_24.png") no-repeat 5% 4px / 24px; font-family: Gilroy, system-ui, sans-serif; }
     .shot-search-bar input[type="text"]::placeholder{ color:rgba(218,218,218,.5); }
 
     .tricode-row{ padding-top:2rem; padding-bottom:.5rem; font-weight:700; font-size:5rem; opacity:.85; letter-spacing:1.2px; }
     .school-row{ padding-top:1rem; padding-bottom:1.5rem; font-weight:400; font-size:1.5rem; opacity:.5; letter-spacing:1.2px; }
 
     .specials-text-bar input[type="text"]{ box-sizing:content-box; width: calc(8ch + 2rem); padding-inline:.75rem 1rem; height:2.5rem; border:1px solid #5E5E5E; border-radius:10px; background-color:rgba(82,82,82,.1); font-family: Gilroy, system-ui, sans-serif; }
-    
   </style>
   <div class="main-col-container">
     <div class="main-row-container">
@@ -145,49 +146,36 @@ export class MatchupRow extends HTMLElement {
   }
 
   connectedCallback(){
-    // Wire interactions
     const { awayInput, homeInput, awayTable, awayBody, homeTable, homeBody, swapBtn, rotWrap, rotImg, calInput } = this._els;
 
-    // dropdown helpers
-    const filterTeams = (q) => {
-      const s = (q||'').toLowerCase().trim();
-      if(!s) return [];
-      return (Array.isArray(this._curatedTeams) ? this._curatedTeams : [])
-        .filter(t => String(t).toLowerCase().includes(s))
-        .slice(0, 50);
-    };
-    const renderRows = (body, table, list, onPick) => {
-      body.innerHTML = '';
-      if(!list.length){ table.classList.remove('is-open'); return; }
-      body.innerHTML = list.map(s => `<tr data-val="${String(s).replaceAll('"','&quot;')}"><td>${s}</td></tr>`).join('');
-      [...body.querySelectorAll('tr')].forEach(tr => tr.addEventListener('click', () => onPick(tr.dataset.val)) );
-      table.classList.add('is-open');
-    };
-    const closeTables = () => { awayTable.classList.remove('is-open'); homeTable.classList.remove('is-open'); };
+    // track keyboard nav index per dropdown
+    this._nav = { away: -1, home: -1 };
 
-    awayInput.addEventListener('input', (e)=>{
-      const v = this._sanitize(e.target.value);
-      e.target.value = v;
-      renderRows(awayBody, awayTable, filterTeams(v), (pick)=>{
-        awayInput.value = pick;
-        this._hydrateTeam('away', pick);
-        closeTables();
-      });
+    // INPUT -> suggestions
+    const onInputAway = (e)=> this._onInput('away', e);
+    const onInputHome = (e)=> this._onInput('home', e);
+    awayInput.addEventListener('input', onInputAway);
+    homeInput.addEventListener('input', onInputHome);
+
+    // keyboard navigation
+    awayInput.addEventListener('keydown', (e)=> this._onKey('away', e));
+    homeInput.addEventListener('keydown', (e)=> this._onKey('home', e));
+
+    // click to pick (delegated inside shadow)
+    awayBody.addEventListener('click', (e)=>{
+      const tr = e.target.closest('tr[data-val]');
+      if(tr) this._pick('away', tr.dataset.val);
     });
-    homeInput.addEventListener('input', (e)=>{
-      const v = this._sanitize(e.target.value);
-      e.target.value = v;
-      renderRows(homeBody, homeTable, filterTeams(v), (pick)=>{
-        homeInput.value = pick;
-        this._hydrateTeam('home', pick);
-        closeTables();
-      });
+    homeBody.addEventListener('click', (e)=>{
+      const tr = e.target.closest('tr[data-val]');
+      if(tr) this._pick('home', tr.dataset.val);
     });
 
-    document.addEventListener('click', (e)=>{
-      if(!this.shadowRoot.contains(e.target)) closeTables();
-    });
+    // outside click closes (use composedPath + capture)
+    this._outsideHandler = (e)=>{ if(!this._isInside(e)) this._closeTables(); };
+    document.addEventListener('pointerdown', this._outsideHandler, true);
 
+    // swap teams
     swapBtn.addEventListener('click', async ()=>{
       const a = this.awaySearch, h = this.homeSearch;
       this.awaySearch = h; this.homeSearch = a;
@@ -219,7 +207,14 @@ export class MatchupRow extends HTMLElement {
 
   /* ---------- Public properties / API ---------- */
   get curatedTeams(){ return this._curatedTeams; }
-  set curatedTeams(v){ this._curatedTeams = Array.isArray(v) ? v : []; }
+  set curatedTeams(v){
+    this._curatedTeams = Array.isArray(v) ? v : [];
+    // If a dropdown is open, refresh it with the new dataset
+    const av = (this._els.awayInput?.value || '').trim();
+    const hv = (this._els.homeInput?.value || '').trim();
+    if (this._els.awayTable?.classList.contains('is-open')) this._renderSuggestions('away', av);
+    if (this._els.homeTable?.classList.contains('is-open')) this._renderSuggestions('home', hv);
+  }
 
   get specialsData(){ return this._specialsData; }
   set specialsData(v){ this._specialsData = v; }
@@ -333,6 +328,86 @@ export class MatchupRow extends HTMLElement {
     const len = (el.placeholder || '').length;
     const w = `calc(${len}ch + ${extra})`;
     el.style.width = w; el.style.minWidth = w; el.style.maxWidth = w;
+  }
+
+  /* ---- dropdown helpers (native, no jQuery) ---- */
+  _onInput(side, e){
+    const v = this._sanitize(e.target.value);
+    e.target.value = v;
+    this._renderSuggestions(side, v);
+  }
+
+  _renderSuggestions(side, query){
+    const table = side === 'away' ? this._els.awayTable : this._els.homeTable;
+    const body  = side === 'away' ? this._els.awayBody  : this._els.homeBody;
+
+    body.innerHTML = '';
+    const q = (query||'').toLowerCase().trim();
+    if(!q){ table.classList.remove('is-open'); return; }
+
+    const list = (Array.isArray(this._curatedTeams) ? this._curatedTeams : [])
+      .filter(s => String(s).toLowerCase().includes(q))
+      .slice(0, 100);
+
+    if(!list.length){ table.classList.remove('is-open'); return; }
+
+    body.innerHTML = list.map((s,i)=>
+      `<tr data-val="${String(s).replaceAll('"','&quot;')}" data-index="${i}"><td>${s}</td></tr>`
+    ).join('');
+
+    table.style.removeProperty('display');
+    table.classList.add('is-open');
+    this._nav[side] = -1;
+  }
+
+  _onKey(side, e){
+    const table = side === 'away' ? this._els.awayTable : this._els.homeTable;
+    const body  = side === 'away' ? this._els.awayBody  : this._els.homeBody;
+    const rows = [...body.querySelectorAll('tr')];
+
+    if(e.key === 'Escape'){ this._closeTables(); return; }
+
+    if(!table.classList.contains('is-open')){
+      if(e.key === 'ArrowDown' && (e.target.value||'').trim()){
+        this._renderSuggestions(side, e.target.value);
+        e.preventDefault();
+      }
+      return;
+    }
+
+    if(e.key === 'ArrowDown'){ this._moveActive(side, +1, rows); e.preventDefault(); }
+    else if(e.key === 'ArrowUp'){ this._moveActive(side, -1, rows); e.preventDefault(); }
+    else if(e.key === 'Enter'){
+      const i = this._nav[side];
+      if(i >= 0 && rows[i]){ this._pick(side, rows[i].dataset.val); e.preventDefault(); }
+    }
+  }
+
+  _moveActive(side, delta, rows){
+    let i = this._nav[side] ?? -1;
+    i = Math.max(0, Math.min((rows.length - 1), i + delta));
+    rows.forEach(r => r.classList.remove('is-active'));
+    if(rows[i]){
+      rows[i].classList.add('is-active');
+      rows[i].scrollIntoView({ block: 'nearest' });
+      this._nav[side] = i;
+    }
+  }
+
+  _pick(side, text){
+    if(side === 'away'){ this._els.awayInput.value = text; this._hydrateTeam('away', text); }
+    else { this._els.homeInput.value = text; this._hydrateTeam('home', text); }
+    this._closeTables();
+  }
+
+  _isInside(event){
+    const path = event.composedPath ? event.composedPath() : [];
+    return path.includes(this) || path.includes(this.shadowRoot);
+  }
+
+  _closeTables(){
+    this._els.awayTable.classList.remove('is-open');
+    this._els.homeTable.classList.remove('is-open');
   }
 
   _emit(){ this.dispatchEvent(new CustomEvent('rowchange', { detail: this.value })); }
