@@ -37,12 +37,10 @@
 		//INITIALIZE MATCHUP ROW
 		window.initMatchupRow = function initMatchupRow(target, options = {}) {
 
-			console.log(options);
-			console.log(window.curated_teams);
-
 			let randomPairing = twoRandomDistinct(window.curated_teams);
-			console.log(randomPairing);
-			// let tempaway = randomItem[0]
+			
+			let tempawayparsed = parseTeamString(randomItem[0]);
+			let temphomeparsed = parseTeamString(randomItem[1]);
 
 			const {
 				curatedTeams    = (window.curated_teams ?? []),
@@ -57,12 +55,12 @@
 				{ icon: './img/moon_stars.svg', state: 'Night' },
 				],
 				initialValue = {
-					awaysearchbar: '',
-					homesearchbar: '',
-					'tricode-row-away': 'N/A',
-					'school-row-away': 'No Away School Selected',
-					'tricode-row-home': 'N/A',
-					'school-row-home': 'No Home School Selected',
+					awaysearchbar: tempaway,
+					homesearchbar: temphome,
+					'tricode-row-away': tempawayparsed.code,
+					'school-row-away': tempawayparsed.name,
+					'tricode-row-home': temphomeparsed.code,
+					'school-row-home': temphomeparsed.name,
 					'cal-text-input': '',
 					currentIcon: { index: 0 },
 				},
