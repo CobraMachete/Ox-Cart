@@ -267,8 +267,11 @@
 				// TODO: hydrate UI with teams
 				// const api = window.initMatchupRow('#row1', { curatedTeams: window.curated_teams });
 				mountRow1('#rowcollection');
-				const row = document.querySelector('matchup-row');
-				row.curatedTeams = window.curated_teams;
+				setTimeout(() => {
+					const row = document.querySelector('matchup-row');
+					row.curatedTeams = window.curated_teams;
+				}, 3000)
+				
 			};
 			
 			const onSpecialsReady = (e) => {
