@@ -62,8 +62,8 @@
 
 			let randomPairing = twoRandomDistinct(window.curated_teams);
 			
-			let tempawayparsed = chopTeamString(randomItem[0]);
-			let temphomeparsed = chopTeamString(randomItem[1]);
+			let tempawayparsed = chopTeamString(randomPairing[0]);
+			let temphomeparsed = chopTeamString(randomPairing[1]);
 
 			const {
 				curatedTeams    = (window.curated_teams ?? []),
