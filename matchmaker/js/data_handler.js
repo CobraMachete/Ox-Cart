@@ -1,8 +1,10 @@
 var teams_data;
 var shots_data;
 var structure_src;
+var specials_src;
 var curated_teams = [];
 var structure_data = [];
+var specials_data = [];
 var selected_data;
 var thumbnailwhitelist = [];
 var init_shot_name = "None";
@@ -37,12 +39,19 @@ function readShotsJson(jsonfile) {
 }
 
 function readStructuredData(data) {
-	console.log('Received Structured Data: ', data);
-	console.log('Special Fields: ', data[0].specialfields);
+		
+	specials_src = Array.isArray(data[0].specialfields) ? data[0].specialfields : [];
 
-	// assign to the GLOBALS (no const/let here)
+	for (var i=0; i < specials_src.length; i++) {
+		specials_data.push(specials_src[i]);
+	}
+	console.log('specials_data:', specials_data);
+
+	
 	structure_src = Array.isArray(data) ? data : [];
-	structure_data = structure_src.map(({ shotname = '', details = [] }) => `${shotname} (${details})`);
+	for (var j=1; j < structure_src.length; j++) {
+		structure_data.push(structure_src[j]);
+	}
 	console.log('structure_data:', structure_data);
 	
 	// let the UI know it’s ready (if you want to listen for it)
