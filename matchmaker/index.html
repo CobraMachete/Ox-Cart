@@ -27,8 +27,7 @@
 	<script type="text/javascript" src="js/endscreen.js"></script>
 	<script type="text/javascript" src="js/mousetrap.min.js"></script>
 	
-	<!-- MATCHUP CUSTOM ELEMENT -->
-	<script type="module" src="ui/matchup-row.js"></script>
+	
 	
 	
 </head>
@@ -115,149 +114,149 @@
 			return api;
 		}
 
+
+		$(document).ready(function() {
 		
-		// $(document).ready(function() {
+		    console.log("Document is ready...")
 		
-		//     console.log("Document is ready...")
+		    // var awaysearchbox = document.getElementById("awaysearchbar");
+		    // var homesearchbox = document.getElementById("homesearchbar");
 		
-		//     var awaysearchbox = document.getElementById("awaysearchbar");
-		//     var homesearchbox = document.getElementById("homesearchbar");
+		    // var swapper = document.getElementById("swapbtn");
 		
-		//     var swapper = document.getElementById("swapbtn");
+		    // const $bodyaway = $('#shotstableaway');
+		    // const $tableaway = $('#shottablebodyaway');
 		
-		//     const $bodyaway = $('#shotstableaway');
-		//     const $tableaway = $('#shottablebodyaway');
+		    // const $bodyhome = $('#shotstablehome');
+		    // const $tablehome = $('#shottablebodyhome');
 		
-		//     const $bodyhome = $('#shotstablehome');
-		//     const $tablehome = $('#shottablebodyhome');
+		    // swapper.addEventListener('click', function (e) {
+		    //     var awaybox = document.getElementById("awaysearchbar");
+		    //     var homebox = document.getElementById("homesearchbar");
 		
-		//     swapper.addEventListener('click', function (e) {
-		//         var awaybox = document.getElementById("awaysearchbar");
-		//         var homebox = document.getElementById("homesearchbar");
+		    //     if (awaybox.value.length > 0 && homebox.value.length > 0) {
 		
-		//         if (awaybox.value.length > 0 && homebox.value.length > 0) {
+		    //         console.log("Both fields have items");
 		
-		//             console.log("Both fields have items");
+		    //         awayval = awaybox.value;
+		    //         homeval = homebox.value;
 		
-		//             awayval = awaybox.value;
-		//             homeval = homebox.value;
+		    //         awaybox.value = homeval;
+		    //         homebox.value = awayval;
 		
-		//             awaybox.value = homeval;
-		//             homebox.value = awayval;
+		    //         parseTeamString(homeval)
+		    //         .then((info) => {
 		
-		//             parseTeamString(homeval)
-		//             .then((info) => {
+		    //             var awaytricodetxt = document.getElementById("tricode-row-away");
+		    //             var awayschooltxt = document.getElementById("school-row-away");
 		
-		//                 var awaytricodetxt = document.getElementById("tricode-row-away");
-		//                 var awayschooltxt = document.getElementById("school-row-away");
+		    //             awaytricodetxt.innerText = info.code;
+		    //             awayschooltxt.innerText = info.name;
 		
-		//                 awaytricodetxt.innerText = info.code;
-		//                 awayschooltxt.innerText = info.name;
-		
-		//                 console.log(awaybox.value);
-		//             });
-		
-		
-		//             parseTeamString(awayval)
-		//             .then((info) => {
-		
-		//                 var hometricodetxt = document.getElementById("tricode-row-home");
-		//                 var homeschooltxt = document.getElementById("school-row-home");
-		
-		//                 hometricodetxt.innerText = info.code;
-		//                 homeschooltxt.innerText = info.name;
-		
-		//                 console.log(homebox.value);
-		//             });
+		    //             console.log(awaybox.value);
+		    //         });
 		
 		
+		    //         parseTeamString(awayval)
+		    //         .then((info) => {
 		
-		//         } else {
-		//             console.log("Fields missing items");
-		//             console.log(awaybox.value);
-		//             console.log(homebox.value);
-		//         }
+		    //             var hometricodetxt = document.getElementById("tricode-row-home");
+		    //             var homeschooltxt = document.getElementById("school-row-home");
 		
+		    //             hometricodetxt.innerText = info.code;
+		    //             homeschooltxt.innerText = info.name;
 		
-		//     });
-		
-		
-		//     //EVENT LISTENER FOR SHOT SEARCH BOX
-		//     awaysearchbox.addEventListener('input', function (e) {
-		//         const myinput = (sanitizeshot(e.target.value) || '').toLowerCase();
-		//         e.target.value = myinput;
-		
-		//         const $tableaway = $('#shotstableaway');
-		//         const $bodyaway  = $('#shottablebodyaway');
-		
-		//         $bodyaway.empty();
-		
-		//         if (!myinput.length) {
-		//             $tableaway.removeClass('is-open');
-		//             // also clear inline display if it was ever set elsewhere
-		//             $tableaway[0].style.removeProperty('display');
-		//             return;
-		//         }
-		
-		//         const list = Array.isArray(window.curated_teams) ? window.curated_teams : [];
-		//         const suggestions = list.filter(s => s.toLowerCase().includes(myinput));
-		
-		//         if (!suggestions.length) {
-		//             $tableaway.removeClass('is-open');
-		//             $tableaway[0].style.removeProperty('display');
-		//             return;
-		//         }
-		
-		//         const rows = suggestions
-		//             .map(s => `<tr onclick="addToShotFieldAway(this)"><td>${s}</td></tr>`)
-		//             .join('');
-		
-		//         $bodyaway.append(rows);
-		
-		//         // clear any inline display:none, then show via class
-		//         $tableaway[0].style.removeProperty('display');
-		//         $tableaway.addClass('is-open');
-		//     });
-		
-		//     homesearchbox.addEventListener('input', function (e) {
-		//         const myinput = (sanitizeshot(e.target.value) || '').toLowerCase();
-		//         e.target.value = myinput;
-		
-		//         const $tablehome = $('#shotstablehome');
-		//         const $bodyhome  = $('#shottablebodyhome');
-		
-		//         $bodyhome.empty();
-		
-		//         if (!myinput.length) {
-		//             $tablehome.removeClass('is-open');
-		//             // also clear inline display if it was ever set elsewhere
-		//             $tablehome[0].style.removeProperty('display');
-		//             return;
-		//         }
-		
-		//         const list = Array.isArray(window.curated_teams) ? window.curated_teams : [];
-		//         const suggestions = list.filter(s => s.toLowerCase().includes(myinput));
-		
-		//         if (!suggestions.length) {
-		//             $tablehome.removeClass('is-open');
-		//             $tablehome[0].style.removeProperty('display');
-		//             return;
-		//         }
-		
-		//         const rows = suggestions
-		//             .map(s => `<tr onclick="addToShotFieldHome(this)"><td>${s}</td></tr>`)
-		//             .join('');
-		
-		//         $bodyhome.append(rows);
-		
-		//         // clear any inline display:none, then show via class
-		//         $tablehome[0].style.removeProperty('display');
-		//         $tablehome.addClass('is-open');
-		//     });
+		    //             console.log(homebox.value);
+		    //         });
 		
 		
 		
-		// });
+		    //     } else {
+		    //         console.log("Fields missing items");
+		    //         console.log(awaybox.value);
+		    //         console.log(homebox.value);
+		    //     }
+		
+		
+		    // });
+		
+		
+		    // //EVENT LISTENER FOR SHOT SEARCH BOX
+		    // awaysearchbox.addEventListener('input', function (e) {
+		    //     const myinput = (sanitizeshot(e.target.value) || '').toLowerCase();
+		    //     e.target.value = myinput;
+		
+		    //     const $tableaway = $('#shotstableaway');
+		    //     const $bodyaway  = $('#shottablebodyaway');
+		
+		    //     $bodyaway.empty();
+		
+		    //     if (!myinput.length) {
+		    //         $tableaway.removeClass('is-open');
+		    //         // also clear inline display if it was ever set elsewhere
+		    //         $tableaway[0].style.removeProperty('display');
+		    //         return;
+		    //     }
+		
+		    //     const list = Array.isArray(window.curated_teams) ? window.curated_teams : [];
+		    //     const suggestions = list.filter(s => s.toLowerCase().includes(myinput));
+		
+		    //     if (!suggestions.length) {
+		    //         $tableaway.removeClass('is-open');
+		    //         $tableaway[0].style.removeProperty('display');
+		    //         return;
+		    //     }
+		
+		    //     const rows = suggestions
+		    //         .map(s => `<tr onclick="addToShotFieldAway(this)"><td>${s}</td></tr>`)
+		    //         .join('');
+		
+		    //     $bodyaway.append(rows);
+		
+		    //     // clear any inline display:none, then show via class
+		    //     $tableaway[0].style.removeProperty('display');
+		    //     $tableaway.addClass('is-open');
+		    // });
+		
+		    // homesearchbox.addEventListener('input', function (e) {
+		    //     const myinput = (sanitizeshot(e.target.value) || '').toLowerCase();
+		    //     e.target.value = myinput;
+		
+		    //     const $tablehome = $('#shotstablehome');
+		    //     const $bodyhome  = $('#shottablebodyhome');
+		
+		    //     $bodyhome.empty();
+		
+		    //     if (!myinput.length) {
+		    //         $tablehome.removeClass('is-open');
+		    //         // also clear inline display if it was ever set elsewhere
+		    //         $tablehome[0].style.removeProperty('display');
+		    //         return;
+		    //     }
+		
+		    //     const list = Array.isArray(window.curated_teams) ? window.curated_teams : [];
+		    //     const suggestions = list.filter(s => s.toLowerCase().includes(myinput));
+		
+		    //     if (!suggestions.length) {
+		    //         $tablehome.removeClass('is-open');
+		    //         $tablehome[0].style.removeProperty('display');
+		    //         return;
+		    //     }
+		
+		    //     const rows = suggestions
+		    //         .map(s => `<tr onclick="addToShotFieldHome(this)"><td>${s}</td></tr>`)
+		    //         .join('');
+		
+		    //     $bodyhome.append(rows);
+		
+		    //     // clear any inline display:none, then show via class
+		    //     $tablehome[0].style.removeProperty('display');
+		    //     $tablehome.addClass('is-open');
+		    // });
+		
+		
+		
+		});
 		
 		// LISTENING FOR TEAMS DATA EVENT DISPATCH
 		document.addEventListener('DOMContentLoaded', async () => {
@@ -269,7 +268,7 @@
 				const teams = e.detail?.curated_teams ?? window.curated_teams ?? [];
 				console.log('ready teams:', teams);
 				// TODO: hydrate UI with teams
-				const api = window.initMatchupRow('#row1', { curatedTeams: window.curated_teams });
+				// const api = window.initMatchupRow('#row1', { curatedTeams: window.curated_teams });
 			};
 			
 			const onSpecialsReady = (e) => {
@@ -329,51 +328,7 @@
 				</div>
 				
 				<div class="row-collection" id="rowcollection">
-					<!-- <matchup-row id="row1"></matchup-row> -->
 					
-					<!-- <script type="module">
-						const row = document.getElementById('row1');
-						
-						// Provide datasets (all optional; expand later as needed)
-						row.curatedTeams = window.curated_teams || [];      // for suggestions
-						row.specialsData = window.specials_data || null;     // reserved for future use
-						row.structureData = window.structure_data || null;   // reserved for future use
-						
-						// (Optional) parsing hook — your existing lookup to return {code, name}
-						row.parseTeamString = async (s) => {
-						// Example shim; plug in your real logic:
-						// return parseTeamString(s)
-						const m = /\\b([A-Z]{2,4})\\b/.exec(s);
-						return { code: m?.[1] || '', name: s };
-						};
-						
-						// Configure the time-of-day icons (defaults included)
-						row.icons = [
-						{ icon: './img/sunny.svg',       state: 'Day'   },
-						{ icon: './img/moon_stars.svg',  state: 'Night' }
-						];
-						
-						// Listen for convenient state updates
-						row.addEventListener('rowchange', (e) => {
-						console.log('Row changed:', e.detail);
-						});
-						
-						// Example: set initial values programmatically
-						row.value = {
-						awaysearchbar: 'arizona state',
-						homesearchbar: 'hawaii',
-						'tricode-row-away': 'ASU',
-						'school-row-away': 'Arizona State',
-						'tricode-row-home': 'HAW',
-						'school-row-home': 'University of Hawaii',
-						'cal-text-input': '1025',
-						icons: row.icons,                 // can override too
-						currentIcon: { index: 0 }         // choose currently shown icon
-						};
-						
-						// Later, you can read everything in one shot:
-						console.log(row.value);
-					</script> -->
 				</div>
 				
 				<!-- BUTTON ROW -->
@@ -393,6 +348,8 @@
 	<script type="text/javascript" src="js/ftrack_widget.js"></script>
 	<script type="text/javascript" src="js/ftrack_data_loader.js"></script>
 	<script type="text/javascript" src="js/createassets.js"></script>
+	<!-- MATCHUP CUSTOM ELEMENT -->
+	<script type="module" src="ui/matchup-row.js"></script>
 	
 	
 </body>
