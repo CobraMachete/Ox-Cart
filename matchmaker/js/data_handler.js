@@ -5,51 +5,6 @@ var selected_data;
 var thumbnailwhitelist = [];
 var init_shot_name = "None";
 
-// ui_bootstrap.js (or anywhere in your widget bundle)
-
-// Listen once the loader has parsed & merged the seed
-window.addEventListener('matchmaker:seed', (e) => {
-  // e.detail is the payload your loader built
-  const { teams, structure, projectId, entityId, objectType } = e.detail || {};
-
-  // Example: pass straight into your UI init
-  initMatchMakerUI({ teams, structure, projectId, entityId, objectType });
-});
-
-// If the seed was ready before this file loaded, handle that too:
-const boot = window.getMatchMakerSeed?.();
-if (boot?.teams && boot?.structure) {
-  initMatchMakerUI(boot);
-}
-
-// Your UI bootstrap (adjust to your data shape)
-function initMatchMakerUI({ teams, structure, projectId, entityId }) {
-  console.log('[MM/UI] seed received', { teams, structure, projectId, entityId });
-
-  // Example: safely map to options
-  const teamOptions = Array.isArray(teams) ? teams.map(t => ({
-    label: t.name ?? t.displayName ?? String(t.id),
-    value: t.id
-  })) : [];
-
-  // Example wiring into your existing helpers (guarded)
-  if (typeof window.updateInitShotname === 'function') window.updateInitShotname('None');
-
-  const prop =
-    structure?.prop ||
-    structure?.property ||
-    structure?.name ||
-    null;
-
-  if (prop) {
-    window.ddFromCurrProp?.(prop);
-    window.buildThumbList?.(prop);
-  }
-
-  // …the rest of your UI setup using `teams` & `structure`
-}
-
-
 
 // fetch('./temp_data/shotsinfo.json').then((response) => response.json()).then((json) => readShotsJson(json));
 // fetch('./temp_data/teamsinfo.json').then((response) => response.json()).then((json) => readTeamsJson(json));
