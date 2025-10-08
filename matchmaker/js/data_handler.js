@@ -29,10 +29,8 @@ function readShotsJson(jsonfile) {
 }
 
 function readStructuredData(data) {
-
     console.log('Received Structured Data: ', data);
-    console.log('Special Fields: ', data.specialfields);
-
+    console.log('Special Fields: ', data[0].specialfields);
 }
 
 
