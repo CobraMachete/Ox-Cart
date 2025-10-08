@@ -34,13 +34,36 @@
 <body>
 	<script>
 
+		function chopTeamString(str) {
+			// Match: "NAME (CODE)" with flexible spaces
+			return new Promise((resolve) => {
+				
+				const m = String(str).match(/^\s*(.*?)\s*\(\s*([^)]+)\s*\)\s*$/);
+				if (m) {
+					resolve( { name: m[1].trim(), code: m[2].trim() } );
+				}
+				
+				// Fallbacks: try last (...) if formatting is a bit off, else no code
+				const t = String(str).trim();
+				const open = t.lastIndexOf('(');
+				const close = t.lastIndexOf(')');
+				if (open !== -1 && close !== -1 && close > open) {
+					resolve ({ name: t.slice(0, open).trim(), code: t.slice(open + 1, close).trim() }) ;
+				}
+				
+				// No parentheses present
+				resolve ( { name: t, code: '' });
+			})
+			
+		}
+
 		//INITIALIZE MATCHUP ROW
 		window.initMatchupRow = function initMatchupRow(target, options = {}) {
 
 			let randomPairing = twoRandomDistinct(window.curated_teams);
 			
-			let tempawayparsed = parseTeamString(randomItem[0]);
-			let temphomeparsed = parseTeamString(randomItem[1]);
+			let tempawayparsed = chopTeamString(randomItem[0]);
+			let temphomeparsed = chopTeamString(randomItem[1]);
 
 			const {
 				curatedTeams    = (window.curated_teams ?? []),
