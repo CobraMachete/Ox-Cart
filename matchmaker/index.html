@@ -169,6 +169,55 @@
                 });
 
 
+                // LISTENING FOR TEAMS DATA EVENT DISPATCH
+                document.addEventListener('DOMContentLoaded', () => {
+                    const onCuratedReady = (e) => {
+                        const teams = e.detail?.curated_teams ?? window.curated_teams ?? [];
+                        console.log('ready teams:', teams);
+                        // TODO: hydrate UI with teams
+                    };
+
+                    const onSpecialsReady = (e) => {
+                        const specials = e.detail?.specials_data ?? window.specials_data ?? [];
+                        console.log('ready specials:', specials);
+                        // TODO: hydrate UI with teams
+                    };
+
+                    const onStructureReady = (e) => {
+                        const struct = e.detail?.structure_data ?? window.structure_data ?? [];
+                        console.log('ready structure:', struct);
+                        // TODO: hydrate UI with teams
+                    };
+
+                    // HANDLE FUTURE DISPATCHES
+                    // TEAMS DATA
+                    window.addEventListener('curatedTeams:ready', onCuratedReady, { once: true });
+
+                    //SPECIALS DATA
+                    window.addEventListener('specialsData:ready', onSpecialsReady, { once: true });
+
+                    //STRUCTURE DATA
+                    window.addEventListener('structureData:ready', onStructureReady, { once: true });
+
+
+                    // HANDLE THE CASE WHERE THE EVENT FIRED BEFORE THIS LISTENER WAS ATTACHED
+                    //FOR TEAMS DATA
+                    if (Array.isArray(window.curated_teams) && window.curated_teams.length) {
+                        onCuratedReady({ detail: { curated_teams: window.curated_teams } });
+                    }
+
+                    //FOR SPECIALS DATA
+                    if (Array.isArray(window.specials_data) && window.specials_data.length) {
+                        onSpecialsReady({ detail: { specials_data: window.specials_data } });
+                    }
+
+                    //FOR STRUCTURE DATA
+                    if (Array.isArray(window.structure_data) && window.structure_data.length) {
+                        onSpecialsReady({ detail: { structure_data: window.structure_data } });
+                    }
+
+
+                });
             });
 
             //ADMIN PROJECT WITH THUMBNAIL RESOURCES

@@ -21,21 +21,14 @@ var init_shot_name = "None";
 function readTeamsData(jsonfile) {
 	shots_data = Array.isArray(jsonfile) ? jsonfile : [];
 	curated_teams = shots_data.map(({ full = '', tricode = '' }) => `${full} (${tricode})`);
-	console.log('curated_teams:', curated_teams);
 	
-	// let the UI know it’s ready (if you want to listen for it)
-	window.dispatchEvent(new CustomEvent('curatedTeams:ready'));
-}
-
-
-function readShotsJson(jsonfile) {
-	// assign to the GLOBALS (no const/let here)
-	shots_data = Array.isArray(jsonfile) ? jsonfile : [];
-	curated_teams = shots_data.map(({ full = '', tricode = '' }) => `${full} (${tricode})`);
-	console.log('curated_teams:', curated_teams);
+	// OPTIONAL: KEEP A SNAPSHOT FOR LATE LISTENERS
+	window.curated_teams = curated_teams;
 	
-	// let the UI know it’s ready (if you want to listen for it)
-	window.dispatchEvent(new CustomEvent('curatedTeams:ready'));
+	// DISPATCH WITH DETAIL
+	window.dispatchEvent(new CustomEvent('curatedTeams:ready', {
+		detail: { curated_teams }
+	}));
 }
 
 function readStructuredData(data) {
@@ -47,27 +40,49 @@ function readStructuredData(data) {
 	}
 	console.log('specials_data:', specials_data);
 
+	window.specials_data = specials_data;
+
 	
 	structure_src = Array.isArray(data) ? data : [];
 	for (var j=1; j < structure_src.length; j++) {
 		structure_data.push(structure_src[j]);
 	}
 	console.log('structure_data:', structure_data);
+
+	window.structure_data = structure_data;
 	
-	// let the UI know it’s ready (if you want to listen for it)
-	// window.dispatchEvent(new CustomEvent('structureData:ready'));
+	// DISPATCH WITH DETAIL
+	window.dispatchEvent(new CustomEvent('specialsData:ready', {
+		detail: { specials_data }
+	}));
+
+	// DISPATCH WITH DETAIL
+	window.dispatchEvent(new CustomEvent('structureData:ready', {
+		detail: { structure_data }
+	}));
 }
 
+//OLD METHOD FOR JSON ON GITHUB
+// function readShotsJson(jsonfile) {
+// 	// assign to the GLOBALS (no const/let here)
+// 	shots_data = Array.isArray(jsonfile) ? jsonfile : [];
+// 	curated_teams = shots_data.map(({ full = '', tricode = '' }) => `${full} (${tricode})`);
+// 	console.log('curated_teams:', curated_teams);
+	
+// 	// let the UI know it’s ready (if you want to listen for it)
+// 	window.dispatchEvent(new CustomEvent('curatedTeams:ready'));
+// }
 
-function readTeamsJson(jsonfile) {
+//OLD METHOD FOR JSON ON GITHUB
+// function readTeamsJson(jsonfile) {
 	
-	teams_data = jsonfile;
-	var keys = Object.keys(teams_data)
+// 	teams_data = jsonfile;
+// 	var keys = Object.keys(teams_data)
 	
 	
-	dropdownpopulate(teams_data);
-	taskdropdownpopulate();
-}
+// 	dropdownpopulate(teams_data);
+// 	taskdropdownpopulate();
+// }
 
 function buildThumbList(props) {
 	console.log("========================================     CURRENT PROPERTY IS    ========================================================================");
