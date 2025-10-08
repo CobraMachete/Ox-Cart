@@ -120,6 +120,32 @@
 		}
 
 
+		//MOUNT INITIAL ROW
+		// async function mountRow1(targetSelector = '#rowcollection') {
+		// 	// 1) Wait until the custom element is registered
+		// 	await customElements.whenDefined('matchup-row');
+
+		// 	// 2) Find where to put it (fallback to <body> if #rows doesn't exist)
+		// 	const host = document.querySelector(targetSelector) || document.body;
+
+		// 	// 3) Create and append the element
+		// 	const row = document.createElement('matchup-row');
+		// 	row.id = 'row1';
+		// 	host.appendChild(row);
+
+		// 	// 4) Initialize it
+		// 	const api = window.initMatchupRow(row, {
+		// 	curatedTeams: window.curated_teams || [],
+		// 	onChange(detail) {
+		// 		console.log('rowchange:', detail);
+		// 	},
+		// 	// initialValue, icons, parseTeamString, etc. can be passed here too
+		// 	});
+
+		// 	// (optional) keep a reference
+		// 	row._api = api;
+		// 	return api;
+		// }
 
 
 		$(document).ready(function() {
@@ -268,12 +294,20 @@
 		// LISTENING FOR TEAMS DATA EVENT DISPATCH
 		document.addEventListener('DOMContentLoaded', async () => {
 
-			const rowP   = mountRow1('#rowcollection');
+			 const rowP   = mountRow1('#rowcollection');
   			const teamsP = waitForCuratedTeams();
 
 			const [row, teams] = await Promise.all([rowP, teamsP]);
 
 			row.curatedTeams = teams;
+
+			const api = window.initMatchupRow(row, {
+			curatedTeams: teams || [],
+			onChange(detail) {
+				console.log('rowchange:', detail);
+			},
+			// initialValue, icons, parseTeamString, etc. can be passed here too
+			});
 
 			const onCuratedReady = (e) => {
 				const teamsx = e.detail?.curated_teams ?? window.curated_teams ?? [];
