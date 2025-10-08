@@ -1,378 +1,399 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>MatchMaker</title>
-        <!-- <link rel="stylesheet" type="text/css" href="css/style.css"> -->
-        <link rel="preconnect" href="https://cdn.fonts.net/kit/b0386608-2665-4bdb-9fbd-a444e77360a7/b0386608-2665-4bdb-9fbd-a444e77360a7_enhanced.js" crossorigin>
-	    <script type="text/javascript" src="https://cdn.fonts.net/kit/b0386608-2665-4bdb-9fbd-a444e77360a7/b0386608-2665-4bdb-9fbd-a444e77360a7_enhanced.js" async></script>
-
-        <link rel="stylesheet" type="text/css" href="css/etc.min.css">
-        <link rel="stylesheet" type="text/css" href="css/ext.min.css">
-        <link rel="stylesheet" type="text/css" href="css/ftrack-theme-dark-vars.min.css">
-        <link rel="stylesheet" type="text/css" href="css/ftrack-theme.min.css">
-        <link rel="stylesheet" type="text/css" href="css/material-icons.css">
-        <link rel="stylesheet" type="text/css" href="css/normalize.min.css">
-        <link rel="stylesheet" type="text/css" href="css/theme-dark.css">
-        <link rel="stylesheet" type="text/css" href="css/nice-select.css">
-
-        <!-- <script type="text/javascript" src="js/rive.js"></script> -->
-        <script src="https://unpkg.com/@rive-app/canvas@2.20.0"></script>
-        <script type="text/javascript" src="js/jquery-3.7.1.slim.min.js"></script>
-        <script type="text/javascript" src="js/jquery.nice-select.js"></script>
-
-        <script type="text/javascript" src="js/ui.js"></script>
-        <script type="text/javascript" src="js/data_handler.js"></script>
-        <script type="text/javascript" src="js/endscreen.js"></script>
-        <script type="text/javascript" src="js/mousetrap.min.js"></script>
-        
-        
-    </head>
-    <body>
-        <script>
-            $(document).ready(function() {
-
-                console.log("Document is ready...")
-                
-                var awaysearchbox = document.getElementById("awaysearchbar");
-                var homesearchbox = document.getElementById("homesearchbar");
-
-                var swapper = document.getElementById("swapbtn");
-
-                const $bodyaway = $('#shotstableaway');
-                const $tableaway = $('#shottablebodyaway');
-
-                const $bodyhome = $('#shotstablehome');
-                const $tablehome = $('#shottablebodyhome');
-
-                swapper.addEventListener('click', function (e) {
-                    var awaybox = document.getElementById("awaysearchbar");
-                    var homebox = document.getElementById("homesearchbar");
-
-                    if (awaybox.value.length > 0 && homebox.value.length > 0) {
-
-                        console.log("Both fields have items");
-
-                        awayval = awaybox.value;
-                        homeval = homebox.value;
-
-                        awaybox.value = homeval;
-                        homebox.value = awayval;
-
-                        parseTeamString(homeval)
-                        .then((info) => {
-
-                            var awaytricodetxt = document.getElementById("tricode-row-away");
-                            var awayschooltxt = document.getElementById("school-row-away");
-
-                            awaytricodetxt.innerText = info.code;
-                            awayschooltxt.innerText = info.name;
-
-                            console.log(awaybox.value);
-                        });
-
-
-                        parseTeamString(awayval)
-                        .then((info) => {
-
-                            var hometricodetxt = document.getElementById("tricode-row-home");
-                            var homeschooltxt = document.getElementById("school-row-home");
-                            
-                            hometricodetxt.innerText = info.code;
-                            homeschooltxt.innerText = info.name;
-
-                            console.log(homebox.value);
-                        });
-                        
-                        
-                        
-                    } else {
-                        console.log("Fields missing items");
-                        console.log(awaybox.value);
-                        console.log(homebox.value);
-                    }
-
-
-                });
-
-                
-                //EVENT LISTENER FOR SHOT SEARCH BOX
-                awaysearchbox.addEventListener('input', function (e) {
-                    const myinput = (sanitizeshot(e.target.value) || '').toLowerCase();
-                    e.target.value = myinput;
-
-                    const $tableaway = $('#shotstableaway');
-                    const $bodyaway  = $('#shottablebodyaway');
-
-                    $bodyaway.empty();
-
-                    if (!myinput.length) {
-                        $tableaway.removeClass('is-open');
-                        // also clear inline display if it was ever set elsewhere
-                        $tableaway[0].style.removeProperty('display');
-                        return;
-                    }
-
-                    const list = Array.isArray(window.curated_teams) ? window.curated_teams : [];
-                    const suggestions = list.filter(s => s.toLowerCase().includes(myinput));
-
-                    if (!suggestions.length) {
-                        $tableaway.removeClass('is-open');
-                        $tableaway[0].style.removeProperty('display');
-                        return;
-                    }
-
-                    const rows = suggestions
-                        .map(s => `<tr onclick="addToShotFieldAway(this)"><td>${s}</td></tr>`)
-                        .join('');
-
-                    $bodyaway.append(rows);
-
-                    // clear any inline display:none, then show via class
-                    $tableaway[0].style.removeProperty('display');
-                    $tableaway.addClass('is-open');
-                });
-
-                homesearchbox.addEventListener('input', function (e) {
-                    const myinput = (sanitizeshot(e.target.value) || '').toLowerCase();
-                    e.target.value = myinput;
-
-                    const $tablehome = $('#shotstablehome');
-                    const $bodyhome  = $('#shottablebodyhome');
-
-                    $bodyhome.empty();
-
-                    if (!myinput.length) {
-                        $tablehome.removeClass('is-open');
-                        // also clear inline display if it was ever set elsewhere
-                        $tablehome[0].style.removeProperty('display');
-                        return;
-                    }
-
-                    const list = Array.isArray(window.curated_teams) ? window.curated_teams : [];
-                    const suggestions = list.filter(s => s.toLowerCase().includes(myinput));
-
-                    if (!suggestions.length) {
-                        $tablehome.removeClass('is-open');
-                        $tablehome[0].style.removeProperty('display');
-                        return;
-                    }
-
-                    const rows = suggestions
-                        .map(s => `<tr onclick="addToShotFieldHome(this)"><td>${s}</td></tr>`)
-                        .join('');
-
-                    $bodyhome.append(rows);
-
-                    // clear any inline display:none, then show via class
-                    $tablehome[0].style.removeProperty('display');
-                    $tablehome.addClass('is-open');
-                });
-
-
-                
-            });
-
-            // LISTENING FOR TEAMS DATA EVENT DISPATCH
-            document.addEventListener('DOMContentLoaded', () => {
-                const onCuratedReady = (e) => {
-                    const teams = e.detail?.curated_teams ?? window.curated_teams ?? [];
-                    console.log('ready teams:', teams);
-                    // TODO: hydrate UI with teams
-                };
-
-                const onSpecialsReady = (e) => {
-                    const specials = e.detail?.specials_data ?? window.specials_data ?? [];
-                    console.log('ready specials:', specials);
-                    // TODO: hydrate UI with teams
-                };
-
-                const onStructureReady = (e) => {
-                    const struct = e.detail?.structure_data ?? window.structure_data ?? [];
-                    console.log('ready structure:', struct);
-                    // TODO: hydrate UI with teams
-                };
-
-                // HANDLE FUTURE DISPATCHES
-                // TEAMS DATA
-                window.addEventListener('curatedTeams:ready', onCuratedReady, { once: true });
-
-                //SPECIALS DATA
-                window.addEventListener('specialsData:ready', onSpecialsReady, { once: true });
-
-                //STRUCTURE DATA
-                window.addEventListener('structureData:ready', onStructureReady, { once: true });
-
-
-                // HANDLE THE CASE WHERE THE EVENT FIRED BEFORE THIS LISTENER WAS ATTACHED
-                //FOR TEAMS DATA
-                if (Array.isArray(window.curated_teams) && window.curated_teams.length) {
-                    onCuratedReady({ detail: { curated_teams: window.curated_teams } });
-                }
-
-                //FOR SPECIALS DATA
-                if (Array.isArray(window.specials_data) && window.specials_data.length) {
-                    onSpecialsReady({ detail: { specials_data: window.specials_data } });
-                }
-
-                //FOR STRUCTURE DATA
-                if (Array.isArray(window.structure_data) && window.structure_data.length) {
-                    onSpecialsReady({ detail: { structure_data: window.structure_data } });
-                }
-
-
-            });
-
-            //ADMIN PROJECT WITH THUMBNAIL RESOURCES
-            var ADMIN_PRJ_ID = "249a98cd-b296-46cd-b6e2-0c9c61608b6c";
-            var RESOURCE_FOLDER_ID = "14ede329-6b72-43e1-b458-6ff31196c089";
-        </script>
-        
-        <div id="widget">
-            <div class="master-container" id="mastercontainer">
-                <div class="main-container" id="maincontainer">
-
-                    <!-- HEADER WIDGET WORDMARK IMAGE -->
-                    <div class="header-container">
-                        <div class="header-image"><img src="./img/matchmaker_wordmark.svg"></div>
-                    </div>
-
-                    <!-- FULL ROW STARTS HERE THAT CONTAINS ALL OF THE ROW COMPONENTS -->
-                    <div class="main-col-container">
-
-                        <!-- MATCHUP UI HERE -->
-                        <div class="main-row-container">
-
-                            <div class="awayteam-container">
-                                <div class="title-row">Away Team</div>
-                                <div class="shot-search-bar">
-                                    <input id="awaysearchbar" type="text" placeholder="Search Away Teams...">
-                                    <table class="custom-table" id="shotstableaway">
-                                        <thead><tr><th scope="col">Away Teams</th></tr></thead>
-                                        <tbody id="shottablebodyaway"></tbody>
-                                    </table>
-                                </div>
-                                <div class="tricode-row" id="tricode-row-away">ASU</div>
-                                <div class="school-row" id="school-row-away">Arizona State</div>
-                            </div>
-
-                            <div class="vs-container">
-                                <div class="swap-row" id="swapbtn"></div>
-                                <div class="vs-row">vs</div>
-                            </div>
-
-                            <div class="hometeam-container">
-                                <div class="title-row">Home Team</div>
-                                <div class="shot-search-bar">
-                                    <input id="homesearchbar" type="text" placeholder="Search Home Teams...">
-                                    <table class="custom-table" id="shotstablehome">
-                                        <thead><tr><th scope="col">Home Teams</th></tr></thead>
-                                        <tbody id="shottablebodyhome"></tbody>
-                                    </table>
-                                </div>
-
-                                <div class="tricode-row" id="tricode-row-home">HAW</div>
-                                <div class="school-row" id="school-row-home">University of Hawaii</div>
-                            </div>
-
-                        </div>
-
-                        <!-- SPECIAL FIELDS UI HERE -->
-                        <div class="bottom-row-container">
-
-                            <div class="specials-container-spacer">
-                                <div class="specials-container">
-                                    <span class="icon-rotator" id="tod-rotator">
-                                        <img class="specials-icon" id="tod-icon" src="./img/sunny.svg" alt="Time of Day">
-                                    </span>
-                                    <div class="specials-title">Time of Day</div>
-                                </div>
-
-
-                                <script>
-                                    const ICONS = ["./img/sunny.svg", "./img/moon_stars.svg"];
-
-                                    const img = document.getElementById('tod-icon');
-                                    const rot = document.getElementById('tod-rotator');
-                                    let idx = 0, busy = false;
-                                    const DURATION = 240;               // match CSS
-
-                                    // Belt-and-suspenders: remove any inline outline/box-shadow if some lib adds it
-                                    ['outline','outline-color','outline-style','outline-width','box-shadow']
-                                        .forEach(p => img.style.removeProperty(p));
-
-                                    rot.addEventListener('click', () => {
-                                        if (busy) return;
-                                        busy = true;
-
-                                        // half flip
-                                        rot.style.transform = 'rotateX(90deg)';
-
-                                        setTimeout(() => {
-                                        // swap the ACTUAL image src (not backgroundImage)
-                                        idx = (idx + 1) % ICONS.length;
-                                        img.src = ICONS[idx];
-
-                                        // finish flip
-                                        rot.style.transform = 'rotateX(0deg)';
-
-                                        setTimeout(() => { busy = false; }, DURATION / 2);
-                                        }, DURATION / 2);
-                                    });
-                                </script>
-
-
-
-                            </div>
-                            
-                            <div class="specials-container-spacer">
-                                <div class="specials-field-main-container">
-                                    <div class="specials-field-icon-txt-combo">
-                                        <div class="specials-field-icon"></div>
-                                        <div class="specials-text-bar">
-                                            <input id="cal-text-input" type="text" placeholder="Ex: 1025">
-                                            <script>
-                                                const ele = document.getElementById('cal-text-input');
-                                                const extra = '2rem';                       
-                                                const len = (ele.placeholder || '').length;
-
-                                                // SET WIDTH ONCE
-                                                const w = `calc(${len}ch + ${extra})`;
-                                                ele.style.width = w;
-                                                ele.style.minWidth = w;
-                                                ele.style.maxWidth = w;
-
-                                                
-                                            </script>
-
-                                        </div>
-                                    </div>
-                                    <div class="specials-title">Game Date</div>
-                                </div>
-                            </div>
-                            
-                            
-                            
-                        </div>
-                    </div>
-
-                    <!-- BUTTON ROW -->
-                    <div class="button-row-container">
-                        <div class="add-row-btn"></div>
-                        <div class="submit-button">Make Matches</div>
-                    </div>
-                </div>
-                
-                
-            </div>
-            
-            
-        </div>
-
-        <script type="text/javascript" src="js/ftrack.min.js"></script>
-        <script type="text/javascript" src="js/ftrack_widget.js"></script>
-        <script type="text/javascript" src="js/ftrack_data_loader.js"></script>
-        <script type="text/javascript" src="js/createassets.js"></script>
-        
-        
-    </body>
+<head>
+	<title>MatchMaker</title>
+	<!-- <link rel="stylesheet" type="text/css" href="css/style.css"> -->
+	<link rel="preconnect" href="https://cdn.fonts.net/kit/b0386608-2665-4bdb-9fbd-a444e77360a7/b0386608-2665-4bdb-9fbd-a444e77360a7_enhanced.js" crossorigin>
+	<script type="text/javascript" src="https://cdn.fonts.net/kit/b0386608-2665-4bdb-9fbd-a444e77360a7/b0386608-2665-4bdb-9fbd-a444e77360a7_enhanced.js" async></script>
+	
+	<link rel="stylesheet" type="text/css" href="css/etc.min.css">
+	<link rel="stylesheet" type="text/css" href="css/ext.min.css">
+	<link rel="stylesheet" type="text/css" href="css/ftrack-theme-dark-vars.min.css">
+	<link rel="stylesheet" type="text/css" href="css/ftrack-theme.min.css">
+	<link rel="stylesheet" type="text/css" href="css/material-icons.css">
+	<link rel="stylesheet" type="text/css" href="css/normalize.min.css">
+	<link rel="stylesheet" type="text/css" href="css/theme-dark.css">
+	<link rel="stylesheet" type="text/css" href="css/nice-select.css">
+	
+	
+	
+	<!-- <script type="text/javascript" src="js/rive.js"></script> -->
+	<script src="https://unpkg.com/@rive-app/canvas@2.20.0"></script>
+	<script type="text/javascript" src="js/jquery-3.7.1.slim.min.js"></script>
+	<script type="text/javascript" src="js/jquery.nice-select.js"></script>
+	
+	<script type="text/javascript" src="js/ui.js"></script>
+	<script type="text/javascript" src="js/data_handler.js"></script>
+	<script type="text/javascript" src="js/endscreen.js"></script>
+	<script type="text/javascript" src="js/mousetrap.min.js"></script>
+	
+	<!-- MATCHUP CUSTOM ELEMENT -->
+	<script type="module" src="ui/matchup-row.js"></script>
+	
+	
+</head>
+<body>
+	<script>
+
+		//INITIALIZE MATCHUP ROW
+		window.initMatchupRow = function initMatchupRow(target, options = {}) {
+			const {
+				curatedTeams    = (window.curated_teams ?? []),
+				specialsData    = (window.specials_data ?? null),
+				structureData   = (window.structure_data ?? null),
+				parseTeamString = async (s) => {
+					const m = /\b([A-Z]{2,4})\b/.exec(s || '');
+					return { code: m?.[1] || '', name: s };
+				},
+				icons = [
+				{ icon: './img/sunny.svg',      state: 'Day'   },
+				{ icon: './img/moon_stars.svg', state: 'Night' },
+				],
+				initialValue = {
+					awaysearchbar: '',
+					homesearchbar: '',
+					'tricode-row-away': 'N/A',
+					'school-row-away': 'No Away School Selected',
+					'tricode-row-home': 'N/A',
+					'school-row-home': 'No Home School Selected',
+					'cal-text-input': '',
+					currentIcon: { index: 0 },
+				},
+				onChange = (detail) => console.log('Row changed:', detail),
+			} = options || {};
+			
+			const row = (typeof target === 'string') ? document.querySelector(target) : target;
+			if (!row) throw new Error('initMatchupRow: target element not found');
+			
+			// Provide datasets / hooks
+			row.curatedTeams  = curatedTeams;
+			row.specialsData  = specialsData;
+			row.structureData = structureData;
+			row.parseTeamString = parseTeamString;
+			row.icons = icons;
+			
+			// Listen for updates
+			const handler = (e) => onChange?.(e.detail, e);
+			row.addEventListener('rowchange', handler);
+			
+			// Seed initial values (merge icons so you can override them if desired)
+			row.value = { ...initialValue, icons };
+			
+			// Tiny API
+			return {
+				row,
+				get value() { return row.value; },
+				set value(v) { row.value = v; },
+				destroy() { row.removeEventListener('rowchange', handler); },
+			};
+		};
+
+		//MOUNT INITIAL ROW
+		async function mountRow1(targetSelector = '#rowcollection') {
+			// 1) Wait until the custom element is registered
+			await customElements.whenDefined('matchup-row');
+
+			// 2) Find where to put it (fallback to <body> if #rows doesn't exist)
+			const host = document.querySelector(targetSelector) || document.body;
+
+			// 3) Create and append the element
+			const row = document.createElement('matchup-row');
+			row.id = 'row1';
+			host.appendChild(row);
+
+			// 4) Initialize it
+			const api = window.initMatchupRow(row, {
+			curatedTeams: window.curated_teams || [],
+			onChange(detail) {
+				console.log('rowchange:', detail);
+			},
+			// initialValue, icons, parseTeamString, etc. can be passed here too
+			});
+
+			// (optional) keep a reference
+			row._api = api;
+			return api;
+		}
+
+		
+		// $(document).ready(function() {
+		
+		//     console.log("Document is ready...")
+		
+		//     var awaysearchbox = document.getElementById("awaysearchbar");
+		//     var homesearchbox = document.getElementById("homesearchbar");
+		
+		//     var swapper = document.getElementById("swapbtn");
+		
+		//     const $bodyaway = $('#shotstableaway');
+		//     const $tableaway = $('#shottablebodyaway');
+		
+		//     const $bodyhome = $('#shotstablehome');
+		//     const $tablehome = $('#shottablebodyhome');
+		
+		//     swapper.addEventListener('click', function (e) {
+		//         var awaybox = document.getElementById("awaysearchbar");
+		//         var homebox = document.getElementById("homesearchbar");
+		
+		//         if (awaybox.value.length > 0 && homebox.value.length > 0) {
+		
+		//             console.log("Both fields have items");
+		
+		//             awayval = awaybox.value;
+		//             homeval = homebox.value;
+		
+		//             awaybox.value = homeval;
+		//             homebox.value = awayval;
+		
+		//             parseTeamString(homeval)
+		//             .then((info) => {
+		
+		//                 var awaytricodetxt = document.getElementById("tricode-row-away");
+		//                 var awayschooltxt = document.getElementById("school-row-away");
+		
+		//                 awaytricodetxt.innerText = info.code;
+		//                 awayschooltxt.innerText = info.name;
+		
+		//                 console.log(awaybox.value);
+		//             });
+		
+		
+		//             parseTeamString(awayval)
+		//             .then((info) => {
+		
+		//                 var hometricodetxt = document.getElementById("tricode-row-home");
+		//                 var homeschooltxt = document.getElementById("school-row-home");
+		
+		//                 hometricodetxt.innerText = info.code;
+		//                 homeschooltxt.innerText = info.name;
+		
+		//                 console.log(homebox.value);
+		//             });
+		
+		
+		
+		//         } else {
+		//             console.log("Fields missing items");
+		//             console.log(awaybox.value);
+		//             console.log(homebox.value);
+		//         }
+		
+		
+		//     });
+		
+		
+		//     //EVENT LISTENER FOR SHOT SEARCH BOX
+		//     awaysearchbox.addEventListener('input', function (e) {
+		//         const myinput = (sanitizeshot(e.target.value) || '').toLowerCase();
+		//         e.target.value = myinput;
+		
+		//         const $tableaway = $('#shotstableaway');
+		//         const $bodyaway  = $('#shottablebodyaway');
+		
+		//         $bodyaway.empty();
+		
+		//         if (!myinput.length) {
+		//             $tableaway.removeClass('is-open');
+		//             // also clear inline display if it was ever set elsewhere
+		//             $tableaway[0].style.removeProperty('display');
+		//             return;
+		//         }
+		
+		//         const list = Array.isArray(window.curated_teams) ? window.curated_teams : [];
+		//         const suggestions = list.filter(s => s.toLowerCase().includes(myinput));
+		
+		//         if (!suggestions.length) {
+		//             $tableaway.removeClass('is-open');
+		//             $tableaway[0].style.removeProperty('display');
+		//             return;
+		//         }
+		
+		//         const rows = suggestions
+		//             .map(s => `<tr onclick="addToShotFieldAway(this)"><td>${s}</td></tr>`)
+		//             .join('');
+		
+		//         $bodyaway.append(rows);
+		
+		//         // clear any inline display:none, then show via class
+		//         $tableaway[0].style.removeProperty('display');
+		//         $tableaway.addClass('is-open');
+		//     });
+		
+		//     homesearchbox.addEventListener('input', function (e) {
+		//         const myinput = (sanitizeshot(e.target.value) || '').toLowerCase();
+		//         e.target.value = myinput;
+		
+		//         const $tablehome = $('#shotstablehome');
+		//         const $bodyhome  = $('#shottablebodyhome');
+		
+		//         $bodyhome.empty();
+		
+		//         if (!myinput.length) {
+		//             $tablehome.removeClass('is-open');
+		//             // also clear inline display if it was ever set elsewhere
+		//             $tablehome[0].style.removeProperty('display');
+		//             return;
+		//         }
+		
+		//         const list = Array.isArray(window.curated_teams) ? window.curated_teams : [];
+		//         const suggestions = list.filter(s => s.toLowerCase().includes(myinput));
+		
+		//         if (!suggestions.length) {
+		//             $tablehome.removeClass('is-open');
+		//             $tablehome[0].style.removeProperty('display');
+		//             return;
+		//         }
+		
+		//         const rows = suggestions
+		//             .map(s => `<tr onclick="addToShotFieldHome(this)"><td>${s}</td></tr>`)
+		//             .join('');
+		
+		//         $bodyhome.append(rows);
+		
+		//         // clear any inline display:none, then show via class
+		//         $tablehome[0].style.removeProperty('display');
+		//         $tablehome.addClass('is-open');
+		//     });
+		
+		
+		
+		// });
+		
+		// LISTENING FOR TEAMS DATA EVENT DISPATCH
+		document.addEventListener('DOMContentLoaded', async () => {
+
+			mountRow1('#rowcollection');
+  			
+
+			const onCuratedReady = (e) => {
+				const teams = e.detail?.curated_teams ?? window.curated_teams ?? [];
+				console.log('ready teams:', teams);
+				// TODO: hydrate UI with teams
+				const api = window.initMatchupRow('#row1', { curatedTeams: window.curated_teams });
+			};
+			
+			const onSpecialsReady = (e) => {
+				const specials = e.detail?.specials_data ?? window.specials_data ?? [];
+				console.log('ready specials:', specials);
+				// TODO: hydrate UI with teams
+			};
+			
+			const onStructureReady = (e) => {
+				const struct = e.detail?.structure_data ?? window.structure_data ?? [];
+				console.log('ready structure:', struct);
+				// TODO: hydrate UI with teams
+			};
+			
+			// HANDLE FUTURE DISPATCHES
+			// TEAMS DATA
+			window.addEventListener('curatedTeams:ready', onCuratedReady, { once: true });
+			
+			//SPECIALS DATA
+			window.addEventListener('specialsData:ready', onSpecialsReady, { once: true });
+			
+			//STRUCTURE DATA
+			window.addEventListener('structureData:ready', onStructureReady, { once: true });
+			
+			
+			// HANDLE THE CASE WHERE THE EVENT FIRED BEFORE THIS LISTENER WAS ATTACHED
+			//FOR TEAMS DATA
+			if (Array.isArray(window.curated_teams) && window.curated_teams.length) {
+				onCuratedReady({ detail: { curated_teams: window.curated_teams } });
+			}
+			
+			//FOR SPECIALS DATA
+			if (Array.isArray(window.specials_data) && window.specials_data.length) {
+				onSpecialsReady({ detail: { specials_data: window.specials_data } });
+			}
+			
+			//FOR STRUCTURE DATA
+			if (Array.isArray(window.structure_data) && window.structure_data.length) {
+				onSpecialsReady({ detail: { structure_data: window.structure_data } });
+			}
+			
+			
+		});
+		
+		//ADMIN PROJECT WITH THUMBNAIL RESOURCES
+		var ADMIN_PRJ_ID = "249a98cd-b296-46cd-b6e2-0c9c61608b6c";
+		var RESOURCE_FOLDER_ID = "14ede329-6b72-43e1-b458-6ff31196c089";
+	</script>
+	
+	<div id="widget">
+		<div class="master-container" id="mastercontainer">
+			<div class="main-container" id="maincontainer">
+				
+				<!-- HEADER WIDGET WORDMARK IMAGE -->
+				<div class="header-container">
+					<div class="header-image"><img src="./img/matchmaker_wordmark.svg"></div>
+				</div>
+				
+				<div class="row-collection" id="rowcollection">
+					<!-- <matchup-row id="row1"></matchup-row> -->
+					
+					<!-- <script type="module">
+						const row = document.getElementById('row1');
+						
+						// Provide datasets (all optional; expand later as needed)
+						row.curatedTeams = window.curated_teams || [];      // for suggestions
+						row.specialsData = window.specials_data || null;     // reserved for future use
+						row.structureData = window.structure_data || null;   // reserved for future use
+						
+						// (Optional) parsing hook — your existing lookup to return {code, name}
+						row.parseTeamString = async (s) => {
+						// Example shim; plug in your real logic:
+						// return parseTeamString(s)
+						const m = /\\b([A-Z]{2,4})\\b/.exec(s);
+						return { code: m?.[1] || '', name: s };
+						};
+						
+						// Configure the time-of-day icons (defaults included)
+						row.icons = [
+						{ icon: './img/sunny.svg',       state: 'Day'   },
+						{ icon: './img/moon_stars.svg',  state: 'Night' }
+						];
+						
+						// Listen for convenient state updates
+						row.addEventListener('rowchange', (e) => {
+						console.log('Row changed:', e.detail);
+						});
+						
+						// Example: set initial values programmatically
+						row.value = {
+						awaysearchbar: 'arizona state',
+						homesearchbar: 'hawaii',
+						'tricode-row-away': 'ASU',
+						'school-row-away': 'Arizona State',
+						'tricode-row-home': 'HAW',
+						'school-row-home': 'University of Hawaii',
+						'cal-text-input': '1025',
+						icons: row.icons,                 // can override too
+						currentIcon: { index: 0 }         // choose currently shown icon
+						};
+						
+						// Later, you can read everything in one shot:
+						console.log(row.value);
+					</script> -->
+				</div>
+				
+				<!-- BUTTON ROW -->
+				<div class="button-row-container">
+					<div class="add-row-btn"></div>
+					<div class="submit-button">Make Matches</div>
+				</div>
+			</div>
+			
+			
+		</div>
+		
+		
+	</div>
+	
+	<script type="text/javascript" src="js/ftrack.min.js"></script>
+	<script type="text/javascript" src="js/ftrack_widget.js"></script>
+	<script type="text/javascript" src="js/ftrack_data_loader.js"></script>
+	<script type="text/javascript" src="js/createassets.js"></script>
+	
+	
+</body>
 </html>
