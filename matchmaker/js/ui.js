@@ -11,19 +11,105 @@ function getcontainerwidth() {
 };
 
 //SEARCH BAR FUNCTION FOR SHOTS
-function addToShotField(item) {
+function addToShotFieldAway(item) {
+
+    console.log(item);
+   
+    var awaytricodetxt = document.getElementById("tricode-row-away");
+    var awayschooltxt = document.getElementById("school-row-away");
 
     var firstTd = item.querySelector('td');
     var content = firstTd.textContent; 
 
-    var infield = document.getElementById("searchbar");
+    var infield = document.getElementById("awaysearchbar");
     infield.value = content;
 
-    // console.log(infield.value)
-
-    $('#shotstable').hide();
+    $('#shotstableaway').removeClass('is-open');
     document.dispatchEvent(new MouseEvent('mousedown'));
+
+    parseTeamString(content)
+    .then((info) => {
+
+        console.log(info);
+        awaytricodetxt.innerText = info.code;
+        awayschooltxt.innerText = info.name;
+    });
     
+}
+
+function addToShotFieldHome(item) {
+
+    console.log(item);
+   
+    var tricodetxt = document.getElementById("tricode-row-home");
+    var schooltxt = document.getElementById("school-row-home");
+
+    var firstTd = item.querySelector('td');
+    var content = firstTd.textContent; 
+
+    var infield = document.getElementById("homesearchbar");
+    infield.value = content;
+
+    $('#shotstablehome').removeClass('is-open');
+    document.dispatchEvent(new MouseEvent('mousedown'));
+
+    parseTeamString(content)
+    .then((info) => {
+
+        console.log(info);
+        tricodetxt.innerText = info.code;
+        schooltxt.innerText = info.name;
+    })
+
+    
+    
+}
+
+function addToShotField(item) {
+
+    var awaytricodetxt = document.getElementById("tricode-row-away");
+    var awayschooltxt = document.getElementById("school-row-away");
+
+    var firstTd = item.querySelector('td');
+    var content = firstTd.textContent; 
+
+    var infield = document.getElementById("awaysearchbar");
+    infield.value = content;
+
+    $('#shotstable').removeClass('is-open');
+    document.dispatchEvent(new MouseEvent('mousedown'));
+
+    parseTeamString(content)
+    .then((info) => {
+        
+        console.log(info);
+        awaytricodetxt.innerText = info.code;
+        awayschooltxt.innerText = info.name;
+    })
+    
+}
+
+function parseTeamString(str) {
+  // Match: "NAME (CODE)" with flexible spaces
+  return new Promise((resolve) => {
+
+    const m = String(str).match(/^\s*(.*?)\s*\(\s*([^)]+)\s*\)\s*$/);
+    if (m) {
+        resolve( { name: m[1].trim(), code: m[2].trim() } );
+    }
+
+    // Fallbacks: try last (...) if formatting is a bit off, else no code
+    const t = String(str).trim();
+    const open = t.lastIndexOf('(');
+    const close = t.lastIndexOf(')');
+    if (open !== -1 && close !== -1 && close > open) {
+        resolve ({ name: t.slice(0, open).trim(), code: t.slice(open + 1, close).trim() }) ;
+    }
+
+    // No parentheses present
+    resolve ( { name: t, code: '' });
+  })
+  
 }
 
 //SPORT DROPDOWN POPULATE FUNCTION

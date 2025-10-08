@@ -1,5 +1,6 @@
 var teams_data;
 var shots_data;
+var curated_teams = [];
 var selected_data;
 var thumbnailwhitelist = [];
 var init_shot_name = "None";
@@ -8,15 +9,40 @@ var init_shot_name = "None";
 // fetch('./temp_data/shotsinfo.json').then((response) => response.json()).then((json) => readShotsJson(json));
 // fetch('./temp_data/teamsinfo.json').then((response) => response.json()).then((json) => readTeamsJson(json));
 
-fetch('./temp_data/ALL_TEAMS.json').then((response) => response.json()).then((json) => readShotsJson(json));
+fetch('./temp_data/ALL_TEAMS.json')
+  .then(r => r.json())
+  .then(readShotsJson)
+  .catch(console.error);
 
+
+// function readShotsJson(jsonfile) {
+
+//     const shots_data = Array.isArray(jsonfile) ? jsonfile : [];
+//     const curated_teams = shots_data.map(({ full = '', tricode = '' }) => `${full} (${tricode})`);
+//     console.log(curated_teams)
+//     return curated_teams
+    
+// }
 
 function readShotsJson(jsonfile) {
+  // assign to the GLOBALS (no const/let here)
+  shots_data = Array.isArray(jsonfile) ? jsonfile : [];
+  curated_teams = shots_data.map(({ full = '', tricode = '' }) => `${full} (${tricode})`);
+  console.log('curated_teams:', curated_teams);
 
-    // shots_data = jsonfile.shotswhitelist;
-    shots_data = jsonfile;
-    
+  // let the UI know it’s ready (if you want to listen for it)
+  window.dispatchEvent(new CustomEvent('curatedTeams:ready'));
 }
+
+// function readShotsJson(jsonfile) {
+
+//     const shots_data = Array.isArray(jsonfile) ? jsonfile : [];
+//     const teams = shots_data.map(({ full = '', tricode = '' }) => `${full} (${tricode})`);
+//     window.curated_teams = teams;
+//     console.log(curated_teams)
+//     window.dispatchEvent(new CustomEvent('curatedTeams:ready'));
+    
+// }
 
 function readTeamsJson(jsonfile) {
 

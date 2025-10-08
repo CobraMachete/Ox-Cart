@@ -71,7 +71,7 @@ hr {
 }
 
 :focus {
-    outline: 0
+    outline: none;
 }
 
 ::-moz-focus-inner {

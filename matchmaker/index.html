@@ -30,60 +30,143 @@
     <body>
         <script>
             $(document).ready(function() {
-                $('#shotstable').hide();
+                
+                var awaysearchbox = document.getElementById("awaysearchbar");
+                var homesearchbox = document.getElementById("homesearchbar");
 
-                var shotsearchbox = document.getElementById("awaysearchbar");
+                var swapper = document.getElementById("swapbtn");
 
-               
-                // window.addEventListener('matchmaker:seed', (e) => {
-                //     const { teams, structure, projectId, entityId } = e.detail;
-                //     // initYourUI(teams, structure, projectId, entityId);
-                //     console.log(teams, structure, projectId, entityId);
-                // });
+                const $bodyaway = $('#shotstableaway');
+                const $tableaway = $('#shottablebodyaway');
 
-                // Also handle the case where seed was ready before this script loaded:
-                // const boot = window.getMatchMakerSeed?.();
-                //     if (boot?.teams && boot?.structure) {
-                //         // initYourUI(boot.teams, boot.structure, boot.projectId, boot.entityId);
-                //         console.log(boot.teams, boot.structure, boot.projectId, boot.entityId);
-                // }
+                const $bodyhome = $('#shotstablehome');
+                const $tablehome = $('#shottablebodyhome');
 
-                console.log(shots_data);
-                //EVENT LISTENER FOR SHOT SEARCH BOX
-                shotsearchbox.addEventListener('input', function(e) {
-                    
-                    var targinput = event.target.value;
-                    var sanshot = sanitizeshot(targinput);
-                    
-                    var myinput = sanshot.toLowerCase();
+                swapper.addEventListener('click', function (e) {
+                    var awaybox = document.getElementById("awaysearchbar");
+                    var homebox = document.getElementById("homesearchbar");
 
-                    // PUSHING THE SANITIZED TEXT BACK TO FIELD
-                    shotsearchbox.value = myinput;
+                    if (awaybox.value.length > 0 && homebox.value.length > 0) {
 
-                    $('#shottablebody').empty();
-                    if (myinput.length > 0) {
-                        var suggestions = shots_data.filter(function(item) {
-                            return item.toLowerCase().includes(myinput);
+                        console.log("Both fields have items");
+
+                        awayval = awaybox.value;
+                        homeval = homebox.value;
+
+                        awaybox.value = homeval;
+                        homebox.value = awayval;
+
+                        parseTeamString(homeval)
+                        .then((info) => {
+
+                            var awaytricodetxt = document.getElementById("tricode-row-away");
+                            var awayschooltxt = document.getElementById("school-row-away");
+
+                            awaytricodetxt.innerText = info.code;
+                            awayschooltxt.innerText = info.name;
+
+                            console.log(awaybox.value);
                         });
-                        if (suggestions.length > 0) {
-                            
-                            for (var i = 0; i < suggestions.length; i++) {
 
-                                var info = "<tr onclick='addToShotField(this)'><td>" + suggestions[i] + "<td><tr>";
-                                $(datatable).append(info);
-                                
-                            }
 
-                            $('#shotstable').show();
+                        parseTeamString(awayval)
+                        .then((info) => {
+
+                            var hometricodetxt = document.getElementById("tricode-row-home");
+                            var homeschooltxt = document.getElementById("school-row-home");
                             
-                        } else {
-                            $('#shotstable').hide();
-                        }
+                            hometricodetxt.innerText = info.code;
+                            homeschooltxt.innerText = info.name;
+
+                            console.log(homebox.value);
+                        });
+                        
+                        
+                        
                     } else {
-                        $('#shotstable').hide();
+                        console.log("Fields missing items");
+                        console.log(awaybox.value);
+                        console.log(homebox.value);
                     }
 
+
                 });
+
+                
+                //EVENT LISTENER FOR SHOT SEARCH BOX
+                awaysearchbox.addEventListener('input', function (e) {
+                    const myinput = (sanitizeshot(e.target.value) || '').toLowerCase();
+                    e.target.value = myinput;
+
+                    const $tableaway = $('#shotstableaway');
+                    const $bodyaway  = $('#shottablebodyaway');
+
+                    $bodyaway.empty();
+
+                    if (!myinput.length) {
+                        $tableaway.removeClass('is-open');
+                        // also clear inline display if it was ever set elsewhere
+                        $tableaway[0].style.removeProperty('display');
+                        return;
+                    }
+
+                    const list = Array.isArray(window.curated_teams) ? window.curated_teams : [];
+                    const suggestions = list.filter(s => s.toLowerCase().includes(myinput));
+
+                    if (!suggestions.length) {
+                        $tableaway.removeClass('is-open');
+                        $tableaway[0].style.removeProperty('display');
+                        return;
+                    }
+
+                    const rows = suggestions
+                        .map(s => `<tr onclick="addToShotFieldAway(this)"><td>${s}</td></tr>`)
+                        .join('');
+
+                    $bodyaway.append(rows);
+
+                    // clear any inline display:none, then show via class
+                    $tableaway[0].style.removeProperty('display');
+                    $tableaway.addClass('is-open');
+                });
+
+                homesearchbox.addEventListener('input', function (e) {
+                    const myinput = (sanitizeshot(e.target.value) || '').toLowerCase();
+                    e.target.value = myinput;
+
+                    const $tablehome = $('#shotstablehome');
+                    const $bodyhome  = $('#shottablebodyhome');
+
+                    $bodyhome.empty();
+
+                    if (!myinput.length) {
+                        $tablehome.removeClass('is-open');
+                        // also clear inline display if it was ever set elsewhere
+                        $tablehome[0].style.removeProperty('display');
+                        return;
+                    }
+
+                    const list = Array.isArray(window.curated_teams) ? window.curated_teams : [];
+                    const suggestions = list.filter(s => s.toLowerCase().includes(myinput));
+
+                    if (!suggestions.length) {
+                        $tablehome.removeClass('is-open');
+                        $tablehome[0].style.removeProperty('display');
+                        return;
+                    }
+
+                    const rows = suggestions
+                        .map(s => `<tr onclick="addToShotFieldHome(this)"><td>${s}</td></tr>`)
+                        .join('');
+
+                    $bodyhome.append(rows);
+
+                    // clear any inline display:none, then show via class
+                    $tablehome[0].style.removeProperty('display');
+                    $tablehome.addClass('is-open');
+                });
+
+
             });
 
             //ADMIN PROJECT WITH THUMBNAIL RESOURCES
@@ -105,37 +188,39 @@
 
                         <!-- MATCHUP UI HERE -->
                         <div class="main-row-container">
+
                             <div class="awayteam-container">
                                 <div class="title-row">Away Team</div>
-                                <div class="shot-search-bar" id="shotsearch">
-                                    <input id="awaysearchbar" type="text" name="search" placeholder="Search Away Teams...">
+                                <div class="shot-search-bar">
+                                    <input id="awaysearchbar" type="text" placeholder="Search Away Teams...">
+                                    <table class="custom-table" id="shotstableaway">
+                                        <thead><tr><th scope="col">Away Teams</th></tr></thead>
+                                        <tbody id="shottablebodyaway"></tbody>
+                                    </table>
                                 </div>
-                                <table class="custom-table" id="shotstable">
-                                    <thead id="shottableheader">
-                                        <tr>
-                                        <th scope="col">Available Shots</th>
-                                        </tr>
-                                    </thead>
-                                
-                                    <tbody class="custom-table custom-table-body" id="shottablebody">
-                                    
-                                    </tbody>
-                                </table>
-                                <div class="tricode-row">ASU</div>
-                                <div class="school-row">Arizona State</div>
+                                <div class="tricode-row" id="tricode-row-away">ASU</div>
+                                <div class="school-row" id="school-row-away">Arizona State</div>
                             </div>
+
                             <div class="vs-container">
-                                <div class="swap-row"></div>
+                                <div class="swap-row" id="swapbtn"></div>
                                 <div class="vs-row">vs</div>
                             </div>
+
                             <div class="hometeam-container">
                                 <div class="title-row">Home Team</div>
-                                <div class="shot-search-bar" id="shotsearch">
-                                    <input id="homesearchbar" type="text" name="search" placeholder="Search Home Teams...">
+                                <div class="shot-search-bar">
+                                    <input id="homesearchbar" type="text" placeholder="Search Home Teams...">
+                                    <table class="custom-table" id="shotstablehome">
+                                        <thead><tr><th scope="col">Home Teams</th></tr></thead>
+                                        <tbody id="shottablebodyhome"></tbody>
+                                    </table>
                                 </div>
-                                <div class="tricode-row">HAW</div>
-                                <div class="school-row">University of Hawaii</div>
+
+                                <div class="tricode-row" id="tricode-row-home">HAW</div>
+                                <div class="school-row" id="school-row-home">University of Hawaii</div>
                             </div>
+
                         </div>
 
                         <!-- SPECIAL FIELDS UI HERE -->
@@ -143,9 +228,47 @@
 
                             <div class="specials-container-spacer">
                                 <div class="specials-container">
-                                    <div class="specials-icon"></div>
+                                    <span class="icon-rotator" id="tod-rotator">
+                                        <img class="specials-icon" id="tod-icon" src="../img/sunny.svg" alt="Time of Day">
+                                    </span>
                                     <div class="specials-title">Time of Day</div>
                                 </div>
+
+
+                                <script>
+                                    const ICONS = ["../img/sunny.svg", "../img/moon_stars.svg"];
+
+                                    const img = document.getElementById('tod-icon');
+                                    const rot = document.getElementById('tod-rotator');
+                                    let idx = 0, busy = false;
+                                    const DURATION = 240;               // match CSS
+
+                                    // Belt-and-suspenders: remove any inline outline/box-shadow if some lib adds it
+                                    ['outline','outline-color','outline-style','outline-width','box-shadow']
+                                        .forEach(p => img.style.removeProperty(p));
+
+                                    rot.addEventListener('click', () => {
+                                        if (busy) return;
+                                        busy = true;
+
+                                        // half flip
+                                        rot.style.transform = 'rotateX(90deg)';
+
+                                        setTimeout(() => {
+                                        // swap the ACTUAL image src (not backgroundImage)
+                                        idx = (idx + 1) % ICONS.length;
+                                        img.src = ICONS[idx];
+
+                                        // finish flip
+                                        rot.style.transform = 'rotateX(0deg)';
+
+                                        setTimeout(() => { busy = false; }, DURATION / 2);
+                                        }, DURATION / 2);
+                                    });
+                                </script>
+
+
+
                             </div>
                             
                             <div class="specials-container-spacer">
@@ -155,17 +278,17 @@
                                         <div class="specials-text-bar">
                                             <input id="cal-text-input" type="text" placeholder="Ex: 1025">
                                             <script>
-                                                const el = document.getElementById('cal-text-input');
-                                                const extra = '2rem';                         // your cushion
-                                                const len = (el.placeholder || '').length;    // count chars
+                                                const ele = document.getElementById('cal-text-input');
+                                                const extra = '2rem';                       
+                                                const len = (ele.placeholder || '').length;
 
-                                                // set width once
+                                                // SET WIDTH ONCE
                                                 const w = `calc(${len}ch + ${extra})`;
-                                                el.style.width = w;
-                                                el.style.minWidth = w;   // lock it
-                                                el.style.maxWidth = w;   // lock it
+                                                ele.style.width = w;
+                                                ele.style.minWidth = w;
+                                                ele.style.maxWidth = w;
 
-                                                // do NOT add an 'input' listener; we want it fixed
+                                                
                                             </script>
 
                                         </div>
