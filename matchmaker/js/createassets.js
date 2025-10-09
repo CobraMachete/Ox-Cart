@@ -33,6 +33,21 @@ var ERROR_DUPE_TASK = "ERROR: DUPLICATE TASK";
 var cmpTaskErrs = [];
 var thrDTaskErrs = [];
 
+function makeNewSession() {
+    let fw = window.ftrackWidget;
+        
+    var creds = fw.getCredentials();
+    console.log(creds);
+
+    session = new ftrack.Session(
+        creds.serverUrl,
+        creds.apiUser,
+        creds.apiKey
+    );
+
+    return session
+}
+
 function dataPreflight(strucdata, specdata, prjid) {
 
     return new Promise(function (resolve, reject) {
@@ -113,30 +128,116 @@ function shotPreflight(strucdata, selEnt) {
     //INCOMING DATA WILL BE A SINGLE SHOT ITEM FROM STRUCTURE
     return new Promise(function (resolve, reject) {
 
-        let fw = window.ftrackWidget;
-        
-        var creds = fw.getCredentials();
-        console.log(creds);
-
-        session = new ftrack.Session(
-            creds.serverUrl,
-            creds.apiUser,
-            creds.apiKey
-        );
+        let session = makeNewSession();
 
         session.query('select id, name, type.name from TypedContext where id is "' + selEnt + '"')
         .then(function (entityresponse) {
 
             console.log(entityresponse);
-            resolve(entityresponse)
+
+            entity_data = entityresponse.data[0];
+            enttype = entity_data.__entity_type__;
+            entname = entity_data.name;
+
+            if (enttype === 'Production') {
+
+                session.query('select id, name from Shot where name is ' + strucdata.shotname +' and parent_id is "' + selEnt + '"')
+                .then(function (shotresponse) {
+
+                    //SHOT NOT FOUND.  CREATE ONE.
+                    if (shotresponse.data.length === 0 ) {
+
+                        // CREATE NEW SHOT
+                        const newShot = session.create('Shot', {
+                            name: strucdata.shotname,
+                            parent_id: selEnt,
+                            project_id: PRJ_ID,
+                        }).then(function (newshotresponse) {
+                            
+                            console.log(newshotresponse)
+                            resolve(newshotresponse.data[0]);
+                            
+                        });                        
+
+                    } else {
+
+                        resolve(shotresponse.data[0])
+                    }
+
+                })
+                .catch(error => {
+                    console.log(error);
+                    reject(false);
+                });
+                
+            }
+            
 
         })
+        .catch(error => {
+            console.log(error);
+            reject(false);
+        });
 
-        // session.query('select id, name from Shot where name is ' + strucdata.shotname +' and parent_id is "' + entity.id + '"')
-        // .then(function (shotresponse) {
-
-        // })
+        
     })
+}
+
+function parentPreflight(strucdata, subdetail, shotinfo) {
+
+}
+
+function masterMatchMakerSequence(strucdata, specdata, prjid) {
+
+    return new Promise(function (resolve, reject) {
+
+        let rowcollector = document.getElementById('rowcollection');
+
+        if (rowcollector.childElementCount == 0) {
+            return reject(false);
+        }
+
+        dataPreflight(strucdata, specdata, prjid)
+        .then(function(datares) {
+
+            console.log(datares);
+
+            return Promise.all([processRowItems(rowcollector)])
+
+        }).then(function(resp) {
+
+            console.log(resp)
+            resolve(resp)
+        })
+    })
+
+    
+}
+
+async function processRowItems(rowcollector) {
+
+    for (let x = 0; x < rowcollector.childElementCount; x++) {
+
+        let currrow = rowcollector.children[x];
+        await rowPreflight(currrow)
+        .then(rowres => {
+            console.log(rowres)
+        })
+
+    }
+
+
+    // for (let x=0; x < compArr.length; x++) {
+
+    //     await createCompTask(entOBJ.id, projID, compArr[x], tasktype)
+    //     .then(taskItemEnt => {
+    //         console.log("Item " + taskItemEnt.data.name + " successfully added.")
+    //     }).catch((errTask) => {
+    //         cmpTaskErrs.push(errTask);
+    //     });
+
+    // }
+    
 }
 
 function preflightChecks() {
@@ -1656,10 +1757,6 @@ async function processCompTasks(compArr, entOBJ, projID, tasktype) {
         console.log("Array is empty.  No Tasks to add");
     } 
     
-    
-    
-    
-
 }
 
 async function process3DTasks(thrDArr, entOBJ, projID, tasktype) {
