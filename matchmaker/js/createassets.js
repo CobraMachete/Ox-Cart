@@ -112,11 +112,19 @@ function shotPreflight(strucdata, selEnt) {
 
     //INCOMING DATA WILL BE A SINGLE SHOT ITEM FROM STRUCTURE
     return new Promise(function (resolve, reject) {
-        
-        session.query('select id, name from Shot where name is ' + strucdata.shotname +' and parent_id is "' + entity.id + '"')
-        .then(function (shotresponse) {
+
+        session.query('select id, name, type.name from TypedContext where id is "' + selEnt + '"')
+        .then(function (entityresponse) {
+
+            console.log(entityresponse);
+            resolve(entityresponse)
 
         })
+
+        // session.query('select id, name from Shot where name is ' + strucdata.shotname +' and parent_id is "' + entity.id + '"')
+        // .then(function (shotresponse) {
+
+        // })
     })
 }
 
