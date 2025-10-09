@@ -612,7 +612,7 @@ body {
 	grid-template-columns: 1fr auto 1fr;
 	/* left spacer | centered | right */
 	align-items: center;
-	width: 85%;
+	width: calc(1280px*.85);
 	height: 7.5rem;
 	margin: .5rem 0;
 	padding: 0;
