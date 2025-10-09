@@ -113,8 +113,10 @@ function shotPreflight(strucdata, selEnt) {
     //INCOMING DATA WILL BE A SINGLE SHOT ITEM FROM STRUCTURE
     return new Promise(function (resolve, reject) {
 
-        var creds = window.credentials;
-        console.debug(creds);
+        let fw = window.ftrackWidget;
+        
+        var creds = fw.getCredentials();
+        console.log(creds);
 
         session = new ftrack.Session(
             creds.serverUrl,
