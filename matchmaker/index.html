@@ -33,43 +33,43 @@
 </head>
 <body>
 	<script>
-
+		
 		// SYNC: PARSE "NAME (CODE)" OR BEST-EFFORT FALLBACKS
 		function chopTeamString(str) {
 			const t = String(str ?? '').trim();
-
+			
 			// Exact "Name (CODE)"
 			const m = t.match(/^(.*?)\s*\(\s*([^)]+)\s*\)$/);
 			if (m) return { name: m[1].trim(), code: m[2].trim() };
-
+			
 			// Fallback: last (...) pair if formatting is off
 			const open = t.lastIndexOf('('), close = t.lastIndexOf(')');
 			if (open !== -1 && close > open) {
 				return { name: t.slice(0, open).trim(), code: t.slice(open + 1, close).trim() };
 			}
-
+			
 			// No parentheses present
 			return { name: t, code: '' };
 		}
-
+		
 		// ASYNC: INITIALIZE THE ROW AND SEED INITIAL VALUES FROM TWO RANDOM TEAMS
 		window.initMatchupRow = async function initMatchupRow(target, options = {}) {
 			const row = (typeof target === 'string') ? document.querySelector(target) : target;
 			if (!row) throw new Error('initMatchupRow: target element not found');
-
+			
 			const teams = options.curatedTeams ?? window.curated_teams ?? [];
 			if (teams.length < 2) throw new Error('initMatchupRow: need at least 2 curated teams');
-
+			
 			const [awayStr, homeStr] = twoRandomDistinct(teams);
 			const tempawayparsed = chopTeamString(awayStr);
 			const temphomeparsed = chopTeamString(homeStr);
-
+			
 			const {
 				specialsData    = (window.specials_data ?? null),
 				structureData   = (window.structure_data ?? null),
 				parseTeamString = async (s) => {
-				const m = /\b([A-Z]{2,4})\b/.exec(s || '');
-				return { code: m?.[1] || '', name: s };
+					const m = /\b([A-Z]{2,4})\b/.exec(s || '');
+					return { code: m?.[1] || '', name: s };
 				},
 				icons = [
 				{ icon: './img/sunny.svg',      state: 'Day'   },
@@ -77,18 +77,18 @@
 				],
 				onChange = (detail) => console.log('Row changed:', detail),
 			} = options;
-
+			
 			// Provide datasets / hooks
 			row.curatedTeams    = teams;
 			row.specialsData    = specialsData;
 			row.structureData   = structureData;
 			row.parseTeamString = parseTeamString;
 			row.icons           = icons;
-
+			
 			// Listen for updates
 			const handler = (e) => onChange?.(e.detail, e);
 			row.addEventListener('rowchange', handler);
-
+			
 			// Seed initial values
 			row.value = {
 				awaysearchbar: '',
@@ -101,7 +101,7 @@
 				icons,
 				currentIcon: { index: 0 },
 			};
-
+			
 			return {
 				row,
 				get value() { return row.value; },
@@ -109,26 +109,26 @@
 				destroy() { row.removeEventListener('rowchange', handler); },
 			};
 		};
-
-
+		
+		
 		// ASYNC: ADD NEW ROW AND SEED INITIAL VALUES FROM TWO RANDOM TEAMS
 		async function addMatchupRow(target, options = {}) {
 			const row = (typeof target === 'string') ? document.querySelector(target) : target;
 			if (!row) throw new Error('initMatchupRow: target element not found');
-
+			
 			const teams = options.curatedTeams ?? window.curated_teams ?? [];
 			if (teams.length < 2) throw new Error('initMatchupRow: need at least 2 curated teams');
-
+			
 			const [awayStr, homeStr] = twoRandomDistinct(teams);
 			const tempawayparsed = chopTeamString(awayStr);
 			const temphomeparsed = chopTeamString(homeStr);
-
+			
 			const {
 				specialsData    = (window.specials_data ?? null),
 				structureData   = (window.structure_data ?? null),
 				parseTeamString = async (s) => {
-				const m = /\b([A-Z]{2,4})\b/.exec(s || '');
-				return { code: m?.[1] || '', name: s };
+					const m = /\b([A-Z]{2,4})\b/.exec(s || '');
+					return { code: m?.[1] || '', name: s };
 				},
 				icons = [
 				{ icon: './img/sunny.svg',      state: 'Day'   },
@@ -136,18 +136,18 @@
 				],
 				onChange = (detail) => console.log('Row changed:', detail),
 			} = options;
-
+			
 			// Provide datasets / hooks
 			row.curatedTeams    = teams;
 			row.specialsData    = specialsData;
 			row.structureData   = structureData;
 			row.parseTeamString = parseTeamString;
 			row.icons           = icons;
-
+			
 			// Listen for updates
 			const handler = (e) => onChange?.(e.detail, e);
 			row.addEventListener('rowchange', handler);
-
+			
 			// Seed initial values
 			row.value = {
 				awaysearchbar: '',
@@ -160,7 +160,7 @@
 				icons,
 				currentIcon: { index: 0 },
 			};
-
+			
 			return {
 				row,
 				get value() { return row.value; },
@@ -168,47 +168,74 @@
 				destroy() { row.removeEventListener('rowchange', handler); },
 			};
 		};
-
+		
 		//MOUNT INITIAL ROW
 		function mountRow1(targetSelector = '#rowcollection') {
 			return (async () => {
 				// ensure the custom element class is registered
 				await customElements.whenDefined('matchup-row');
-
+				
 				const host = document.querySelector(targetSelector) || document.body;
 				const row  = document.createElement('matchup-row');
 				row.id = 'row1';
 				host.appendChild(row);
-
+				
 				// give the microtask queue a tick so connectedCallback runs
 				await Promise.resolve();
-
+				
 				return row; // <-- resolve with the element
 			})();
 		}
-
-
+		
+		//MOUNT NEW ROW
 		function mountNewRow(targetSelector = '#rowcollection') {
 			return (async () => {
 				// ensure the custom element class is registered
 				// await customElements.whenDefined('matchup-row');
-
+				
 				const host = document.querySelector(targetSelector) || document.body;
 				const row  = document.createElement('matchup-row');
-
+				
 				const rowprefix = "row";
 				const rowlen = host.childElementCount;
-
+				console.log("Number of rows in rowcollect: ", rowlen);
+				
 				row.id = rowprefix + rowlen.toString();
 				host.appendChild(row);
-
+				
 				// give the microtask queue a tick so connectedCallback runs
 				await Promise.resolve();
-
+				
 				return row; // <-- resolve with the element
 			})();
 		}
-
+		
+		//NEW ROW SEQUENCE
+		async function createNewRow() {
+			
+			const rowProm = mountNewRow('#rowcollection');
+			
+			const [row] = await Promise.all([rowProm]);
+			row.curatedTeams = window.curated_teams;
+			
+			row.addEventListener('cornerclick', () => {
+				// open menu / run action
+				console.log(this);
+				console.log('close button clicked');
+			});
+			
+			const api = await addMatchupRow(row, {
+				curatedTeams: window.curated_teams || [],
+				onChange(detail) {
+					console.log('rowchange:', detail);
+				},
+				// initialValue, icons, parseTeamString, etc. can be passed here too
+			});
+			
+			
+			
+		}
+		
 		//WAITING FOR TEAMS DATA TO LOAD
 		function waitForCuratedTeams() {
 			return new Promise((resolve) => {
@@ -223,24 +250,24 @@
 				);
 			});
 		}
-
+		
 		// LISTENING FOR TEAMS DATA EVENT DISPATCH
 		document.addEventListener('DOMContentLoaded', async () => {
-
-			 const rowP   = mountRow1('#rowcollection');
-  			const teamsP = waitForCuratedTeams();
-
+			
+			const rowP   = mountRow1('#rowcollection');
+			const teamsP = waitForCuratedTeams();
+			
 			const [row, teams] = await Promise.all([rowP, teamsP]);
-
+			
 			row.curatedTeams = teams;
-
+			
 			row.addEventListener('cornerclick', () => {
 				// open menu / run action
 				console.log(this);
 				console.log('close button clicked');
 			});
-
-
+			
+			
 			const api = window.initMatchupRow(row, {
 				curatedTeams: teams || [],
 				onChange(detail) {
@@ -248,7 +275,7 @@
 				},
 				// initialValue, icons, parseTeamString, etc. can be passed here too
 			});
-
+			
 			const onCuratedReady = (e) => {
 				const teamsx = e.detail?.curated_teams ?? window.curated_teams ?? [];
 				console.log('ready teams:', teamsx);
