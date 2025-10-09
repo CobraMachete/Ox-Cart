@@ -200,7 +200,7 @@
 				const rowlen = host.childElementCount;
 				console.log("Number of rows in rowcollect: ", rowlen);
 				
-				row.id = rowprefix + rowlen.toString();
+				row.id = rowprefix + (rowlen++).toString();
 				host.appendChild(row);
 				
 				// give the microtask queue a tick so connectedCallback runs
