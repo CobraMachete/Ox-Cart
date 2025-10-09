@@ -42,7 +42,7 @@ TEMPLATE.innerHTML = `
     .swap-row:hover{ opacity:.8 }
     .swap-row:active{ transform: scale(.95) }
 
-    .shot-search-bar input[type="text"]{ width:22rem; height:3rem; padding:0 1rem 0 2.5rem; border:1px solid #5E5E5E; border-radius:10px; background: rgba(82,82,82,.1) url("./img/search_icon_24.png") no-repeat 5% 4px / 24px; font-family: Gilroy, system-ui, sans-serif; }
+    .shot-search-bar input[type="text"]{ width:22rem; height:3rem; padding:0 1rem 0 2.5rem; border:1px solid #5E5E5E; border-radius:10px; background: rgba(82,82,82,.1) url("./img/search_icon_24.png") no-repeat 5% 4px / 24px; font-family: Gilroy, system-ui, sans-serif; margin-left: 1rem;}
     .shot-search-bar input[type="text"]::placeholder{ color:rgba(218,218,218,.5); }
 
     .tricode-row{ padding-top:2rem; padding-bottom:.5rem; font-weight:700; font-size:5rem; opacity:.85; letter-spacing:1.2px; }
@@ -61,8 +61,8 @@ TEMPLATE.innerHTML = `
             <tbody id="shottablebodyaway"></tbody>
           </table>
         </div>
-        <div class="tricode-row" id="tricode-row-away">ASU</div>
-        <div class="school-row" id="school-row-away">Arizona State</div>
+        <div class="tricode-row" id="tricode-row-away"></div>
+        <div class="school-row" id="school-row-away"></div>
       </div>
       <div class="vs-container">
         <div class="swap-row" id="swapbtn"></div>
@@ -77,8 +77,8 @@ TEMPLATE.innerHTML = `
             <tbody id="shottablebodyhome"></tbody>
           </table>
         </div>
-        <div class="tricode-row" id="tricode-row-home">HAW</div>
-        <div class="school-row" id="school-row-home">University of Hawaii</div>
+        <div class="tricode-row" id="tricode-row-home"></div>
+        <div class="school-row" id="school-row-home"></div>
       </div>
     </div>
     <div class="bottom-row-container">

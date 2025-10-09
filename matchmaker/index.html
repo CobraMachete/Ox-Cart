@@ -34,7 +34,7 @@
 <body>
 	<script>
 
-		// Sync: parse "Name (CODE)" or best-effort fallbacks
+		// SYNC: PARSE "NAME (CODE)" OR BEST-EFFORT FALLBACKS
 		function chopTeamString(str) {
 			const t = String(str ?? '').trim();
 
@@ -52,7 +52,7 @@
 			return { name: t, code: '' };
 		}
 
-		// Async: initialize the row and seed initial values from two random teams
+		// ASYNC: INITIALIZE THE ROW AND SEED INITIAL VALUES FROM TWO RANDOM TEAMS
 		window.initMatchupRow = async function initMatchupRow(target, options = {}) {
 			const row = (typeof target === 'string') ? document.querySelector(target) : target;
 			if (!row) throw new Error('initMatchupRow: target element not found');
@@ -128,6 +128,7 @@
 			})();
 		}
 
+		//WAITING FOR TEAMS DATA TO LOAD
 		function waitForCuratedTeams() {
 			return new Promise((resolve) => {
 				if (Array.isArray(window.curated_teams) && window.curated_teams.length) {
@@ -142,178 +143,6 @@
 			});
 		}
 
-
-		//MOUNT INITIAL ROW
-		// async function mountRow1(targetSelector = '#rowcollection') {
-		// 	// 1) Wait until the custom element is registered
-		// 	await customElements.whenDefined('matchup-row');
-
-		// 	// 2) Find where to put it (fallback to <body> if #rows doesn't exist)
-		// 	const host = document.querySelector(targetSelector) || document.body;
-
-		// 	// 3) Create and append the element
-		// 	const row = document.createElement('matchup-row');
-		// 	row.id = 'row1';
-		// 	host.appendChild(row);
-
-		// 	// 4) Initialize it
-		// 	const api = window.initMatchupRow(row, {
-		// 	curatedTeams: window.curated_teams || [],
-		// 	onChange(detail) {
-		// 		console.log('rowchange:', detail);
-		// 	},
-		// 	// initialValue, icons, parseTeamString, etc. can be passed here too
-		// 	});
-
-		// 	// (optional) keep a reference
-		// 	row._api = api;
-		// 	return api;
-		// }
-
-
-		$(document).ready(function() {
-		
-		    console.log("Document is ready...")
-		
-		    // var awaysearchbox = document.getElementById("awaysearchbar");
-		    // var homesearchbox = document.getElementById("homesearchbar");
-		
-		    // var swapper = document.getElementById("swapbtn");
-		
-		    // const $bodyaway = $('#shotstableaway');
-		    // const $tableaway = $('#shottablebodyaway');
-		
-		    // const $bodyhome = $('#shotstablehome');
-		    // const $tablehome = $('#shottablebodyhome');
-		
-		    // swapper.addEventListener('click', function (e) {
-		    //     var awaybox = document.getElementById("awaysearchbar");
-		    //     var homebox = document.getElementById("homesearchbar");
-		
-		    //     if (awaybox.value.length > 0 && homebox.value.length > 0) {
-		
-		    //         console.log("Both fields have items");
-		
-		    //         awayval = awaybox.value;
-		    //         homeval = homebox.value;
-		
-		    //         awaybox.value = homeval;
-		    //         homebox.value = awayval;
-		
-		    //         parseTeamString(homeval)
-		    //         .then((info) => {
-		
-		    //             var awaytricodetxt = document.getElementById("tricode-row-away");
-		    //             var awayschooltxt = document.getElementById("school-row-away");
-		
-		    //             awaytricodetxt.innerText = info.code;
-		    //             awayschooltxt.innerText = info.name;
-		
-		    //             console.log(awaybox.value);
-		    //         });
-		
-		
-		    //         parseTeamString(awayval)
-		    //         .then((info) => {
-		
-		    //             var hometricodetxt = document.getElementById("tricode-row-home");
-		    //             var homeschooltxt = document.getElementById("school-row-home");
-		
-		    //             hometricodetxt.innerText = info.code;
-		    //             homeschooltxt.innerText = info.name;
-		
-		    //             console.log(homebox.value);
-		    //         });
-		
-		
-		
-		    //     } else {
-		    //         console.log("Fields missing items");
-		    //         console.log(awaybox.value);
-		    //         console.log(homebox.value);
-		    //     }
-		
-		
-		    // });
-		
-		
-		    // //EVENT LISTENER FOR SHOT SEARCH BOX
-		    // awaysearchbox.addEventListener('input', function (e) {
-		    //     const myinput = (sanitizeshot(e.target.value) || '').toLowerCase();
-		    //     e.target.value = myinput;
-		
-		    //     const $tableaway = $('#shotstableaway');
-		    //     const $bodyaway  = $('#shottablebodyaway');
-		
-		    //     $bodyaway.empty();
-		
-		    //     if (!myinput.length) {
-		    //         $tableaway.removeClass('is-open');
-		    //         // also clear inline display if it was ever set elsewhere
-		    //         $tableaway[0].style.removeProperty('display');
-		    //         return;
-		    //     }
-		
-		    //     const list = Array.isArray(window.curated_teams) ? window.curated_teams : [];
-		    //     const suggestions = list.filter(s => s.toLowerCase().includes(myinput));
-		
-		    //     if (!suggestions.length) {
-		    //         $tableaway.removeClass('is-open');
-		    //         $tableaway[0].style.removeProperty('display');
-		    //         return;
-		    //     }
-		
-		    //     const rows = suggestions
-		    //         .map(s => `<tr onclick="addToShotFieldAway(this)"><td>${s}</td></tr>`)
-		    //         .join('');
-		
-		    //     $bodyaway.append(rows);
-		
-		    //     // clear any inline display:none, then show via class
-		    //     $tableaway[0].style.removeProperty('display');
-		    //     $tableaway.addClass('is-open');
-		    // });
-		
-		    // homesearchbox.addEventListener('input', function (e) {
-		    //     const myinput = (sanitizeshot(e.target.value) || '').toLowerCase();
-		    //     e.target.value = myinput;
-		
-		    //     const $tablehome = $('#shotstablehome');
-		    //     const $bodyhome  = $('#shottablebodyhome');
-		
-		    //     $bodyhome.empty();
-		
-		    //     if (!myinput.length) {
-		    //         $tablehome.removeClass('is-open');
-		    //         // also clear inline display if it was ever set elsewhere
-		    //         $tablehome[0].style.removeProperty('display');
-		    //         return;
-		    //     }
-		
-		    //     const list = Array.isArray(window.curated_teams) ? window.curated_teams : [];
-		    //     const suggestions = list.filter(s => s.toLowerCase().includes(myinput));
-		
-		    //     if (!suggestions.length) {
-		    //         $tablehome.removeClass('is-open');
-		    //         $tablehome[0].style.removeProperty('display');
-		    //         return;
-		    //     }
-		
-		    //     const rows = suggestions
-		    //         .map(s => `<tr onclick="addToShotFieldHome(this)"><td>${s}</td></tr>`)
-		    //         .join('');
-		
-		    //     $bodyhome.append(rows);
-		
-		    //     // clear any inline display:none, then show via class
-		    //     $tablehome[0].style.removeProperty('display');
-		    //     $tablehome.addClass('is-open');
-		    // });
-		
-		
-		
-		});
-		
 		// LISTENING FOR TEAMS DATA EVENT DISPATCH
 		document.addEventListener('DOMContentLoaded', async () => {
 
