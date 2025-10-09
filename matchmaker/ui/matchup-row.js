@@ -39,14 +39,14 @@ TEMPLATE.innerHTML = `
       align-items: center;
       justify-content: center;
       width: 3rem; height: 3rem;
-      
-      background: rgba(82,82,82,.18);
-      backdrop-filter: blur(6px);
+      background: transparent;
+      border: none;
       cursor: pointer;
       font-size: 18px; line-height: 1;
-      content: url("./img/close.svg")
+      content: url("./img/close.svg");
+      opacity: .65;
     }
-    .corner-btn:hover{ background: rgba(82,82,82,.28); }
+    .corner-btn:hover{ opacity: 1; }
     .corner-btn:active{ transform: translateY(1px) scale(.95); }
     .corner-btn:focus-visible{ outline: 2px solid #3b82f6; outline-offset: 2px; }
 
