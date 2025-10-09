@@ -17,7 +17,7 @@ TEMPLATE.innerHTML = `
     :host{ display:block }
     /* Ensure our container inherits your existing layout classes */
     /* Minimal safe defaults if external CSS fails */
-    .main-col-container{ position: relative; width:calc(1280px*.85); margin:0 auto; border-radius:2rem; border:1px solid rgba(255,255,255,.2); display: flex; flex-direction: column; align-items: center; justify-content: center;}
+    .main-col-container{ position: relative; width:calc(1280px*.85); margin:0 auto; border-radius:2rem; border:1px solid rgba(255,255,255,.2); display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 2px 5px 40px 5px rgba(0, 0, 0, .3);}
     .main-row-container{ display:flex; gap:1rem; justify-content:center; align-items:stretch; margin:.5rem 0 1rem; }
     .awayteam-container,.hometeam-container{ width:25%; display:flex; flex-direction:column; align-items:center; }
     .vs-container{ width:8%; display:flex; flex-direction:column; align-items:center; }
