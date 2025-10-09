@@ -33,6 +33,93 @@ var ERROR_DUPE_TASK = "ERROR: DUPLICATE TASK";
 var cmpTaskErrs = [];
 var thrDTaskErrs = [];
 
+function dataPreflight(strucdata, specdata, prjid) {
+
+    return new Promise(function (resolve, reject) {
+
+        let collecteddata = {};
+
+        if (strucdata && specdata && prjid) {
+
+            collecteddata.strucdata = strucdata;
+            collecteddata.specdata = specdata;
+            collecteddata.prjid = prjid;
+
+            resolve(collecteddata)
+
+        } else {
+            reject(false)
+        }
+    
+
+    });
+
+}
+
+
+function rowPreflight(row) {
+
+    return new Promise(function (resolve, reject) {
+
+        let alldataexists = true;
+
+        if (row.awaySearch === '') {
+            alldataexists = false;
+        }
+
+        if (row.homeSearch === '') {
+            alldataexists = false;
+        }
+
+        if (row.awayTricode === '') {
+            alldataexists = false;
+        }
+
+        if (row.homeTricode === '') {
+            alldataexists = false;
+        }
+
+        if (row.awaySchool === '') {
+            alldataexists = false;
+        }
+
+        if (row.homeSchool === '') {
+            alldataexists = false;
+        }
+
+        if (!row.currentIcon) {
+            alldataexists = false;
+        }
+
+        if (row.calText === '') {
+            alldataexists = false;
+        }
+
+        
+
+
+        if (alldataexists === true) {
+            resolve(row)
+        } else {
+            reject(false)
+        }
+
+    });
+
+}
+
+function shotPreflight(strucdata, selEnt) {
+
+    //INCOMING DATA WILL BE A SINGLE SHOT ITEM FROM STRUCTURE
+    return new Promise(function (resolve, reject) {
+        
+        session.query('select id, name from Shot where name is ' + strucdata.shotname +' and parent_id is "' + entity.id + '"')
+        .then(function (shotresponse) {
+
+        })
+    })
+}
+
 function preflightChecks() {
     //DEFOCUS BG ELEMENTS
     blurBGElements();

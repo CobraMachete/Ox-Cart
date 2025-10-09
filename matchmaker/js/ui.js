@@ -39,6 +39,8 @@ function initMatchMakerUI({ teams, structure, projectId, entityId }) {
 	
 	readTeamsData(teams);
 	readStructuredData(structure);
+	PRJ_ID = projectId;
+	SELECTED_ENTITY = entityId;
 	
 	
 }
