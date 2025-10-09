@@ -250,6 +250,16 @@ export class MatchupRow extends HTMLElement {
     this._sizeCalWidth();
   }
 
+  disconnectedCallback(){
+    if (this._outsideHandler) {
+      document.removeEventListener('pointerdown', this._outsideHandler, true);
+      this._outsideHandler = null;
+    }
+    // if you ever add observers/intervals, clear them here too:
+    // this._resizeObs?.disconnect();
+    // clearTimeout(this._flipTimer);
+  }
+
   /* ---------- Public properties / API ---------- */
   get curatedTeams(){ return this._curatedTeams; }
   set curatedTeams(v){

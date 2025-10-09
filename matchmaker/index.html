@@ -33,7 +33,16 @@
 </head>
 <body>
 	<script>
-		
+		//RANDOM CHAR GENERATOR
+		function randomCode(len = 4) {
+			const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+			const out = [];
+			const buf = new Uint8Array(len);
+			crypto.getRandomValues(buf);
+			for (let i = 0; i < len; i++) out.push(alphabet[buf[i] % alphabet.length]);
+			return out.join('');
+		}
+
 		// SYNC: PARSE "NAME (CODE)" OR BEST-EFFORT FALLBACKS
 		function chopTeamString(str) {
 			const t = String(str ?? '').trim();
@@ -177,7 +186,9 @@
 				
 				const host = document.querySelector(targetSelector) || document.body;
 				const row  = document.createElement('matchup-row');
-				row.id = 'row1';
+				const rowprefix = "row_";
+				const rowsuffix = randomCode();
+				row.id = rowprefix + rowsuffix;
 				host.appendChild(row);
 				
 				// give the microtask queue a tick so connectedCallback runs
@@ -196,11 +207,10 @@
 				const host = document.querySelector(targetSelector) || document.body;
 				const row  = document.createElement('matchup-row');
 				
-				const rowprefix = "row";
-				const rowlen = host.childElementCount;
-				console.log("Number of rows in rowcollect: ", rowlen);
+				const rowprefix = "row_";
+				const rowsuffix = randomCode();
 				
-				row.id = rowprefix + (rowlen++).toString();
+				row.id = rowprefix + rowsuffix;
 				host.appendChild(row);
 				
 				// give the microtask queue a tick so connectedCallback runs
@@ -209,6 +219,9 @@
 				return row; // <-- resolve with the element
 			})();
 		}
+
+		
+
 		
 		//NEW ROW SEQUENCE
 		async function createNewRow() {
@@ -220,8 +233,7 @@
 			
 			row.addEventListener('cornerclick', () => {
 				// open menu / run action
-				console.log(this);
-				console.log('close button clicked');
+				row.remove();
 			});
 			
 			const api = await addMatchupRow(row, {
@@ -263,8 +275,7 @@
 			
 			row.addEventListener('cornerclick', () => {
 				// open menu / run action
-				console.log(this);
-				console.log('close button clicked');
+				row.remove();				
 			});
 			
 			
