@@ -17,11 +17,41 @@ TEMPLATE.innerHTML = `
     :host{ display:block }
     /* Ensure our container inherits your existing layout classes */
     /* Minimal safe defaults if external CSS fails */
-    .main-col-container{ width:calc(1280px*.85); margin:0 auto; border-radius:2rem; border:1px solid rgba(255,255,255,.2); display: flex; flex-direction: column; align-items: center; justify-content: center;}
+    .main-col-container{ position: relative; width:calc(1280px*.85); margin:0 auto; border-radius:2rem; border:1px solid rgba(255,255,255,.2); display: flex; flex-direction: column; align-items: center; justify-content: center;}
     .main-row-container{ display:flex; gap:1rem; justify-content:center; align-items:stretch; margin:.5rem 0 1rem; }
     .awayteam-container,.hometeam-container{ width:25%; display:flex; flex-direction:column; align-items:center; }
     .vs-container{ width:8%; display:flex; flex-direction:column; align-items:center; }
     .bottom-row-container{ display:flex; align-items:center; justify-content:center; gap:1.5rem; width:100%; max-width:50%; margin:.5rem auto 0; padding:0; border-top:1px solid rgba(255,255,255,.15) }
+
+    .corner-top-right{
+      position: absolute;
+      top: var(--corner-top, .5rem);
+      right: var(--corner-right, .5rem);
+      z-index: 2;                            /* above tables, etc. */
+      pointer-events: none;                  /* wrapper ignores clicks */
+    }
+    .corner-top-right ::slotted(*),
+    .corner-btn{
+      pointer-events: auto;                  /* the actual control is clickable */
+    }
+    .corner-btn{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 3rem; height: 3rem;
+      
+      background: rgba(82,82,82,.18);
+      backdrop-filter: blur(6px);
+      cursor: pointer;
+      font-size: 18px; line-height: 1;
+      content: url("./img/close.svg")
+    }
+    .corner-btn:hover{ background: rgba(82,82,82,.28); }
+    .corner-btn:active{ transform: translateY(1px) scale(.95); }
+    .corner-btn:focus-visible{ outline: 2px solid #3b82f6; outline-offset: 2px; }
+
+    /* expose for outside styling if you like */
+    .corner-btn{ /* part hook set below */ }
 
     /* Flip animation support if the theme file isn't present */
     .specials-container { perspective: 800px; }
@@ -51,6 +81,13 @@ TEMPLATE.innerHTML = `
     .specials-text-bar input[type="text"]{ box-sizing:content-box; width: calc(8ch + 2rem); padding-inline:.75rem 1rem; height:2.5rem; border:1px solid #5E5E5E; border-radius:10px; background-color:rgba(82,82,82,.1); font-family: Gilroy, system-ui, sans-serif; }
   </style>
   <div class="main-col-container">
+    <!-- floating corner content -->
+    <div class="corner-top-right">
+      <!-- If user provides <button slot="corner">, it replaces this default -->
+      <slot name="corner">
+        <button class="corner-btn" id="corner-btn" part="float-btn" type="button" aria-label="Options">⋯</button>
+      </slot>
+    </div>
     <div class="main-row-container">
       <div class="awayteam-container">
         <div class="title-row">Away Team</div>
@@ -128,6 +165,7 @@ export class MatchupRow extends HTMLElement {
     // Cache nodes
     this.$ = (sel) => root.querySelector(sel);
     this._els = {
+      cornerBtn: this.$('#corner-btn'),
       awayInput: this.$('#awaysearchbar'),
       homeInput: this.$('#homesearchbar'),
       awayTri:   this.$('#tricode-row-away'),
@@ -146,6 +184,13 @@ export class MatchupRow extends HTMLElement {
   }
 
   connectedCallback(){
+    
+    if (this._els.cornerBtn) {
+      this._els.cornerBtn.addEventListener('click', () => {
+        this.dispatchEvent(new CustomEvent('cornerclick', { bubbles: true, composed: true }));
+      });
+    }
+
     const { awayInput, homeInput, awayTable, awayBody, homeTable, homeBody, swapBtn, rotWrap, rotImg, calInput } = this._els;
 
     // track keyboard nav index per dropdown

@@ -635,6 +635,21 @@ body {
 	opacity: .65;
 }
 
+.add-row-btn:hover {
+	opacity: .95;
+	cursor: pointer;
+}
+
+.add-row-btn:active {
+	opacity: .95;
+	cursor: pointer;
+	transform: scale(.95);
+}
+
+.remove-row {
+	content: url("../img/close.svg")
+}
+
 .submit-button {
 	background: linear-gradient(0.25turn, #9F1EF3, #DD22B3, #FB2496);
 	color: rgb(230, 230, 230);
@@ -652,10 +667,7 @@ body {
 
 }
 
-.add-row-btn:hover {
-	opacity: .95;
-	cursor: pointer;
-}
+
 
 .specials-container-spacer {
 	display: flex;
