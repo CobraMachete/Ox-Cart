@@ -76,7 +76,7 @@ TEMPLATE.innerHTML = `
     .shot-search-bar input[type="text"]::placeholder{ color:rgba(218,218,218,.5); }
 
     .tricode-row{ padding-top:2rem; padding-bottom:.5rem; font-weight:700; font-size:5rem; opacity:.85; letter-spacing:1.2px; }
-    .school-row{ padding-top:1rem; padding-bottom:1.5rem; font-weight:400; font-size:1.5rem; opacity:.5; letter-spacing:1.2px; }
+    .school-row{ padding-top:1rem; padding-bottom:1.5rem; font-weight:400; font-size:1.25rem; opacity:.5; letter-spacing:1.2px; }
 
     .specials-text-bar input[type="text"]{ box-sizing:content-box; width: calc(8ch + 2rem); padding-inline:.75rem 1rem; height:2.5rem; border:1px solid #5E5E5E; border-radius:10px; background-color:rgba(82,82,82,.1); font-family: Gilroy, system-ui, sans-serif; }
   </style>

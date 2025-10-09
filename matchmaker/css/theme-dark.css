@@ -613,10 +613,10 @@ body {
 	/* left spacer | centered | right */
 	align-items: center;
 	width: 85%;
-	height: 5rem;
-	margin: 2.5rem 0;
+	height: 7.5rem;
+	margin: .5rem 0;
 	padding: 0;
-	box-shadow: 0px -10px 40px 7px rgba(0, 0, 0, .3);
+	box-shadow: 0px -12px 20px 7px rgba(0, 0, 0, .15);
 }
 
 .button-row-container> :first-child {
