@@ -184,12 +184,165 @@ function shotPreflight(strucdata, selEnt) {
     })
 }
 
+function checkCreateFolder(foldername, parentid, prjid) {
+
+    return new Promise(function (resolve, reject) {
+
+        session.query('select id, name from Folder where name is ' + foldername + ' and parent_id is "' + parentid + '"')
+        .then(function (folderresponse) {
+
+            //IF FOLDER DOESNT EXIST THEN CREATE AND RETURN
+            if (folderresponse.data.length === 0 ) {
+
+                // CREATE NEW FOLDER
+                const newShot = session.create('Folder', {
+                    name: foldername,
+                    parent_id: currshotid,
+                    project_id: prjid,
+                }).then(function (newfolderres) {
+
+                    console.log(newfolderres)
+
+                    let folderdata = newfolderres.data;
+
+                    resolve(folderdata.id)
+
+                })
+            } else {
+
+                let folderdata = folderresponse.data[0];
+                resolve(folderdata.id)
+            }
+
+        }).catch((errFold) => {
+            console.log(errFold);
+            reject(false)
+        });
+
+    })
+    
+
+}
+
+function checkCreateTeamsMultiObj(objname, objtype, parentid, prjid) {
+
+    return new Promise(function (resolve, reject) {
+
+        session.query('select id, name from ' + objtype + ' where name is "' + objname +'" and parent_id is "' + parentid + '"')
+        .then(function (multires) {
+
+            //IF FOLDER DOESNT EXIST THEN CREATE AND RETURN
+            if (multires.data.length === 0 ) {
+
+                //CREATE NEW MULTICOMP OR TEAMS OBJ
+                const newShot = session.create(`${objtype}`, {
+                    name: objname,
+                    parent_id: parentid,
+                    project_id: prjid,
+                }).then(function(newmultires) {
+
+                    console.log(newmultires);
+                    let newmultiobj = newmultires.data;
+
+                    resolve(newmultiobj.id)
+
+                })
+            } else {
+
+                let multiobj = multires.data[0];
+                resolve(multiobj.id)
+            }
+
+        }).catch((errMulti) => {
+            console.log(errMulti);
+            reject(false)
+        });
+
+    })
+    
+
+}
+
+function checkCreateTaskObj(taskname, tasktype, parentid, prjid) {
+
+    return new Promise(function (resolve, reject) {
+
+        
+        session.query('select id, name from Task where name is "' + taskname + '" and type.nam is "' + tasktype + '" and parent_id is "' + parentid + '"')
+        .then(function (taskresponse) {
+
+            console.log(taskresponse);
+
+            if (taskresponse.data.length === 0 ) {
+
+                //QUERY TASK TYPE ID
+                getTaskTypeId(tasktype)
+                .then(function(typeres) {
+
+                    if (typeres != false) {
+
+                        //CREATE NEW TASK
+                        const newTask = session.create('Task', {
+                            name: taskname,
+                            parent_id: parentid,
+                            project_id: prjid,
+                            type_id: typeres
+                        }).then(function (taskres) {
+
+                            console.log(taskres);
+
+                            let newtaskobj = taskres.data;
+                            let newtaskid = newtaskobj.id;
+
+                            if (newtaskid) {
+                                resolve(newtaskid);
+                            } else {
+                                reject(false)
+                            }
+                            
+                        })
+                    } else {
+                        reject(false)
+                    }
+                })
+
+                
+            }
+
+        })
+    })
+
+}
+
+function getTaskTypeId(tasktype) {
+
+    return new Promise(function (resolve, reject) {
+        const q = `select id, name
+        from Type
+        where name is "${tasktype}" and object_type.name is "Task"
+        limit 1`;
+
+        session.query(q).then(({ data }) => {
+            const t = data[0];
+            if (!t) {
+                console.warn('No Task Type found named:', tasktype);
+                reject(false);
+            }
+            console.log('Task Type ID:', t.id);
+            resolve(t.id)
+        });
+    })
+
+}
+
 function parentPreflight(row, subdetail, shotinfo) {
 
     return new Promise(function (resolve, reject) {
         console.log('Special Data: ', window.specials_data);
         console.log('Detail Data: ', subdetail);
         console.log('Shot Info Data: ', shotinfo);
+
+        let currshotid = shotinfo;
 
         //PARSE INFO INTO VARS
         let foldername = subdetail.folder;
@@ -206,8 +359,44 @@ function parentPreflight(row, subdetail, shotinfo) {
         console.log(parentname);
         console.log(taskname);
 
+        //CHECKING IF FOLDER EXISTS
+        checkCreateFolder(foldername, currshotid, PRJ_ID)
+        .then(function(thefolder) {
 
-        resolve(true)
+            if (thefolder != false) {
+
+                //CHECK AND CREATE MULTI OR TEAMS OBJ IF PARENT TYPE NOT FOLDER
+                if (parenttype != 'Folder') {
+
+                    checkCreateTeamsMultiObj(objname, objtype, parentid, prjid)
+                    .then(function(themultiobj) {
+
+                        console.log(themultiobj)
+
+                        if (themultiobj != false) {
+
+                            checkCreateTaskObj(taskname, tasktype, themultiobj, prjid)
+                            .then(function(thetask) {
+                                console.log(thetask);
+                                resolve(thetask)
+                            })
+                        }
+
+                    })
+                } else {
+
+                    // CREATE TASK INSIDE FOLDER BC PARENT IS FOLDER
+                    checkCreateTaskObj(taskname, tasktype, thefolder, prjid)
+                    .then(function(thetask) {
+                        console.log(thetask);
+                        resolve(thetask)
+                    })
+                }
+            } else {
+                reject(false)
+            }
+
+        })
     })
     
 
@@ -256,7 +445,9 @@ async function processRowItems(rowcollector, strucdata) {
                 console.log('Sending to shots...');
                 await processShotItems(currrow, strucdata, SELECTED_ENTITY)
                 .then(function(procres) {
+                    
                     console.log('All Done')
+                    return true
                 })
             }
         }).catch((errRow) => {
