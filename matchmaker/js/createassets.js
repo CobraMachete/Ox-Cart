@@ -203,18 +203,14 @@ function masterMatchMakerSequence(strucdata, specdata, prjid) {
         }
 
         dataPreflight(strucdata, specdata, prjid)
-        .then((datares) => {
+        .then(function(datares) {
 
             console.log(datares);
-
+            
             return Promise.all([processRowItems(rowcollector)])
 
         })
-        .then((resp) => {
-
-            console.log(resp)
-            resolve(resp)
-        })
+        
     })
 
     
@@ -228,7 +224,9 @@ async function processRowItems(rowcollector) {
         await rowPreflight(currrow)
         .then(rowres => {
             console.log(rowres)
-        })
+        }).catch((errRow) => {
+            console.log(errRow);
+        });
 
     }
 
