@@ -191,20 +191,26 @@ function masterMatchMakerSequence(strucdata, specdata, prjid) {
 
     return new Promise(function (resolve, reject) {
 
-        let rowcollector = document.getElementById('rowcollection');
+        console.log(strucdata);
+        console.log(specdata);
+        console.log(prjid);
 
-        if (rowcollector.childElementCount == 0) {
+        let rowcollector = document.getElementById('rowcollection');
+        console.log(rowcollector.childElementCount);
+
+        if (rowcollector.childElementCount === 0) {
             return reject(false);
         }
 
         dataPreflight(strucdata, specdata, prjid)
-        .then(function(datares) {
+        .then((datares) => {
 
             console.log(datares);
 
             return Promise.all([processRowItems(rowcollector)])
 
-        }).then(function(resp) {
+        })
+        .then((resp) => {
 
             console.log(resp)
             resolve(resp)
