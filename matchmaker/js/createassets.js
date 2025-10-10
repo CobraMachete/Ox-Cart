@@ -317,9 +317,10 @@ function checkCreateTaskObj(taskname, tasktype, parentid, prjid) {
 function getTaskTypeId(tasktype) {
 
     return new Promise(function (resolve, reject) {
-        const q = `select type_id from Task where type.name is "${tasktype}" limit 1`;
+        const q = 'select id, name, object_type_id from Task where object_type.name is "' + tasktype + '" limit 1';
 
         session.query(q).then(({ data }) => {
+            console.log(data);
             const t = data[0];
             if (!t) {
                 console.warn('No Task Type found named:', tasktype);
