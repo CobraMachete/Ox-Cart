@@ -200,6 +200,12 @@ function parentPreflight(row, subdetail, shotinfo) {
         let parentname = replaceTokens(subdetail.parentname, buildVarsFromUI(row));
         let taskname = replaceTokens(subdetail.taskname, buildVarsFromUI(row));
 
+        console.log(foldername);
+        console.log(parenttype);
+        console.log(tasktype);
+        console.log(parentname);
+        console.log(taskname);
+
 
         resolve(true)
     })
