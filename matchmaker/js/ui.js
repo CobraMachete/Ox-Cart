@@ -57,6 +57,27 @@ function getcontainerwidth() {
 	
 };
 
+function scrollChildIntoCenter(container, child, {behavior = 'smooth'} = {}) {
+  if (!container || !child) return;
+
+  const cRect = container.getBoundingClientRect();
+  const rRect = child.getBoundingClientRect();
+
+  // Position of child relative to container’s scroll content
+  const offsetTop  = rRect.top  - cRect.top  + container.scrollTop;
+  const offsetLeft = rRect.left - cRect.left + container.scrollLeft;
+
+  const targetTop  = offsetTop  - (container.clientHeight - child.clientHeight) / 2;
+  const targetLeft = offsetLeft - (container.clientWidth  - child.clientWidth)  / 2;
+
+  container.scrollTo({
+    top: Math.max(0, targetTop),
+    left: Math.max(0, targetLeft),
+    behavior
+  });
+}
+
+
 //SEARCH BAR FUNCTION FOR SHOTS
 function addToShotFieldAway(item) {
 	

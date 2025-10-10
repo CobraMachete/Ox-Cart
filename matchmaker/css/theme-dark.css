@@ -2505,3 +2505,9 @@ canvas {
   padding-left: 1rem; /* remove the extra icon padding when icon hidden */
   margin-left: 1rem;
 }
+
+
+.dimrow {
+	opacity: .2;
+	transition: opacity 0.3s ease;
+}
