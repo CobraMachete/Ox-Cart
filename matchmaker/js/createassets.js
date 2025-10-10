@@ -226,8 +226,10 @@ async function processRowItems(rowcollector) {
         await rowPreflight(currrow)
         .then(rowres => {
             console.log(rowres)
+            return true
         }).catch((errRow) => {
             console.log(errRow);
+            return false
         });
 
     }
