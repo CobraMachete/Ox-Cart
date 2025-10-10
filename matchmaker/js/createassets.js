@@ -208,7 +208,7 @@ function masterMatchMakerSequence(strucdata, specdata, prjid) {
 
             console.log(datares);
             
-            return Promise.all([processRowItems(rowcollector)])
+            return Promise.all([processRowItems(rowcollector, strucdata)])
 
         })
         
@@ -217,7 +217,7 @@ function masterMatchMakerSequence(strucdata, specdata, prjid) {
     
 }
 
-async function processRowItems(rowcollector) {
+async function processRowItems(rowcollector, strucdata) {
 
     for (let x = 0; x < rowcollector.childElementCount; x++) {
 
@@ -225,8 +225,11 @@ async function processRowItems(rowcollector) {
         console.log(currrow);
         await rowPreflight(currrow)
         .then(rowres => {
-            console.log(rowres)
-            return true
+
+            console.log(rowres);
+            if (rowres === true) {
+
+            }
         }).catch((errRow) => {
             console.log(errRow);
             return false
@@ -234,18 +237,26 @@ async function processRowItems(rowcollector) {
 
     }
 
+}
 
-    // for (let x=0; x < compArr.length; x++) {
+async function processShotItems(row, strucdata, selEnt) {
 
-    //     await createCompTask(entOBJ.id, projID, compArr[x], tasktype)
-    //     .then(taskItemEnt => {
-    //         console.log("Item " + taskItemEnt.data.name + " successfully added.")
-    //     }).catch((errTask) => {
-    //         cmpTaskErrs.push(errTask);
-    //     });
+    for (let x = 0; x < strucdata.length; x++) {
 
-    // }
-    
+        let currshotobj = strucdata[x];
+        console.log(currshot);
+        await shotPreflight(currshot, selEnt)
+        .then(shotres => {
+
+            console.log(shotres);
+
+        }).catch((errShot) => {
+            console.log(errShot);
+            return false
+        });
+
+    }
+
 }
 
 function preflightChecks() {
