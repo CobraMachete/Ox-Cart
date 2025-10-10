@@ -227,7 +227,7 @@ async function processRowItems(rowcollector, strucdata) {
         .then(async rowres => {
 
             console.log(rowres);
-            if (rowres === true) {
+            if (rowres != false) {
                 await processShotItems(currrow, strucdata, SELECTED_ENTITY)
                 .then(function(procres) {
                     console.log('All Done')
