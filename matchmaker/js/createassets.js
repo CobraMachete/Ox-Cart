@@ -76,6 +76,7 @@ function rowPreflight(row) {
 
     return new Promise(function (resolve, reject) {
 
+        console.log(row);
         let alldataexists = true;
 
         if (row.awaySearch === '') {
