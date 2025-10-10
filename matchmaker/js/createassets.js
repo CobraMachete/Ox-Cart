@@ -221,6 +221,7 @@ async function processRowItems(rowcollector) {
     for (let x = 0; x < rowcollector.childElementCount; x++) {
 
         let currrow = rowcollector.children[x];
+        console.log(currrow);
         await rowPreflight(currrow)
         .then(rowres => {
             console.log(rowres)
