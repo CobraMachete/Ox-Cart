@@ -317,7 +317,7 @@ function checkCreateTaskObj(taskname, tasktype, parentid, prjid) {
 function getTaskTypeId(tasktype) {
 
     return new Promise(function (resolve, reject) {
-        const q = `select id, name from Type where name is "${tasktype}" and object_type.name is "Task" limit 1`;
+        const q = `select id, name from Type where name is "${tasktype}" and task_type_schemas.name is "VFX" limit 1`;
 
         session.query(q).then(({ data }) => {
             const t = data[0];
