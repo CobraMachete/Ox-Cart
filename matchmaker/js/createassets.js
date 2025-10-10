@@ -317,7 +317,7 @@ function checkCreateTaskObj(taskname, tasktype, parentid, prjid) {
 function getTaskTypeId(tasktype) {
 
     return new Promise(function (resolve, reject) {
-        const q = `select id, name from Type where name is "${tasktype}" and task_type_schemas.name is "VFX" limit 1`;
+        const q = `select type_id from Task where type.name is "${tasktype}" limit 1`;
 
         session.query(q).then(({ data }) => {
             const t = data[0];
@@ -325,8 +325,8 @@ function getTaskTypeId(tasktype) {
                 console.warn('No Task Type found named:', tasktype);
                 reject(false);
             }
-            console.log('Task Type ID:', t.id);
-            resolve(t.id)
+            console.log('Task Type ID:', t.type_id);
+            resolve(t.type_id)
         });
     })
 
