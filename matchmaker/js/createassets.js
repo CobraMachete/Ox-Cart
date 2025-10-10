@@ -197,7 +197,7 @@ function checkCreateFolder(foldername, parentid, prjid) {
                 // CREATE NEW FOLDER
                 const newShot = session.create('Folder', {
                     name: foldername,
-                    parent_id: currshotid,
+                    parent_id: parentid,
                     project_id: prjid,
                 }).then(function (newfolderres) {
 
@@ -368,14 +368,14 @@ function parentPreflight(row, subdetail, shotinfo) {
                 //CHECK AND CREATE MULTI OR TEAMS OBJ IF PARENT TYPE NOT FOLDER
                 if (parenttype != 'Folder') {
 
-                    checkCreateTeamsMultiObj(objname, objtype, parentid, prjid)
+                    checkCreateTeamsMultiObj(objname, objtype, parentid, PRJ_ID)
                     .then(function(themultiobj) {
 
                         console.log(themultiobj)
 
                         if (themultiobj != false) {
 
-                            checkCreateTaskObj(taskname, tasktype, themultiobj, prjid)
+                            checkCreateTaskObj(taskname, tasktype, themultiobj, PRJ_ID)
                             .then(function(thetask) {
                                 console.log(thetask);
                                 resolve(thetask)
@@ -386,7 +386,7 @@ function parentPreflight(row, subdetail, shotinfo) {
                 } else {
 
                     // CREATE TASK INSIDE FOLDER BC PARENT IS FOLDER
-                    checkCreateTaskObj(taskname, tasktype, thefolder, prjid)
+                    checkCreateTaskObj(taskname, tasktype, thefolder, PRJ_ID)
                     .then(function(thetask) {
                         console.log(thetask);
                         resolve(thetask)
