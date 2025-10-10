@@ -368,7 +368,7 @@ function parentPreflight(row, subdetail, shotinfo) {
                 //CHECK AND CREATE MULTI OR TEAMS OBJ IF PARENT TYPE NOT FOLDER
                 if (parenttype != 'Folder') {
 
-                    checkCreateTeamsMultiObj(objname, objtype, parentid, PRJ_ID)
+                    checkCreateTeamsMultiObj(parentname, parenttype, thefolder, PRJ_ID)
                     .then(function(themultiobj) {
 
                         console.log(themultiobj)
