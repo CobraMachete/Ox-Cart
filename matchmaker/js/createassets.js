@@ -124,6 +124,60 @@ function rowPreflight(row) {
 
 }
 
+async function fieldsPreflight(rowcont) {
+
+    let missingitems = [];
+
+    for (var x = 0; x < rowcont.childElementCount; x++) {
+
+        let row = rowcont.children[x];
+
+        console.log(row);
+        
+
+        if (row.awaySearch === '') {
+            let missels = { "rowid": row.id, "element": '#awaysearchbar'};
+            missingitems.push(missels)
+
+        }
+
+        if (row.homeSearch === '') {
+            let missels = { "rowid": row.id, "element": '#homesearchbar'};
+            missingitems.push(missels)
+        }
+
+        if (row.awayTricode === '') {
+            let missels = { "rowid": row.id, "element": '#tricode-row-away'};
+            missingitems.push(missels)
+        }
+
+        if (row.homeTricode === '') {
+            let missels = { "rowid": row.id, "element": '#tricode-row-home'};
+            missingitems.push(missels)
+        }
+
+        if (row.awaySchool === '') {
+            let missels = { "rowid": row.id, "element": '#school-row-away'};
+            missingitems.push(missels)
+        }
+
+        if (row.homeSchool === '') {
+            let missels = { "rowid": row.id, "element": '#school-row-home'};
+            missingitems.push(missels)
+        }
+
+        
+        if (row.calText === '') {
+            let missels = { "rowid": row.id, "element": '#cal-text-input'};
+            missingitems.push(missels)
+        }
+        
+    }
+
+    return missingitems
+
+}
+
 function shotPreflight(strucdata, selEnt) {
 
     //INCOMING DATA WILL BE A SINGLE SHOT ITEM FROM STRUCTURE
@@ -427,6 +481,9 @@ function masterMatchMakerSequence(strucdata, specdata, prjid) {
             return Promise.all([processRowItems(rowcollector, strucdata)])
 
         })
+        .then(function(rowprocresp) {
+            console.log(rowprocresp);
+        })
         
     })
 
@@ -435,29 +492,42 @@ function masterMatchMakerSequence(strucdata, specdata, prjid) {
 
 async function processRowItems(rowcollector, strucdata) {
 
-    for (let x = 0; x < rowcollector.childElementCount; x++) {
+    await fieldsPreflight(rowcollector)
+    .then(async itemsres => {
 
-        let currrow = rowcollector.children[x];
-        console.log(currrow);
-        await rowPreflight(currrow)
-        .then(async rowres => {
+        if (itemsres.length > 0) {
 
-            console.log(rowres);
-            if (rowres != false) {
-                console.log('Sending to shots...');
-                await processShotItems(currrow, strucdata, SELECTED_ENTITY)
-                .then(function(procres) {
-                    
-                    console.log('All Done')
-                    return true
-                })
+            return itemsres
+
+        } else {
+
+            for (let x = 0; x < rowcollector.childElementCount; x++) {
+
+                let currrow = rowcollector.children[x];
+                console.log(currrow);
+                await rowPreflight(currrow)
+                .then(async rowres => {
+
+                    console.log(rowres);
+                    if (rowres != false) {
+                        console.log('Sending to shots...');
+                        await processShotItems(currrow, strucdata, SELECTED_ENTITY)
+                        .then(function(procres) {
+                            
+                            console.log('All Done')
+                            return true
+                        })
+                    }
+                }).catch((errRow) => {
+                    console.log(errRow);
+                    return false
+                });
+
             }
-        }).catch((errRow) => {
-            console.log(errRow);
-            return false
-        });
+        }
+    })
 
-    }
+    
 
 }
 
