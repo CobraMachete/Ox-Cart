@@ -261,8 +261,13 @@ async function processShotItems(row, strucdata, selEnt) {
         .then(async shotres => {
 
             console.log(shotres);
+            let shotid = shotres.id;
+            let currshotname = shotres.name;
 
-            await processParentItems(row, strucdata, currshot, selEnt)
+            console.log(strucdata[x].details);
+            let detaildata = strucdata[x].details;
+
+            await processParentItems(row, detaildata, shotid, selEnt)
             .then(async parentprocres => {
 
                 console.log(parentprocres);
@@ -278,14 +283,14 @@ async function processShotItems(row, strucdata, selEnt) {
 
 }
 
-async function processParentItems(row, strucdata, currshot, selEnt) {
+async function processParentItems(row, detaildata, currshot, selEnt) {
 
-    for (let x = 0; x < strucdata.details.length; x++) {
+    for (let x = 0; x < detaildata.length; x++) {
 
-        let currparent = strucdata.details[x];
+        let currparent = detaildata[x];
         console.log(currparent);
         
-        await parentPreflight(strucdata, currparent, currshot)
+        await parentPreflight(detaildata, currparent, currshot)
         .then(parentres => {
 
             console.log(parentres);
