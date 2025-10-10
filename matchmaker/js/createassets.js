@@ -496,15 +496,12 @@ function masterMatchMakerSequence(strucdata, specdata, prjid) {
   if (rowcollector.childElementCount === 0) return Promise.reject(new Error('No rows to process'));
 
   return dataPreflight(strucdata, specdata, prjid)
-    .then((datares) => {
+    .then(async (datares) => {
       console.log('preflight:', datares);
       // If you only have one async job, no need for Promise.all
-      return processRowItems(rowcollector, strucdata);
+      const rowProcess = await processRowItems(rowcollector, strucdata);
+      console.log(rowProcess);
     })
-    .then((rowprocresp) => {
-      console.log('rows:', rowprocresp);
-      return rowprocresp; // propagate result
-    });
 }
 
 async function processRowItems(rowcollector, strucdata) {
