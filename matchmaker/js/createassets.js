@@ -156,7 +156,7 @@ function shotPreflight(strucdata, selEnt) {
                         }).then(function (newshotresponse) {
                             
                             console.log(newshotresponse)
-                            resolve(newshotresponse.data[0]);
+                            resolve(newshotresponse.data);
                             
                         });                        
 
@@ -184,12 +184,23 @@ function shotPreflight(strucdata, selEnt) {
     })
 }
 
-function parentPreflight(strucdata, subdetail, shotinfo) {
+function parentPreflight(row, subdetail, shotinfo) {
 
     return new Promise(function (resolve, reject) {
-        console.log('Structure Data: ', strucdata);
+        console.log('Special Data: ', window.specials_data);
         console.log('Detail Data: ', subdetail);
         console.log('Shot Info Data: ', shotinfo);
+
+        //PARSE INFO INTO VARS
+        let foldername = subdetail.folder;
+        let parenttype = subdetail.parenttype;
+        let tasktype = subdetail.tasktype;
+
+        //THESE TWO VARS MAY CONTAIN TOKENS
+        let parentname = replaceTokens(subdetail.parentname, buildVarsFromUI(row));
+        let taskname = replaceTokens(subdetail.taskname, buildVarsFromUI(row));
+
+
         resolve(true)
     })
     
@@ -290,7 +301,7 @@ async function processParentItems(row, detaildata, currshot, selEnt) {
         let currparent = detaildata[x];
         console.log(currparent);
         
-        await parentPreflight(detaildata, currparent, currshot)
+        await parentPreflight(row, currparent, currshot)
         .then(parentres => {
 
             console.log(parentres);
