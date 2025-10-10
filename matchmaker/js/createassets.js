@@ -458,43 +458,62 @@ function parentPreflight(row, subdetail, shotinfo) {
 
 }
 
-function masterMatchMakerSequence(strucdata, specdata, prjid) {
+// function masterMatchMakerSequence(strucdata, specdata, prjid) {
 
-    return new Promise(function (resolve, reject) {
+//     return new Promise(function (resolve, reject) {
 
-        console.log(strucdata);
-        console.log(specdata);
-        console.log(prjid);
+//         console.log(strucdata);
+//         console.log(specdata);
+//         console.log(prjid);
 
-        let rowcollector = document.getElementById('rowcollection');
-        console.log(rowcollector.childElementCount);
+//         let rowcollector = document.getElementById('rowcollection');
+//         console.log(rowcollector.childElementCount);
 
-        if (rowcollector.childElementCount === 0) {
-            return reject(false);
-        }
+//         if (rowcollector.childElementCount === 0) {
+//             return reject(false);
+//         }
 
-        dataPreflight(strucdata, specdata, prjid)
-        .then(function(datares) {
+//         dataPreflight(strucdata, specdata, prjid)
+//         .then(function(datares) {
 
-            console.log(datares);
+//             console.log(datares);
             
-            return Promise.all([processRowItems(rowcollector, strucdata)])
+//             return Promise.all([processRowItems(rowcollector, strucdata)])
 
-        })
-        .then(function(rowprocresp) {
-            console.log(rowprocresp);
-        })
+//         })
+//         .then(function(rowprocresp) {
+//             console.log(rowprocresp);
+//         })
         
-    })
+//     })
 
     
+// }
+
+function masterMatchMakerSequence(strucdata, specdata, prjid) {
+  const rowcollector = document.getElementById('rowcollection');
+  if (!rowcollector) return Promise.reject(new Error('#rowcollection not found'));
+  if (rowcollector.childElementCount === 0) return Promise.reject(new Error('No rows to process'));
+
+  return dataPreflight(strucdata, specdata, prjid)
+    .then((datares) => {
+      console.log('preflight:', datares);
+      // If you only have one async job, no need for Promise.all
+      return processRowItems(rowcollector, strucdata);
+    })
+    .then((rowprocresp) => {
+      console.log('rows:', rowprocresp);
+      return rowprocresp; // propagate result
+    });
 }
 
 async function processRowItems(rowcollector, strucdata) {
 
     await fieldsPreflight(rowcollector)
     .then(async itemsres => {
+
         console.log(itemsres);
+
         if (itemsres.length > 0) {
 
             return itemsres
@@ -526,8 +545,6 @@ async function processRowItems(rowcollector, strucdata) {
             }
         }
     })
-
-    
 
 }
 
