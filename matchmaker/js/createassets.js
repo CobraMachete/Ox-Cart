@@ -307,6 +307,10 @@ function checkCreateTaskObj(taskname, tasktype, parentid, prjid) {
                 })
 
                 
+            } else {
+                
+                let thetask = taskresponse.data[0];
+                resolve(thetask.id);
             }
 
         })
@@ -477,6 +481,7 @@ async function processShotItems(row, strucdata, selEnt) {
             .then(async parentprocres => {
 
                 console.log(parentprocres);
+                return parentprocres
                 
             })
 
@@ -500,6 +505,7 @@ async function processParentItems(row, detaildata, currshot, selEnt) {
         .then(parentres => {
 
             console.log(parentres);
+            return parentres
 
         }).catch((errParent) => {
             console.log(errParent);
