@@ -173,7 +173,7 @@ async function fieldsPreflight(rowcont) {
         }
         
     }
-
+    console.log(missingitems);
     return missingitems
 
 }
@@ -494,7 +494,7 @@ async function processRowItems(rowcollector, strucdata) {
 
     await fieldsPreflight(rowcollector)
     .then(async itemsres => {
-
+        console.log(itemsres);
         if (itemsres.length > 0) {
 
             return itemsres
