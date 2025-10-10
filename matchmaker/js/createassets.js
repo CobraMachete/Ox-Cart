@@ -490,60 +490,49 @@ function parentPreflight(row, subdetail, shotinfo) {
     
 // }
 
-function masterMatchMakerSequence(strucdata, specdata, prjid) {
-  const rowcollector = document.getElementById('rowcollection');
-  if (!rowcollector) return Promise.reject(new Error('#rowcollection not found'));
-  if (rowcollector.childElementCount === 0) return Promise.reject(new Error('No rows to process'));
 
-  return dataPreflight(strucdata, specdata, prjid)
-    .then(async (datares) => {
-      console.log('preflight:', datares);
-      // If you only have one async job, no need for Promise.all
-      const rowProcess = await processRowItems(rowcollector, strucdata);
-      console.log(rowProcess);
-    })
+async function masterMatchMakerSequence(strucdata, specdata, prjid) {
+  const rowcollector = document.getElementById('rowcollection');
+  if (!rowcollector) throw new Error('#rowcollection not found');
+  if (rowcollector.childElementCount === 0) throw new Error('No rows to process');
+
+  const datares = await dataPreflight(strucdata, specdata, prjid);
+  console.log('preflight:', datares);
+
+  const rowProcess = await processRowItems(rowcollector, strucdata);
+  console.log('rowProcess:', rowProcess);
+
+  return rowProcess; // <-- important
 }
+
 
 async function processRowItems(rowcollector, strucdata) {
+  const itemsres = await fieldsPreflight(rowcollector);
 
-    await fieldsPreflight(rowcollector)
-    .then(async itemsres => {
+  // If fieldsPreflight already produced items, return them
+  if (Array.isArray(itemsres) && itemsres.length > 0) {
+    return itemsres; // <-- returns from processRowItems
+  }
 
-        console.log(itemsres);
+  // Otherwise process rows one by one
+  const results = [];
+  for (const currrow of Array.from(rowcollector.children)) {
+    try {
+      const rowres = await rowPreflight(currrow);
+      if (rowres !== false) {
+        // Make sure processShotItems itself returns something useful
+        const procres = await processShotItems(currrow, strucdata, SELECTED_ENTITY);
+        results.push(procres);
+      }
+    } catch (errRow) {
+      console.log('row error:', errRow);
+      // decide if you want to push a placeholder or skip
+    }
+  }
 
-        if (itemsres.length > 0) {
-
-            return itemsres
-
-        } else {
-
-            for (let x = 0; x < rowcollector.childElementCount; x++) {
-
-                let currrow = rowcollector.children[x];
-                console.log(currrow);
-                await rowPreflight(currrow)
-                .then(async rowres => {
-
-                    console.log(rowres);
-                    if (rowres != false) {
-                        console.log('Sending to shots...');
-                        await processShotItems(currrow, strucdata, SELECTED_ENTITY)
-                        .then(function(procres) {
-                            
-                            console.log('All Done')
-                            return true
-                        })
-                    }
-                }).catch((errRow) => {
-                    console.log(errRow);
-                    return false
-                });
-
-            }
-        }
-    })
-
+  return results; // <-- always return something (even empty array)
 }
+
 
 async function processShotItems(row, strucdata, selEnt) {
 
