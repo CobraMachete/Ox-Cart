@@ -161,7 +161,7 @@ function shotPreflight(strucdata, selEnt) {
                         });                        
 
                     } else {
-
+                        console.log(shotresponse);
                         resolve(shotresponse.data[0])
                     }
 
@@ -185,6 +185,14 @@ function shotPreflight(strucdata, selEnt) {
 }
 
 function parentPreflight(strucdata, subdetail, shotinfo) {
+
+    return new Promise(function (resolve, reject) {
+        console.log('Structure Data: ', strucdata);
+        console.log('Detail Data: ', subdetail);
+        console.log('Shot Info Data: ', shotinfo);
+        resolve(true)
+    })
+    
 
 }
 
@@ -250,12 +258,40 @@ async function processShotItems(row, strucdata, selEnt) {
         let currshot = strucdata[x];
         console.log(currshot);
         await shotPreflight(currshot, selEnt)
-        .then(shotres => {
+        .then(async shotres => {
 
             console.log(shotres);
 
+            await processParentItems(row, strucdata, currshot, selEnt)
+            .then(async parentprocres => {
+
+                console.log(parentprocres);
+                
+            })
+
         }).catch((errShot) => {
             console.log(errShot);
+            return false
+        });
+
+    }
+
+}
+
+async function processParentItems(row, strucdata, currshot, selEnt) {
+
+    for (let x = 0; x < strucdata.details.length; x++) {
+
+        let currparent = strucdata.details[x];
+        console.log(currparent);
+        
+        await parentPreflight(strucdata, currparent, currshot)
+        .then(parentres => {
+
+            console.log(parentres);
+
+        }).catch((errParent) => {
+            console.log(errParent);
             return false
         });
 
