@@ -224,11 +224,14 @@ async function processRowItems(rowcollector, strucdata) {
         let currrow = rowcollector.children[x];
         console.log(currrow);
         await rowPreflight(currrow)
-        .then(rowres => {
+        .then(async rowres => {
 
             console.log(rowres);
             if (rowres === true) {
-
+                await processShotItems()
+                .then(function(procres) {
+                    console.log('All Done')
+                })
             }
         }).catch((errRow) => {
             console.log(errRow);
