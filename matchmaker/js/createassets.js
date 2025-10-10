@@ -268,7 +268,7 @@ function checkCreateTaskObj(taskname, tasktype, parentid, prjid) {
     return new Promise(function (resolve, reject) {
 
         
-        session.query('select id, name from Task where name is "' + taskname + '" and type.nam is "' + tasktype + '" and parent_id is "' + parentid + '"')
+        session.query('select id, name from Task where name is "' + taskname + '" and type.name is "' + tasktype + '" and parent_id is "' + parentid + '"')
         .then(function (taskresponse) {
 
             console.log(taskresponse);
@@ -317,10 +317,7 @@ function checkCreateTaskObj(taskname, tasktype, parentid, prjid) {
 function getTaskTypeId(tasktype) {
 
     return new Promise(function (resolve, reject) {
-        const q = `select id, name
-        from Type
-        where name is "${tasktype}" and object_type.name is "Task"
-        limit 1`;
+        const q = `select id, name from Type where name is "${tasktype}" and object_type.name is "Task" limit 1`;
 
         session.query(q).then(({ data }) => {
             const t = data[0];
