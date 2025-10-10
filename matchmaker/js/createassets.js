@@ -246,7 +246,7 @@ async function processShotItems(row, strucdata, selEnt) {
 
     for (let x = 0; x < strucdata.length; x++) {
 
-        let currshotobj = strucdata[x];
+        let currshot = strucdata[x];
         console.log(currshot);
         await shotPreflight(currshot, selEnt)
         .then(shotres => {
