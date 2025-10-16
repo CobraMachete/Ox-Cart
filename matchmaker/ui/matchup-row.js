@@ -190,6 +190,7 @@ export class MatchupRow extends HTMLElement {
     this._riveInputs = null;      // cached inputs
     this._resizeObs = null;
     this._riveBox = this.getAttribute('rive-box') || 'padding'; 
+    this._pendingInputs = [];
 
     // Configurable via attributes if you want
     this._riveSrc = this.getAttribute('rive-src') || 'https://cobramachete.github.io/Ox-Cart/matchmaker/rive/matchmaker_loading.riv';
@@ -299,11 +300,13 @@ export class MatchupRow extends HTMLElement {
       }),
       onLoad: () => {
         try {
-          // Cache inputs once loaded
           this._riveInputs = this._rive.stateMachineInputs(this._riveStateMachine) || [];
-          console.log(this._riveInputs);
-        } catch (e) {
-          console.warn('[MatchupRow] Could not cache state machine inputs:', e);
+        } catch (e) { console.warn('[MatchupRow] Could not cache inputs:', e); }
+
+        // Flush any queued inputs
+        if (this._pendingInputs?.length) {
+          for (const {name, value} of this._pendingInputs) this.riveSetInput(name, value);
+          this._pendingInputs.length = 0;
         }
 
         // Forward Rive runtime events as DOM CustomEvents per row
@@ -436,7 +439,7 @@ export class MatchupRow extends HTMLElement {
     // safe-fire input if/when SM exists
     this._getInput('start_loader')?.fire?.();
   }
-  
+
   riveStop(){ this._getInput('stop_loader')?.fire?.(); }
   riveError(){ this._getInput('hasErr')?.fire?.(); }
   riveClose(){ // play close + hide
@@ -485,26 +488,28 @@ export class MatchupRow extends HTMLElement {
     }));
   }
   riveSetInput(name, value){
+    // If inputs not ready yet, queue it
+    if (!this._riveInputs || !this._riveInputs.length) {
+      this._pendingInputs.push({ name, value });
+      return false;
+    }
     const i = this._getInput(name);
     if (!i) { console.warn(`[Rive] input "${name}" not found`); return false; }
 
-    // If it's a Trigger and caller passed true/"fire", fire it
     if (typeof i.fire === 'function' && (value === true || value === 'fire' || value === undefined)) {
       i.fire(); return true;
     }
-
-    // Otherwise if it looks like a boolean/number input with .value, set it
     if ('value' in i) {
-      if (typeof value === 'boolean') { i.value = value; return true; }
-      if (typeof value === 'number')  { i.value = value; return true; }
+      if (typeof value === 'boolean' || typeof value === 'number') { i.value = value; return true; }
     }
-
-    console.warn('[Rive] Unsupported input/value combination:', { name, i, value });
+    console.warn('[Rive] Unsupported input/value combination:', { name, value, i });
     return false;
   }
+
   riveFire(name){ return this.riveSetInput(name, 'fire'); }
   riveSetBool(name, bool){ return this.riveSetInput(name, !!bool); }
   riveSetNumber(name, num){ return this.riveSetInput(name, Number(num)); }
+
 
 
   /* ---------- Public properties / API ---------- */
