@@ -505,9 +505,9 @@ async function processRowItems(rowcollector, strucdata) {
 		const { name, data, row } = e.detail;
 		console.log('[riveevent]', name, data, row);
 		if (name == 'txtALoop') {
-			randomLooperPhrase(row, 'txtBLoop')
+			randomLooperPhrase(row, 'RunLoopB')
 		} else {
-			randomLooperPhrase(row, 'txtALoop')
+			randomLooperPhrase(row, 'RunLoopA')
 		}
 	});
 	
@@ -527,7 +527,7 @@ async function processRowItems(rowcollector, strucdata) {
 			// 1) ensure previous row's overlay is off (animation finished)
 			await waitForOverlayOff(prevRow);
 			// 2) plus an extra 2s pause before starting the next row
-			await sleep(2000);
+			await sleep(1200);
 			
 			// Now we can center the next row and start its rive
 			scrollChildIntoCenter(rowcollector, currrow);
