@@ -501,7 +501,8 @@ async function processRowItems(rowcollector, strucdata) {
 			}
 
 			await customElements.whenDefined('matchup-row');
-			currrow.riveFire('start_loader')
+			currrow.riveStart();
+			currrow.riveFire('start_loader');
 			console.log('riveStart called for row:', currrow.id || '(no id)');
 
 			// optionally verify overlay actually toggled
