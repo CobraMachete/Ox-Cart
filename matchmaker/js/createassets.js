@@ -522,8 +522,8 @@ async function processRowItems(rowcollector, strucdata) {
 				console.warn('Skipping non-upgraded row:', currrow);
 				continue;
 			}
-			randomLooperPhrase(row, 'RunLoopA');
-			randomLooperPhrase(row, 'RunLoopB');
+			randomLooperPhrase(currrow, 'RunLoopA');
+			randomLooperPhrase(currrow, 'RunLoopB');
 			// ── throttle & sequencing ──────────────────────────────────────
 			// 1) ensure previous row's overlay is off (animation finished)
 			await waitForOverlayOff(prevRow);
