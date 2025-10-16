@@ -491,7 +491,8 @@ async function processRowItems(rowcollector, strucdata) {
 	let rowCounter = 0;
 	// Otherwise process rows one by one
 	const results = [];
-	for (const currrow of Array.from(rowcollector.children)) {
+	const rows = rowcollector.querySelectorAll('matchup-row');
+	for (const currrow of rows) {
 		try {
 			// make sure we’re talking to the custom element
 			if (typeof currrow.riveStart !== 'function') {
@@ -499,7 +500,8 @@ async function processRowItems(rowcollector, strucdata) {
 			continue;
 			}
 
-			currrow.riveStart();
+			await customElements.whenDefined('matchup-row');
+			currrow.riveFire('start_loader')
 			console.log('riveStart called for row:', currrow.id || '(no id)');
 
 			// optionally verify overlay actually toggled
