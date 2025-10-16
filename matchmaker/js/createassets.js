@@ -601,31 +601,22 @@ async function processParentItems(row, detaildata, currshot, selEnt) {
 }
 
 function randomLooperPhrase(row, txtRun) {
-
-		return new Promise(function (resolve, reject) {
-
-			const phraseArr = [
-			"Swiping Right...",
-			"Sharpening Rizz...",
-			"Sliding into DMs...",
-			"Padding Profile...",
-			"Honing Stats...",
-			"Checking chemistry...",
-			"Passing Vibe Checks...",
-			"Meeting For Coffee...",
-			"Checking Horoscope...",
-			"Evaluating Compatibility",
-			"Making a move..."
-		]
-		
-		let nextPhrase = randomItem(phraseArr);
-		console.log("Next phrase is: ", nextPhrase);
-		row.riveSetText(txtRun, nextPhrase);
-		
-	})
-	
-	
-	
+  const phraseArr = [
+    "Swiping Right...",
+    "Sharpening Rizz...",
+    "Sliding into DMs...",
+    "Padding Profile...",
+    "Honing Stats...",
+    "Checking chemistry...",
+    "Passing Vibe Checks...",
+    "Meeting For Coffee...",
+    "Checking Horoscope...",
+    "Evaluating Compatibility",
+    "Making a move..."
+  ];
+  const nextPhrase = randomItem(phraseArr) ?? "";
+  console.log("Next phrase is:", nextPhrase);
+  row?.riveSetText?.(txtRun, nextPhrase);
 }
 
 async function setDetailsTxtRuntime(row, hasSuccess) {
@@ -646,15 +637,13 @@ async function setDetailsTxtRuntime(row, hasSuccess) {
 
 
 
-// Random INDEX (or -1 if empty / not an array)
-async function randomIndex(arr) {
-	return Array.isArray(arr) && arr.length ? Math.floor(Math.random() * arr.length) : -1;
+function randomIndex(arr) {
+  return Array.isArray(arr) && arr.length ? Math.floor(Math.random() * arr.length) : -1;
 }
 
-// Random VALUE (or undefined if empty / not an array)
-async function randomItem(arr) {
-	const i = randomIndex(arr);
-	return i === -1 ? undefined : arr[i];
+function randomItem(arr) {
+  const i = randomIndex(arr);
+  return i === -1 ? undefined : arr[i];
 }
 
 
