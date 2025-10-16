@@ -426,13 +426,17 @@ export class MatchupRow extends HTMLElement {
   }
 
   // Public triggers (name these to match your SM inputs)
-  riveStart(){   // show + kick off
-    this._ensureRive();
-    if (!this._rive) return;
+  riveStart(){
+    // show overlay first so user sees feedback immediately
     this._els.riveOverlay.classList.add('is-on');
     this._els.riveOverlay.setAttribute('aria-hidden', 'false');
+
+    // try to ensure rive; if runtime not present, we still keep overlay on
+    this._ensureRive();
+    // safe-fire input if/when SM exists
     this._getInput('start_loader')?.fire?.();
   }
+  
   riveStop(){ this._getInput('stop_loader')?.fire?.(); }
   riveError(){ this._getInput('hasErr')?.fire?.(); }
   riveClose(){ // play close + hide

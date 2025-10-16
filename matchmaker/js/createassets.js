@@ -493,94 +493,78 @@ async function processRowItems(rowcollector, strucdata) {
 	const results = [];
 	for (const currrow of Array.from(rowcollector.children)) {
 		try {
+			// make sure we’re talking to the custom element
+			if (typeof currrow.riveStart !== 'function') {
+			console.warn('Skipping item, not a matchup-row or not upgraded yet:', currrow);
+			continue;
+			}
+
+			currrow.riveStart();
+			console.log('riveStart called for row:', currrow.id || '(no id)');
+
+			// optionally verify overlay actually toggled
+			const ov = currrow.shadowRoot?.getElementById?.('riveOverlay');
+			console.log('overlay on?', ov?.classList?.contains('is-on'));
+
+			// ... then your existing logic
 			const rowres = await rowPreflight(currrow);
 			if (rowres !== false) {
-				currrow.riveStart(); 
-				rowCounter++;
-				console.log('Currently handling row number ', rowCounter);
+			scrollChildIntoCenter(rowcollector, currrow);
 
-				// SCROLL ROW ITEM TO VISIBLE AREA
-				scrollChildIntoCenter(rowcollector, currrow);
-				
-				const procres = await processShotItems(currrow, strucdata, SELECTED_ENTITY);
-				results.push(procres);
+			const procres = await processShotItems(currrow, strucdata, SELECTED_ENTITY);
+			results.push(procres);
 
-				currrow.riveSetBool('isSuccessful', true);
-				await setDetailsTxtRuntime(currrow, true);
-				currrow.riveStop(); 
-
-				// currrow.classList.add('dimrow');
+			currrow.riveSetBool?.('isSuccessful', true);
+			await setDetailsTxtRuntime(currrow, true);
+			currrow.riveStop?.();
 			}
 		} catch (errRow) {
 			console.log('row error:', errRow);
-			let failSelectArr = [0,1,2];
-			let failSelection = await randomItem(failSelectArr);
-			currrow.riveSetNumber('EndHeroFail', failSelection);
-			currrow.riveSetBool('isSuccessful', false);
+			// defensive: only call rive APIs if present
+			currrow.riveSetNumber?.('EndHeroFail', await randomItem([0,1,2]));
+			currrow.riveSetBool?.('isSuccessful', false);
 			await setDetailsTxtRuntime(currrow, false);
-			currrow.riveFire('stop_loader'); 
-
-			// decide if you want to push a placeholder or skip
+			currrow.riveFire?.('stop_loader');
 		}
-	}
+		}
+
 	
 	return results; // <-- always return something (even empty array)
 }
 
 
 async function processShotItems(row, strucdata, selEnt) {
-	
-	for (let x = 0; x < strucdata.length; x++) {
-		
-		let currshot = strucdata[x];
-		console.log(currshot);
-		await shotPreflight(currshot, selEnt)
-		.then(async shotres => {
-			
-			console.log(shotres);
-			let shotid = shotres.id;
-			let currshotname = shotres.name;
-			
-			console.log(strucdata[x].details);
-			let detaildata = strucdata[x].details;
-			
-			await processParentItems(row, detaildata, shotid, selEnt)
-			.then(async parentprocres => {
-				
-				console.log(parentprocres);
-				return parentprocres
-				
-			})
-			
-		}).catch((errShot) => {
-			console.log(errShot);
-			return false
-		});
-		
-	}
-	
+  const out = [];
+  for (const currshot of strucdata || []) {
+    try {
+      const shotres = await shotPreflight(currshot, selEnt);   // {id,name,...}
+      console.log('shotres:', shotres);
+
+      const detaildata = currshot.details || [];
+      const parentResults = await processParentItems(row, detaildata, shotres.id, selEnt);
+
+      out.push({ shot: shotres, parents: parentResults });     // keep what you need
+    } catch (errShot) {
+      console.log(errShot);
+      out.push({ shot: false, parents: [] });
+    }
+  }
+  return out;                           // <<— IMPORTANT: return something
 }
 
 async function processParentItems(row, detaildata, currshot, selEnt) {
-	
-	for (let x = 0; x < detaildata.length; x++) {
-		
-		let currparent = detaildata[x];
-		console.log(currparent);
-		
-		await parentPreflight(row, currparent, currshot)
-		.then(parentres => {
-			
-			console.log(parentres);
-			return parentres
-			
-		}).catch((errParent) => {
-			console.log(errParent);
-			return false
-		});
-		
-	}
-	
+  const out = [];
+  for (const currparent of detaildata || []) {
+    try {
+      const parentres = await parentPreflight(row, currparent, currshot);
+      console.log('parentres:', parentres);
+      out.push(parentres);
+    } catch (errParent) {
+      console.log(errParent);
+      out.push(false);                 // or skip push if you prefer
+    }
+  }
+  return out;                          // <<— IMPORTANT: return something
 }
 
 async function randomLooperPhrase(row, txtRun) {
