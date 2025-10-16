@@ -505,9 +505,9 @@ async function processRowItems(rowcollector, strucdata) {
 		const { name, data, row } = e.detail;
 		console.log('[riveevent]', name, data, row);
 		if (name == 'txtALoop') {
-			randomLooperPhrase(row, 'RunLoopB')
-		} else {
 			randomLooperPhrase(row, 'RunLoopA')
+		} else {
+			randomLooperPhrase(row, 'RunLoopB')
 		}
 	});
 	
@@ -522,7 +522,8 @@ async function processRowItems(rowcollector, strucdata) {
 				console.warn('Skipping non-upgraded row:', currrow);
 				continue;
 			}
-			
+			randomLooperPhrase(row, 'RunLoopA');
+			randomLooperPhrase(row, 'RunLoopB');
 			// ── throttle & sequencing ──────────────────────────────────────
 			// 1) ensure previous row's overlay is off (animation finished)
 			await waitForOverlayOff(prevRow);
@@ -599,26 +600,33 @@ async function processParentItems(row, detaildata, currshot, selEnt) {
 	return out;                          // <<— IMPORTANT: return something
 }
 
-async function randomLooperPhrase(row, txtRun) {
+function randomLooperPhrase(row, txtRun) {
+
+		return new Promise (resolve => {
+			const phraseArr = [
+			"Swiping Right...",
+			"Sharpening Rizz...",
+			"Sliding into DMs...",
+			"Padding Profile...",
+			"Honing Stats...",
+			"Checking chemistry...",
+			"Passing Vibe Checks...",
+			"Meeting For Coffee...",
+			"Checking Horoscope...",
+			"Evaluating Compatibility",
+			"Making a move..."
+		]
+		
+		randomItem(phraseArr)
+		.then(nextPhrase => {
+			row.riveSetText(txtRun, nextPhrase);
+			resolve(true)
+		});
+		
+		
+	})
 	
-	const phraseArr = [
-		"Swiping Right...",
-		"Sharpening Rizz...",
-		"Sliding into DMs...",
-		"Padding Profile...",
-		"Honing Stats...",
-		"Checking chemistry...",
-		"Passing Vibe Checks...",
-		"Meeting For Coffee...",
-		"Checking Horoscope...",
-		"Evaluating Compatibility",
-		"Making a move..."
-	]
 	
-	let nextPhrase = await randomItem(phraseArr);
-	
-	row.riveSetText(txtRun, nextPhrase);
-	return
 	
 }
 
