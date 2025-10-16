@@ -301,6 +301,7 @@ export class MatchupRow extends HTMLElement {
         try {
           // Cache inputs once loaded
           this._riveInputs = this._rive.stateMachineInputs(this._riveStateMachine) || [];
+          console.log(this._riveInputs);
         } catch (e) {
           console.warn('[MatchupRow] Could not cache state machine inputs:', e);
         }
@@ -441,6 +442,7 @@ export class MatchupRow extends HTMLElement {
       this._els.riveOverlay.setAttribute('aria-hidden', 'true');
     }, 200);
   }
+
   riveSuccess(){
     const i = this._getInput('isSuccessful');
     if (!i) { console.warn(`[Rive] input "${'isSuccessful'}" not found`); return; }
