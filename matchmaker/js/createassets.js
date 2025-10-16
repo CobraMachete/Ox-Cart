@@ -517,7 +517,7 @@ async function processRowItems(rowcollector, strucdata) {
 			const procres = await processShotItems(currrow, strucdata, SELECTED_ENTITY);
 			results.push(procres);
 
-			currrow.riveSetBool?.('isSuccessful', true);
+			currrow.riveSuccess();
 			await setDetailsTxtRuntime(currrow, true);
 			currrow.riveStop?.();
 			}
