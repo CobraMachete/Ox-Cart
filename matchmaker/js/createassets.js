@@ -505,9 +505,9 @@ async function processRowItems(rowcollector, strucdata) {
 		const { name, data, row } = e.detail;
 		console.log('[riveevent]', name, data, row);
 		if (name == 'txtALoop') {
-			randomLooperPhrase(row, 'RunLoopA')
-		} else {
-			randomLooperPhrase(row, 'RunLoopB')
+			randomLooperPhrase(row, "RunLoopA")
+		} else if (name == 'txtBLoop'){
+			randomLooperPhrase(row, "RunLoopB")
 		}
 	});
 	
@@ -522,8 +522,8 @@ async function processRowItems(rowcollector, strucdata) {
 				console.warn('Skipping non-upgraded row:', currrow);
 				continue;
 			}
-			randomLooperPhrase(currrow, 'RunLoopA');
-			randomLooperPhrase(currrow, 'RunLoopB');
+			randomLooperPhrase(currrow, "RunLoopA");
+			randomLooperPhrase(currrow, "RunLoopB");
 			// ── throttle & sequencing ──────────────────────────────────────
 			// 1) ensure previous row's overlay is off (animation finished)
 			await waitForOverlayOff(prevRow);
@@ -619,6 +619,7 @@ function randomLooperPhrase(row, txtRun) {
 		
 		randomItem(phraseArr)
 		.then(nextPhrase => {
+			console.log("Next phrase is: ", nextPhrase);
 			row.riveSetText(txtRun, nextPhrase);
 			resolve(true)
 		});
