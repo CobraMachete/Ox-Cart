@@ -433,7 +433,7 @@ function parentPreflight(row, subdetail, shotinfo) {
 							checkCreateTaskObj(taskname, tasktype, themultiobj, PRJ_ID)
 							.then(function(thetask) {
 								console.log(thetask);
-								resolve(thetask)
+								return resolve(thetask)
 							})
 						}
 						
@@ -444,11 +444,11 @@ function parentPreflight(row, subdetail, shotinfo) {
 					checkCreateTaskObj(taskname, tasktype, thefolder, PRJ_ID)
 					.then(function(thetask) {
 						console.log(thetask);
-						resolve(thetask)
+						return resolve(thetask)
 					})
 				}
 			} else {
-				reject(false)
+				return reject(false)
 			}
 			
 		})
