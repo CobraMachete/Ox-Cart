@@ -500,7 +500,7 @@ async function processRowItems(rowcollector, strucdata) {
 
 				// SCROLL ROW ITEM TO VISIBLE AREA
 				scrollChildIntoCenter(rowcollector, currrow);
-				currrow.startRive(); 
+				currrow.riveStart(); 
 				const procres = await processShotItems(currrow, strucdata, SELECTED_ENTITY);
 				results.push(procres);
 
