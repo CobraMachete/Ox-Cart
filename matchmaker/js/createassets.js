@@ -500,20 +500,20 @@ async function processRowItems(rowcollector, strucdata) {
 
 				// SCROLL ROW ITEM TO VISIBLE AREA
 				scrollChildIntoCenter(rowcollector, currrow);
-				currrow.riveFire('start_loader'); 
+				currrow.startRive(); 
 				const procres = await processShotItems(currrow, strucdata, SELECTED_ENTITY);
 				results.push(procres);
 
 				currrow.riveSetBool('isSuccessful', true);
 				await setDetailsTxtRuntime(currrow, true);
-				currrow.riveFire('stop_loader'); 
+				currrow.riveStop(); 
 
 				currrow.classList.add('dimrow');
 			}
 		} catch (errRow) {
 			console.log('row error:', errRow);
 			let failSelectArr = [0,1,2];
-			let failSelection = await randomItem(arr);
+			let failSelection = await randomItem(failSelectArr);
 			currrow.riveSetNumber('EndHeroFail', failSelection);
 			currrow.riveSetBool('isSuccessful', false);
 			await setDetailsTxtRuntime(currrow, false);
@@ -608,11 +608,11 @@ async function setDetailsTxtRuntime(row, hasSuccess) {
 
 	let awayCode = row.awayTricode;
 	let homeCode = row.homeTricode;
-
+	let txtDetail = '';
 	if (hasSuccess == true) {
-		let txtDetail = awayCode + " vs " + homeCode + " was created successfully!"
+		txtDetail = awayCode + " vs " + homeCode + " was created successfully!"
 	} else {
-		let txtDetail = "Devastation! " + awayCode + " vs " + homeCode + " creation failed."
+		txtDetail = "Devastation! " + awayCode + " vs " + homeCode + " creation failed."
 	}
 
 	row.riveSetText('ResultDetailsTxt', txtDetail);
