@@ -504,6 +504,11 @@ async function processRowItems(rowcollector, strucdata) {
 	document.addEventListener('riveevent', (e) => {
 		const { name, data, row } = e.detail;
 		console.log('[riveevent]', name, data, row);
+		if (name == 'txtALoop') {
+			randomLooperPhrase(row, 'txtBLoop')
+		} else {
+			randomLooperPhrase(row, 'txtALoop')
+		}
 	});
 	
 	const results = [];
@@ -613,6 +618,7 @@ async function randomLooperPhrase(row, txtRun) {
 	let nextPhrase = await randomItem(phraseArr);
 	
 	row.riveSetText(txtRun, nextPhrase);
+	return
 	
 }
 
