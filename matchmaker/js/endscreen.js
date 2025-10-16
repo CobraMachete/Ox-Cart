@@ -8,7 +8,7 @@ function computeSize() {
 function initRive() {
 
     var rivinst = new rive.Rive({
-        src: "rive/matchmaker_loading.riv",
+        src: "https://cobramachete.github.io/Ox-Cart/matchmaker/rive/matchmaker_loading.riv",
         canvas: document.getElementById("canvas"),
         autoplay: true,
         artboard: "mm_loader",

@@ -192,7 +192,7 @@ export class MatchupRow extends HTMLElement {
     this._riveBox = this.getAttribute('rive-box') || 'padding'; 
 
     // Configurable via attributes if you want
-    this._riveSrc = this.getAttribute('rive-src') || 'rive/matchmaker_loading.riv';
+    this._riveSrc = this.getAttribute('rive-src') || 'https://cobramachete.github.io/Ox-Cart/matchmaker/rive/matchmaker_loading.riv';
     this._riveArtboard = this.getAttribute('rive-artboard') || 'mm_loader';
     this._riveStateMachine = this.getAttribute('rive-sm') || 'State Machine 1';
 
