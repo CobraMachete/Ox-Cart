@@ -495,12 +495,13 @@ async function processRowItems(rowcollector, strucdata) {
 		try {
 			const rowres = await rowPreflight(currrow);
 			if (rowres !== false) {
+				currrow.riveStart(); 
 				rowCounter++;
 				console.log('Currently handling row number ', rowCounter);
 
 				// SCROLL ROW ITEM TO VISIBLE AREA
 				scrollChildIntoCenter(rowcollector, currrow);
-				currrow.riveStart(); 
+				
 				const procres = await processShotItems(currrow, strucdata, SELECTED_ENTITY);
 				results.push(procres);
 
@@ -508,7 +509,7 @@ async function processRowItems(rowcollector, strucdata) {
 				await setDetailsTxtRuntime(currrow, true);
 				currrow.riveStop(); 
 
-				currrow.classList.add('dimrow');
+				// currrow.classList.add('dimrow');
 			}
 		} catch (errRow) {
 			console.log('row error:', errRow);
