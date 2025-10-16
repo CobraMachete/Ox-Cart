@@ -535,7 +535,9 @@ async function processRowItems(rowcollector, strucdata) {
 
 			randomLooperPhrase(currrow, "RunLoopA");
 			randomLooperPhrase(currrow, "RunLoopB");
-			
+
+			await sleep(200);
+
 			currrow.riveFire('start_loader'); // safe even if queued internally
 			console.log('riveStart for row:', currrow.id || '(no id)');
 			
@@ -614,8 +616,25 @@ function randomLooperPhrase(row, txtRun) {
     "Passing Vibe Checks...",
     "Meeting For Coffee...",
     "Checking Horoscope...",
-    "Evaluating Compatibility",
-    "Making a move..."
+    "Evaluating Compatibility...",
+    "Making a move...",
+	"Double-tapping Profiles...",
+	"Finding Mutuals...",
+	"Curating the Perfect Bio...",
+	"Adjusting Filters...",
+	"Sending the First Message...",
+	"Waiting on a Reply...",
+	"Breaking the Ice...",
+	"Checking for Red Flags...",
+	"Syncing Playlists...",
+  	"Matching Energy...",
+	"Running Background Checks...",
+  	"Reworking Pickup Lines...",
+  	"Updating Relationship Status...",
+	"Flirting with Disaster...",
+	"Blocking Exes...",
+	"Waiting for a Sign...",
+	"Sparking Interest..."
   ];
   const nextPhrase = randomItem(phraseArr) ?? "";
   console.log("Next phrase is:", nextPhrase);
