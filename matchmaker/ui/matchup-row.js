@@ -1,39 +1,59 @@
-// Matchup Row Web Component
-// Encapsulates the provided UI (away/home search, vs, specials, date field)
-// and exposes clean getters/setters + events.
-//
-// Usage:
-//   import './matchup-row.js';
-//   const el = document.querySelector('matchup-row');
-//   el.curatedTeams = [ 'Arizona State', 'Hawaii', ... ];
-//   el.parseTeamString = async (s) => ({ code: 'ASU', name: 'Arizona State' });
-//   el.icons = [{icon: './img/sunny.svg', state: 'Day'}, {icon: './img/moon_stars.svg', state: 'Night'}];
-//   el.addEventListener('rowchange', (e) => console.log(e.detail));
+// matchup-row.js
+// Requires Rive runtime loaded globally as window.rive
 
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = `
   <link rel="stylesheet" href="css/theme-dark.css" />
   <style>
     :host{ display:block }
-    /* Ensure our container inherits your existing layout classes */
-    /* Minimal safe defaults if external CSS fails */
-    .main-col-container{ position: relative; width:calc(1280px*.85); margin:0 auto; border-radius:2rem; border:1px solid rgba(255,255,255,.2); display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 2px 5px 40px 5px rgba(0, 0, 0, .3);}
-    .main-row-container{ display:flex; gap:1rem; justify-content:center; align-items:stretch; margin:.5rem 0 1rem; }
-    .awayteam-container,.hometeam-container{ width:25%; display:flex; flex-direction:column; align-items:center; }
-    .vs-container{ width:8%; display:flex; flex-direction:column; align-items:center; }
-    .bottom-row-container{ display:flex; align-items:center; justify-content:center; gap:1.5rem; width:100%; max-width:50%; margin:.5rem auto 0; padding:0; border-top:1px solid rgba(255,255,255,.15) }
 
+    .main-col-container{
+      position: relative;        /* overlay anchor + stacking context */
+      width: calc(1280px * .85);
+      margin: 0 auto;
+      border-radius: 2rem;
+      border: 1px solid rgba(255,255,255,.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 2px 5px 40px 5px rgba(0, 0, 0, .3);
+      overflow: visible;
+    }
+
+    /* Full-cover overlay centered; paints above corner button */
+    .rive-overlay{
+      position: absolute;
+      inset: 0;
+      display: none;              /* hidden by default */
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;              /* higher than corner */
+      pointer-events: none;       /* don't catch clicks while hidden */
+    }
+    .rive-overlay.is-on{
+      display: flex;
+      pointer-events: auto;       /* blocks UI when visible */
+    }
+
+    /* Canvas fills the overlay; bitmap size is set from JS */
+    #riveCanvas{
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 2rem;
+    }
+
+    /* Corner button (kept below overlay by z-index) */
     .corner-top-right{
       position: absolute;
       top: var(--corner-top, .5rem);
       right: var(--corner-right, .5rem);
-      z-index: 2;                            /* above tables, etc. */
-      pointer-events: none;                  /* wrapper ignores clicks */
+      z-index: 2;
+      pointer-events: none;
     }
     .corner-top-right ::slotted(*),
-    .corner-btn{
-      pointer-events: auto;                  /* the actual control is clickable */
-    }
+    .corner-btn{ pointer-events:auto; }
     .corner-btn{
       display: inline-flex;
       align-items: center;
@@ -46,26 +66,25 @@ TEMPLATE.innerHTML = `
       content: url("./img/close.svg");
       opacity: .65;
     }
-    .corner-btn:hover{ opacity: 1; }
-    .corner-btn:active{ transform: translateY(1px) scale(.95); }
+    .corner-btn:hover{ opacity:1 }
+    .corner-btn:active{ transform: translateY(1px) scale(.95) }
     .corner-btn:focus-visible{ outline: 2px solid #3b82f6; outline-offset: 2px; }
 
-    /* expose for outside styling if you like */
-    .corner-btn{ /* part hook set below */ }
+    .main-row-container{ display:flex; gap:1rem; justify-content:center; align-items:stretch; margin:.5rem 0 1rem; }
+    .awayteam-container,.hometeam-container{ width:25%; display:flex; flex-direction:column; align-items:center; }
+    .vs-container{ width:8%; display:flex; flex-direction:column; align-items:center; }
+    .bottom-row-container{ display:flex; align-items:center; justify-content:center; gap:1.5rem; width:100%; max-width:50%; margin:.5rem auto 0; padding:0; border-top:1px solid rgba(255,255,255,.15) }
 
-    /* Flip animation support if the theme file isn't present */
     .specials-container { perspective: 800px; }
     .icon-rotator{ display:inline-block; width:3rem; height:3rem; transform: rotateX(0deg); transition: transform 240ms ease; backface-visibility:hidden; -webkit-backface-visibility:hidden; }
     .specials-icon{ width:100%; height:100%; display:block; outline:none!important; border:none!important; box-shadow:none!important; -webkit-tap-highlight-color:transparent; cursor:pointer; }
 
-    /* Inline dropdown table (shadow-safe) */
     .shot-search-bar{ position:relative; width:100%; }
-    table.custom-table{ position:absolute; top:calc(100% + .25rem); left:0; right:0; z-index:1000; display:none; width:100%; max-height:16rem; overflow:auto; background:#192129; border:1px solid rgba(217,217,217,.12); border-radius:.5rem; box-shadow:0 8px 24px rgba(0,0,0,.2); margin:0; border-collapse:collapse; table-layout:fixed; }
+    table.custom-table{ position:absolute; top:calc(100% + .25rem); left:0; right:0; z-index:20; display:none; width:100%; max-height:16rem; overflow:auto; background:#192129; border:1px solid rgba(217,217,217,.12); border-radius:.5rem; box-shadow:0 8px 24px rgba(0,0,0,.2); margin:0; border-collapse:collapse; table-layout:fixed; }
     table.custom-table.is-open{ display:table; }
     table.custom-table thead th{ position:sticky; top:0; background:#192129; color:rgba(235,235,235,.9); font-weight:800; font-size:16px; text-align:left; padding:12px 15px; user-select:none; z-index:1; }
     table.custom-table tbody td{ color:rgba(235,235,235,.6); font-weight:400; font-size:1.25rem; text-align:left; vertical-align:middle; padding:1rem 15px; background:transparent; border-bottom:1px solid rgba(217,217,217,.1); }
     table.custom-table tbody tr:hover td{ color:rgba(235,235,235,.9); background:rgba(217,217,217,.05); border-bottom-color:rgba(147,91,162,.9); }
-    /* keyboard navigation highlight */
     table.custom-table tbody tr.is-active td{ color:rgba(235,235,235,.95); background:rgba(217,217,217,.08); border-bottom-color:rgba(147,91,162,.9); }
 
     .swap-row{ width:3.5rem; height:3.5rem; opacity:.4; content:url("./img/swap_horiz.svg"); cursor:pointer; margin-top:3.2rem; }
@@ -80,14 +99,14 @@ TEMPLATE.innerHTML = `
 
     .specials-text-bar input[type="text"]{ box-sizing:content-box; width: calc(8ch + 2rem); padding-inline:.75rem 1rem; height:2.5rem; border:1px solid #5E5E5E; border-radius:10px; background-color:rgba(82,82,82,.1); font-family: Gilroy, system-ui, sans-serif; }
   </style>
+
   <div class="main-col-container">
-    <!-- floating corner content -->
     <div class="corner-top-right">
-      <!-- If user provides <button slot="corner">, it replaces this default -->
       <slot name="corner">
-        <button class="corner-btn" id="corner-btn" part="float-btn" type="button" aria-label="Options">⋯</button>
+        <button class="corner-btn" id="corner-btn" part="float-btn" type="button" aria-label="Options"></button>
       </slot>
     </div>
+
     <div class="main-row-container">
       <div class="awayteam-container">
         <div class="title-row">Away Team</div>
@@ -101,10 +120,12 @@ TEMPLATE.innerHTML = `
         <div class="tricode-row" id="tricode-row-away"></div>
         <div class="school-row" id="school-row-away"></div>
       </div>
+
       <div class="vs-container">
         <div class="swap-row" id="swapbtn"></div>
         <div class="vs-row">vs</div>
       </div>
+
       <div class="hometeam-container">
         <div class="title-row">Home Team</div>
         <div class="shot-search-bar">
@@ -118,6 +139,7 @@ TEMPLATE.innerHTML = `
         <div class="school-row" id="school-row-home"></div>
       </div>
     </div>
+
     <div class="bottom-row-container">
       <div class="specials-container-spacer">
         <div class="specials-container">
@@ -139,12 +161,16 @@ TEMPLATE.innerHTML = `
         </div>
       </div>
     </div>
+
+    <!-- Overlay LAST so it paints above everything including the corner slot -->
+    <div class="rive-overlay" id="riveOverlay" aria-hidden="true">
+      <canvas id="riveCanvas"></canvas>
+    </div>
   </div>
 `;
 
 export class MatchupRow extends HTMLElement {
   static get is() { return 'matchup-row'; }
-
   static get observedAttributes(){ return ['away-tricode','away-school','home-tricode','home-school']; }
 
   constructor(){
@@ -157,12 +183,22 @@ export class MatchupRow extends HTMLElement {
     this._curatedTeams = [];
     this._specialsData = null;
     this._structureData = null;
-    this._parseTeamString = null; // user-supplied async function
+    this._parseTeamString = null;
+
+    // Rive bits
+    this._rive = null;
+    this._riveInputs = null;      // cached inputs
+    this._resizeObs = null;
+    this._riveBox = this.getAttribute('rive-box') || 'padding'; 
+
+    // Configurable via attributes if you want
+    this._riveSrc = this.getAttribute('rive-src') || 'rive/matchmaker_loading.riv';
+    this._riveArtboard = this.getAttribute('rive-artboard') || 'mm_loader';
+    this._riveStateMachine = this.getAttribute('rive-sm') || 'State Machine 1';
 
     const root = this.attachShadow({ mode: 'open' });
     root.appendChild(TEMPLATE.content.cloneNode(true));
 
-    // Cache nodes
     this.$ = (sel) => root.querySelector(sel);
     this._els = {
       cornerBtn: this.$('#corner-btn'),
@@ -179,48 +215,32 @@ export class MatchupRow extends HTMLElement {
       swapBtn:   this.$('#swapbtn'),
       rotWrap:   this.$('#tod-rotator'),
       rotImg:    this.$('#tod-icon'),
-      calInput:  this.$('#cal-text-input')
+      calInput:  this.$('#cal-text-input'),
+      riveOverlay: this.$('#riveOverlay'),
+      riveCanvas:  this.$('#riveCanvas'),
+      container:   this.$('.main-col-container')
     };
   }
 
   connectedCallback(){
-    
-    if (this._els.cornerBtn) {
-      this._els.cornerBtn.addEventListener('click', () => {
-        this.dispatchEvent(new CustomEvent('cornerclick', { bubbles: true, composed: true }));
-      });
-    }
+    // corner button passthrough
+    this._els.cornerBtn?.addEventListener('click', () => {
+      this.dispatchEvent(new CustomEvent('cornerclick', { bubbles: true, composed: true }));
+    });
 
-    const { awayInput, homeInput, awayTable, awayBody, homeTable, homeBody, swapBtn, rotWrap, rotImg, calInput } = this._els;
-
-    // track keyboard nav index per dropdown
+    const { awayInput, homeInput, awayBody, homeBody, swapBtn, rotWrap, rotImg, calInput } = this._els;
     this._nav = { away: -1, home: -1 };
 
-    // INPUT -> suggestions
-    const onInputAway = (e)=> this._onInput('away', e);
-    const onInputHome = (e)=> this._onInput('home', e);
-    awayInput.addEventListener('input', onInputAway);
-    homeInput.addEventListener('input', onInputHome);
-
-    // keyboard navigation
+    awayInput.addEventListener('input', (e)=> this._onInput('away', e));
+    homeInput.addEventListener('input', (e)=> this._onInput('home', e));
     awayInput.addEventListener('keydown', (e)=> this._onKey('away', e));
     homeInput.addEventListener('keydown', (e)=> this._onKey('home', e));
+    awayBody.addEventListener('click', (e)=>{ const tr = e.target.closest('tr[data-val]'); if(tr) this._pick('away', tr.dataset.val); });
+    homeBody.addEventListener('click', (e)=>{ const tr = e.target.closest('tr[data-val]'); if(tr) this._pick('home', tr.dataset.val); });
 
-    // click to pick (delegated inside shadow)
-    awayBody.addEventListener('click', (e)=>{
-      const tr = e.target.closest('tr[data-val]');
-      if(tr) this._pick('away', tr.dataset.val);
-    });
-    homeBody.addEventListener('click', (e)=>{
-      const tr = e.target.closest('tr[data-val]');
-      if(tr) this._pick('home', tr.dataset.val);
-    });
-
-    // outside click closes (use composedPath + capture)
     this._outsideHandler = (e)=>{ if(!this._isInside(e)) this._closeTables(); };
     document.addEventListener('pointerdown', this._outsideHandler, true);
 
-    // swap teams
     swapBtn.addEventListener('click', async ()=>{
       const a = this.awaySearch, h = this.homeSearch;
       this.awaySearch = h; this.homeSearch = a;
@@ -229,42 +249,262 @@ export class MatchupRow extends HTMLElement {
       this._emit();
     });
 
-    // Icon flipper
-    ;['outline','outline-color','outline-style','outline-width','box-shadow']
-      .forEach(p => rotImg.style.removeProperty(p));
-    rotWrap.addEventListener('click', ()=>{
+    ;['outline','outline-color','outline-style','outline-width','box-shadow'].forEach(p => rotImg.style.removeProperty(p));
+    this._els.rotWrap.addEventListener('click', ()=>{
       if(this._busy) return;
       this._busy = true;
       rotWrap.style.transform = 'rotateX(90deg)';
       setTimeout(()=>{
         this._iconIndex = (this._iconIndex + 1) % this._icons.length;
-        rotImg.src = this._icons[this._iconIndex]?.icon ?? '';
+        this._els.rotImg.src = this._icons[this._iconIndex]?.icon ?? '';
         rotWrap.style.transform = 'rotateX(0deg)';
         setTimeout(()=>{ this._busy = false; this._emit(); }, 120);
       }, 120);
     });
 
     calInput.addEventListener('input', ()=> this._emit());
-
-    // Initial placeholder-based width sizing for cal input
     this._sizeCalWidth();
   }
 
   disconnectedCallback(){
-    if (this._outsideHandler) {
-      document.removeEventListener('pointerdown', this._outsideHandler, true);
-      this._outsideHandler = null;
-    }
-    // if you ever add observers/intervals, clear them here too:
-    // this._resizeObs?.disconnect();
-    // clearTimeout(this._flipTimer);
+    document.removeEventListener('pointerdown', this._outsideHandler, true);
+    this._outsideHandler = null;
+
+    if (this._resizeObs){ this._resizeObs.disconnect(); this._resizeObs = null; }
+    if (this._rive){ try{ this._rive.cleanup?.(); }catch{} this._rive = null; }
+    this._riveInputs = null;
   }
+
+  /* ------------ Rive ------------ */
+  _ensureRive(){
+    if (this._rive) return;
+    const R = window.rive;
+    if (!R) {
+      console.warn('[MatchupRow] Rive runtime not found (window.rive). Load @rive-app/canvas first.');
+      return;
+    }
+
+    const canvas = this._els.riveCanvas;
+    const container = this._els.container;
+
+    this._rive = new R.Rive({
+      src: this._riveSrc,
+      canvas,
+      autoplay: true,
+      artboard: this._riveArtboard,
+      stateMachines: this._riveStateMachine,
+      layout: new R.Layout({
+        fit: R.Fit.CONTAIN,
+        alignment: R.Alignment.CENTER
+      }),
+      onLoad: () => {
+        try {
+          // Cache inputs once loaded
+          this._riveInputs = this._rive.stateMachineInputs(this._riveStateMachine) || [];
+        } catch (e) {
+          console.warn('[MatchupRow] Could not cache state machine inputs:', e);
+        }
+
+        // Forward Rive runtime events as DOM CustomEvents per row
+        try {
+          this._rive.on(R.EventType.RiveEvent, (rvEvent) => {
+            // General event
+            this._dispatchRiveEvent('riveevent', rvEvent);
+
+            // Also a specific event (e.g. "rive:clickBtnOut")
+            const en = rvEvent?.data?.name;
+            if (en) this._dispatchRiveEvent(`rive:${en}`, rvEvent);
+          });
+        } catch (e) {
+          console.warn('[MatchupRow] Event wiring failed:', e);
+        }
+
+        // Initial sizing + ResizeObserver
+        this._resizeCanvasTo(container);
+        this._resizeObs = new ResizeObserver(() => this._resizeCanvasTo(container));
+        this._resizeObs.observe(container);
+      }
+    });
+  }
+
+  _dispatchRiveEvent(type, rvEvent){
+    // rvEvent.data can contain "name", "properties", etc.
+    const detail = {
+      name: rvEvent?.data?.name ?? null,
+      data: rvEvent?.data ?? null,
+      raw: rvEvent ?? null,
+      row: this
+    };
+    this.dispatchEvent(new CustomEvent(type, { detail, bubbles: true, composed: true }));
+  }
+
+
+    _measureBox(el){
+    const rect = el.getBoundingClientRect();       // border box (CSS px)
+    const cs = getComputedStyle(el);
+    const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+    const padY = parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom);
+    const borX = parseFloat(cs.borderLeftWidth) + parseFloat(cs.borderRightWidth);
+    const borY = parseFloat(cs.borderTopWidth)  + parseFloat(cs.borderBottomWidth);
+    const marX = parseFloat(cs.marginLeft) + parseFloat(cs.marginRight);
+    const marY = parseFloat(cs.marginTop)  + parseFloat(cs.marginBottom);
+
+    // Start from border box
+    const borderW = rect.width;
+    const borderH = rect.height;
+
+    // Derive padding box and content box sizes
+    const paddingW = borderW - borX;
+    const paddingH = borderH - borY;
+
+    return {
+      borderW, borderH,
+      paddingW, paddingH,
+      margins: { left: parseFloat(cs.marginLeft), right: parseFloat(cs.marginRight),
+                top: parseFloat(cs.marginTop),  bottom: parseFloat(cs.marginBottom) }
+    };
+  }
+
+  _resizeCanvasTo(container){
+    const canvas = this._els.riveCanvas;
+    const overlay = this._els.riveOverlay;
+    if (!canvas || !overlay) return;
+
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+    const m = this._measureBox(container);
+
+    // Choose target visual box for sizing
+    let visW, visH;
+
+    if (this._riveBox === 'border') {
+      // overlay inset stays 0; use full border box
+      overlay.style.left = overlay.style.top = overlay.style.right = overlay.style.bottom = '0';
+      visW = m.borderW; visH = m.borderH;
+
+    } else if (this._riveBox === 'margin') {
+      // expand overlay to include margins (negative offsets)
+      overlay.style.left   = `-${m.margins.left}px`;
+      overlay.style.right  = `-${m.margins.right}px`;
+      overlay.style.top    = `-${m.margins.top}px`;
+      overlay.style.bottom = `-${m.margins.bottom}px`;
+      // canvas should match *border box + margins*
+      visW = m.borderW + m.margins.left + m.margins.right;
+      visH = m.borderH + m.margins.top  + m.margins.bottom;
+
+    } else { // 'padding' (default)
+      // keep overlay inset to padding box (inset:0 already uses the padding box)
+      overlay.style.left = overlay.style.top = overlay.style.right = overlay.style.bottom = '0';
+      visW = m.paddingW; visH = m.paddingH;
+    }
+
+    // DPR-aware bitmap sizing
+    canvas.width  = Math.max(1, Math.round(visW * dpr));
+    canvas.height = Math.max(1, Math.round(visH * dpr));
+
+    // Let CSS keep canvas visually filling the overlay
+    // (we already set width/height:100% in CSS)
+    try { this._rive?.resizeDrawingSurfaceToCanvas?.(); } catch {}
+  }
+
+
+  // _resizeCanvasTo(container){
+  //   const canvas = this._els.riveCanvas;
+  //   if (!canvas) return;
+  //   const rect = container.getBoundingClientRect();
+  //   const dpr = Math.max(1, window.devicePixelRatio || 1);
+  //   canvas.width  = Math.max(1, Math.round(rect.width  * dpr));
+  //   canvas.height = Math.max(1, Math.round(rect.height * dpr));
+  //   // CSS handles visual size; Rive uses canvas bitmap size for crisp rendering
+  //   try { this._rive?.resizeDrawingSurfaceToCanvas?.(); } catch {}
+  // }
+
+  _getInput(name){
+    return Array.isArray(this._riveInputs)
+      ? this._riveInputs.find(i => i.name === name) || null
+      : null;
+  }
+
+  // Public triggers (name these to match your SM inputs)
+  riveStart(){   // show + kick off
+    this._ensureRive();
+    if (!this._rive) return;
+    this._els.riveOverlay.classList.add('is-on');
+    this._els.riveOverlay.setAttribute('aria-hidden', 'false');
+    this._getInput('start_loader')?.fire?.();
+  }
+  riveStop(){ this._getInput('stop_loader')?.fire?.(); }
+  riveError(){ this._getInput('hasErr')?.fire?.(); }
+  riveClose(){ // play close + hide
+    this._getInput('closeScreen')?.fire?.();
+    setTimeout(() => {
+      this._els.riveOverlay.classList.remove('is-on');
+      this._els.riveOverlay.setAttribute('aria-hidden', 'true');
+    }, 200);
+  }
+  riveSuccess(){
+    const i = this._getInput('isSuccessful');
+    if (!i) { console.warn(`[Rive] input "${'isSuccessful'}" not found`); return; }
+
+    // If your runtime exposes the type, you can sanity-check:
+    // if (i.type !== rive.StateMachineInputType.Boolean) { ... }
+
+    i.value = true;       // <-- set boolean
+    
+  }
+
+  // --- Text runs (for setTextRuntimes equivalent) ---
+  riveSetText(runName, value){
+    if (!this._rive || !runName) return;
+    try { this._rive.setTextRunValue(runName, String(value ?? '')); }
+    catch (e) { console.warn('[MatchupRow] setTextRunValue failed:', runName, e); }
+  }
+  riveSetTexts(map){
+    if (!map || typeof map !== 'object') return;
+    for (const [k, v] of Object.entries(map)) this.riveSetText(k, v);
+  }
+
+  // --- State machine inputs (boolean/number/trigger) ---
+  _getInput(name){
+    return Array.isArray(this._riveInputs)
+      ? this._riveInputs.find(i => i.name === name) || null
+      : null;
+  }
+  riveGetInputs(){
+    return (this._riveInputs || []).map(i => ({
+      name: i.name,
+      // type may exist on recent runtimes; guard if absent
+      type: typeof i.type === 'number' ? i.type : undefined,
+      hasFire: typeof i.fire === 'function',
+      hasValue: 'value' in i
+    }));
+  }
+  riveSetInput(name, value){
+    const i = this._getInput(name);
+    if (!i) { console.warn(`[Rive] input "${name}" not found`); return false; }
+
+    // If it's a Trigger and caller passed true/"fire", fire it
+    if (typeof i.fire === 'function' && (value === true || value === 'fire' || value === undefined)) {
+      i.fire(); return true;
+    }
+
+    // Otherwise if it looks like a boolean/number input with .value, set it
+    if ('value' in i) {
+      if (typeof value === 'boolean') { i.value = value; return true; }
+      if (typeof value === 'number')  { i.value = value; return true; }
+    }
+
+    console.warn('[Rive] Unsupported input/value combination:', { name, i, value });
+    return false;
+  }
+  riveFire(name){ return this.riveSetInput(name, 'fire'); }
+  riveSetBool(name, bool){ return this.riveSetInput(name, !!bool); }
+  riveSetNumber(name, num){ return this.riveSetInput(name, Number(num)); }
+
 
   /* ---------- Public properties / API ---------- */
   get curatedTeams(){ return this._curatedTeams; }
   set curatedTeams(v){
     this._curatedTeams = Array.isArray(v) ? v : [];
-    // If a dropdown is open, refresh it with the new dataset
     const av = (this._els.awayInput?.value || '').trim();
     const hv = (this._els.homeInput?.value || '').trim();
     if (this._els.awayTable?.classList.contains('is-open')) this._renderSuggestions('away', av);
@@ -277,7 +517,6 @@ export class MatchupRow extends HTMLElement {
   get structureData(){ return this._structureData; }
   set structureData(v){ this._structureData = v; }
 
-  // optional async mapper supplied by host code
   get parseTeamString(){ return this._parseTeamString; }
   set parseTeamString(fn){ this._parseTeamString = typeof fn === 'function' ? fn : null; }
 
@@ -293,7 +532,6 @@ export class MatchupRow extends HTMLElement {
   get currentIcon(){ return { index: this._iconIndex, ...this._icons[this._iconIndex] }; }
   set currentIconIndex(i){ if(Number.isInteger(i) && this._icons[i]){ this._iconIndex = i; this._els.rotImg.src = this._icons[i].icon; this._emit(); } }
 
-  // Simple value getters/setters
   get awaySearch(){ return this._els.awayInput.value || ''; }
   set awaySearch(v){ this._els.awayInput.value = String(v||''); }
 
@@ -315,7 +553,6 @@ export class MatchupRow extends HTMLElement {
   get calText(){ return this._els.calInput.value || ''; }
   set calText(v){ this._els.calInput.value = String(v||''); this._emit(); }
 
-  // Aggregate state
   get value(){
     const ic = this.currentIcon;
     return {
@@ -354,24 +591,20 @@ export class MatchupRow extends HTMLElement {
     }
   }
 
-  /* ---------- Private helpers ---------- */
+  /* ---------- UI internals ---------- */
   _sanitize(s){ return String(s||'').toLowerCase().replace(/\s+/g,' ').trim(); }
 
   async _hydrateTeam(side, input){
-    // side: 'away' | 'home'
-    const setter = side === 'away' ?
-      ((t)=>{ this.awayTricode = t.code||''; this.awaySchool = t.name||''; }) :
-      ((t)=>{ this.homeTricode = t.code||''; this.homeSchool = t.name||''; });
+    const setter = side === 'away'
+      ? (t)=>{ this.awayTricode = t.code||''; this.awaySchool = t.name||''; }
+      : (t)=>{ this.homeTricode = t.code||''; this.homeSchool = t.name||''; };
 
     let info = null;
     try{
       if(typeof this._parseTeamString === 'function') info = await this._parseTeamString(input);
     }catch(err){ console.warn('parseTeamString error', err); }
 
-    if(!info){
-      // Fallback heuristic: assume input like "Arizona State" and we leave code unchanged
-      info = { code: side === 'away' ? this.awayTricode : this.homeTricode, name: input };
-    }
+    if(!info) info = { code: side === 'away' ? this.awayTricode : this.homeTricode, name: input };
     setter(info);
     this._emit();
     return info;
@@ -380,12 +613,10 @@ export class MatchupRow extends HTMLElement {
   _sizeCalWidth(){
     const el = this._els.calInput;
     const extra = '2rem';
-    const len = (el.placeholder || '').length;
-    const w = `calc(${len}ch + ${extra})`;
+    const w = `calc(${(el.placeholder || '').length}ch + ${extra})`;
     el.style.width = w; el.style.minWidth = w; el.style.maxWidth = w;
   }
 
-  /* ---- dropdown helpers (native, no jQuery) ---- */
   _onInput(side, e){
     const v = this._sanitize(e.target.value);
     e.target.value = v;

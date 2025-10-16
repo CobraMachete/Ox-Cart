@@ -8,10 +8,10 @@ function computeSize() {
 function initRive() {
 
     var rivinst = new rive.Rive({
-        src: "assets/shots_end_screen.riv",
+        src: "rive/matchmaker_loading.riv",
         canvas: document.getElementById("canvas"),
         autoplay: true,
-        artboard: "Artboard",
+        artboard: "mm_loader",
         layout: new rive.Layout({fit: rive.Fit.FitWidth,
             alignment: rive.Alignment.TopCenter,
         }),

@@ -481,6 +481,12 @@ async function processRowItems(rowcollector, strucdata) {
 	if (Array.isArray(itemsres) && itemsres.length > 0) {
 		return itemsres; // <-- returns from processRowItems
 	}
+
+	document.addEventListener('riveevent', (e) => {
+		// Catches ALL Rive events, any row
+		const { name, data, row } = e.detail;
+		console.log('[riveevent]', name, data, row);
+	});
 	
 	let rowCounter = 0;
 	// Otherwise process rows one by one
@@ -494,12 +500,25 @@ async function processRowItems(rowcollector, strucdata) {
 
 				// SCROLL ROW ITEM TO VISIBLE AREA
 				scrollChildIntoCenter(rowcollector, currrow);
+				currrow.riveFire('start_loader'); 
 				const procres = await processShotItems(currrow, strucdata, SELECTED_ENTITY);
 				results.push(procres);
+
+				currrow.riveSetBool('isSuccessful', true);
+				await setDetailsTxtRuntime(currrow, true);
+				currrow.riveFire('stop_loader'); 
+
 				currrow.classList.add('dimrow');
 			}
 		} catch (errRow) {
 			console.log('row error:', errRow);
+			let failSelectArr = [0,1,2];
+			let failSelection = await randomItem(arr);
+			currrow.riveSetNumber('EndHeroFail', failSelection);
+			currrow.riveSetBool('isSuccessful', false);
+			await setDetailsTxtRuntime(currrow, false);
+			currrow.riveFire('stop_loader'); 
+
 			// decide if you want to push a placeholder or skip
 		}
 	}
@@ -562,6 +581,59 @@ async function processParentItems(row, detaildata, currshot, selEnt) {
 	}
 	
 }
+
+async function randomLooperPhrase(row, txtRun) {
+
+	const phraseArr = [
+		"Swiping Right...",
+		"Sharpening Rizz...",
+		"Sliding into DMs...",
+		"Padding Profile...",
+		"Honing Stats...",
+		"Checking chemistry...",
+		"Passing Vibe Checks...",
+		"Meeting For Coffee...",
+		"Checking Horoscope...",
+		"Evaluating Compatibility",
+		"Making a move..."
+	]
+
+	let nextPhrase = await randomItem(phraseArr);
+
+	row.riveSetText(txtRun, nextPhrase);
+	
+}
+
+async function setDetailsTxtRuntime(row, hasSuccess) {
+
+	let awayCode = row.awayTricode;
+	let homeCode = row.homeTricode;
+
+	if (hasSuccess == true) {
+		let txtDetail = awayCode + " vs " + homeCode + " was created successfully!"
+	} else {
+		let txtDetail = "Devastation! " + awayCode + " vs " + homeCode + " creation failed."
+	}
+
+	row.riveSetText('ResultDetailsTxt', txtDetail);
+	return
+	
+}
+
+
+
+// Random INDEX (or -1 if empty / not an array)
+async function randomIndex(arr) {
+  return Array.isArray(arr) && arr.length ? Math.floor(Math.random() * arr.length) : -1;
+}
+
+// Random VALUE (or undefined if empty / not an array)
+async function randomItem(arr) {
+  const i = randomIndex(arr);
+  return i === -1 ? undefined : arr[i];
+}
+
+
 
 function preflightChecks() {
 	//DEFOCUS BG ELEMENTS

@@ -18,7 +18,8 @@
 	
 	
 	<!-- <script type="text/javascript" src="js/rive.js"></script> -->
-	<script src="https://unpkg.com/@rive-app/canvas@2.20.0"></script>
+	<!-- <script src="https://unpkg.com/@rive-app/canvas@2.20.0"></script> -->
+	 <script src="https://unpkg.com/@rive-app/canvas@latest"></script>
 	<script type="text/javascript" src="js/jquery-3.7.1.slim.min.js"></script>
 	<script type="text/javascript" src="js/jquery.nice-select.js"></script>
 	
@@ -264,6 +265,8 @@
 			});
 		}
 		
+
+		window.addEventListener("change", computeSize);
 		// LISTENING FOR TEAMS DATA EVENT DISPATCH
 		document.addEventListener('DOMContentLoaded', async () => {
 			
@@ -363,6 +366,9 @@
 				<div class="button-row-container">
 					<div class="add-row-btn" onclick="createNewRow()"></div>
 					<div class="submit-button" onclick="masterMatchMakerSequence(window.structure_data, window.specials_data, PRJ_ID)">Make Matches</div>
+
+					<!-- <div class="add-row-btn" onclick="const myrow = document.querySelector('matchup-row'); myrow.riveStop()"></div>
+					<div class="submit-button" onclick="const tmprow = document.querySelector('matchup-row'); tmprow.riveStart(); tmprow.riveSuccess()">Make Matches</div> -->
 				</div>
 			</div>
 			
