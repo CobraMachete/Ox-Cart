@@ -602,7 +602,8 @@ async function processParentItems(row, detaildata, currshot, selEnt) {
 
 function randomLooperPhrase(row, txtRun) {
 
-		return new Promise (resolve => {
+		return new Promise(function (resolve, reject) {
+
 			const phraseArr = [
 			"Swiping Right...",
 			"Sharpening Rizz...",
@@ -617,13 +618,9 @@ function randomLooperPhrase(row, txtRun) {
 			"Making a move..."
 		]
 		
-		randomItem(phraseArr)
-		.then(nextPhrase => {
-			console.log("Next phrase is: ", nextPhrase);
-			row.riveSetText(txtRun, nextPhrase);
-			resolve(true)
-		});
-		
+		let nextPhrase = randomItem(phraseArr);
+		console.log("Next phrase is: ", nextPhrase);
+		row.riveSetText(txtRun, nextPhrase);
 		
 	})
 	
