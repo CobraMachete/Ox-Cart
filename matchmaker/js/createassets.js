@@ -522,8 +522,7 @@ async function processRowItems(rowcollector, strucdata) {
 				console.warn('Skipping non-upgraded row:', currrow);
 				continue;
 			}
-			randomLooperPhrase(currrow, "RunLoopA");
-			randomLooperPhrase(currrow, "RunLoopB");
+			
 			// ── throttle & sequencing ──────────────────────────────────────
 			// 1) ensure previous row's overlay is off (animation finished)
 			await waitForOverlayOff(prevRow);
@@ -533,6 +532,10 @@ async function processRowItems(rowcollector, strucdata) {
 			// Now we can center the next row and start its rive
 			scrollChildIntoCenter(rowcollector, currrow);
 			currrow.riveStart();              // shows overlay + triggers loader
+
+			randomLooperPhrase(currrow, "RunLoopA");
+			randomLooperPhrase(currrow, "RunLoopB");
+			
 			currrow.riveFire('start_loader'); // safe even if queued internally
 			console.log('riveStart for row:', currrow.id || '(no id)');
 			
