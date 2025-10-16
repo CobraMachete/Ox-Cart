@@ -154,7 +154,7 @@ TEMPLATE.innerHTML = `
           <div class="specials-field-icon-txt-combo">
             <div class="specials-field-icon"></div>
             <div class="specials-text-bar">
-              <input id="cal-text-input" type="text" placeholder="Ex: 1025">
+              <input id="cal-text-input" type="text" placeholder="Ex: 1025 (MMDD)">
             </div>
           </div>
           <div class="specials-title">Game Date</div>
