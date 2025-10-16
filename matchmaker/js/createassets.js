@@ -536,7 +536,8 @@ async function processRowItems(rowcollector, strucdata) {
 				const procres = await processShotItems(currrow, strucdata, SELECTED_ENTITY);
 				results.push(procres);
 				
-				currrow.riveSetBool?.('isSuccessful', true);
+				// currrow.riveSetBool?.('isSuccessful', true);
+				currrow.riveSuccess();
 				await setDetailsTxtRuntime(currrow, true);
 				currrow.riveStop?.();
 				// if your SM auto-hides the overlay, great; if not, you can call:
