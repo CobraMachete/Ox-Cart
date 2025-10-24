@@ -391,7 +391,6 @@
 
   function onWidgetUpdate() {
     const entity = ftrackWidget.getEntity();
-    console.log(entity)
     void queryAndBootFromEntity(entity);
   }
 
