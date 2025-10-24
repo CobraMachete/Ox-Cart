@@ -10,10 +10,6 @@ var thumbnailwhitelist = [];
 var init_shot_name = "None";
 
 
-// fetch('./temp_data/shotsinfo.json').then((response) => response.json()).then((json) => readShotsJson(json));
-// fetch('./temp_data/teamsinfo.json').then((response) => response.json()).then((json) => readTeamsJson(json));
-
-// fetch('./temp_data/ALL_TEAMS.json').then(r => r.json()).then(readShotsJson).catch(console.error);
 
 function readTeamsData(jsonfile) {
 	shots_data = Array.isArray(jsonfile) ? jsonfile : [];
