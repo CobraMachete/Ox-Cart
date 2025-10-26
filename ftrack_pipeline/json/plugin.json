@@ -1,5 +1,11 @@
 {
   "integrations": [
-    "https://cobramachete.github.io/Ox-Cart/plugins/tntsports-matchmaker-1.0.0.zip"
+    "https://cobramachete.github.io/Ox-Cart/ftrack_pipeline/plugins/tntsports-cascade-thumbnails-1.0.1.zip",
+    "https://cobramachete.github.io/Ox-Cart/ftrack_pipeline/plugins/tntsports-custom-structure-1.0.1.zip",
+    "https://cobramachete.github.io/Ox-Cart/ftrack_pipeline/plugins/tntsports-matchmaker-1.0.1.zip",
+    "https://cobramachete.github.io/Ox-Cart/ftrack_pipeline/plugins/tntsports-package-builder-1.0.1.zip",
+    "https://cobramachete.github.io/Ox-Cart/ftrack_pipeline/plugins/tntsports-property-builder-1.0.1.zip",
+    "https://cobramachete.github.io/Ox-Cart/ftrack_pipeline/plugins/tntsports-shots-launcher-1.0.1.zip",
+    "https://cobramachete.github.io/Ox-Cart/ftrack_pipeline/plugins/tntsports-status-manager-1.0.1.zip"
   ]
 }
