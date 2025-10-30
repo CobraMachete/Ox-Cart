@@ -1,1026 +1,2184 @@
 {
   "mlb": [
     {
-      "id":1,
-      "tricode":"ARI",
-      "city":"Arizona",
-      "league":"National",
-      "division":"West",
-      "full_name":"Arizona Diamondbacks",
-      "name":"Diamondbacks"
-      
-    },
-    {
-        "id":2,
-        "tricode":"ATL",
-        "city":"Atlanta",
-        "league":"National",
-        "division":"East",
-        "full_name":"Atlanta Braves",
-        "name":"Braves"
-        
-      },
-      {
-        "id":3,
-        "tricode":"BAL",
-        "city":"Baltimore",
-        "league":"American",
-        "division":"East",
-        "full_name":"Baltimore Orioles",
-        "name":"Orioles"
-        
-      },
-      {
-        "id":4,
-        "tricode":"BOS",
-        "city":"Boston",
-        "league":"American",
-        "division":"East",
-        "full_name":"Boston Red Sox",
-        "name":"Red Sox"
-        
-      },
-      {
-        "id":5,
-        "tricode":"CHC",
-        "city":"Chicago",
-        "league":"National",
-        "division":"Central",
-        "full_name":"Chicago Cubs",
-        "name":"Cubs"
-        
-      },
-      {
-        "id":6,
-        "tricode":"CWS",
-        "city":"Chicago",
-        "league":"American",
-        "division":"Central",
-        "full_name":"Chicago White Sox",
-        "name":"White Sox"
-        
-      },
-      {
-        "id":7,
-        "tricode":"CIN",
-        "city":"Cincinnati",
-        "league":"National",
-        "division":"Central",
-        "full_name":"Cincinnati Reds",
-        "name":"Reds"
-        
-      },
-      {
-        "id":8,
-        "tricode":"CLE",
-        "city":"Cleveland",
-        "league":"American",
-        "division":"Central",
-        "full_name":"Cleveland Guardians",
-        "name":"Guardians"
-        
-      },
-      {
-        "id":9,
-        "tricode":"COL",
-        "city":"Colorado",
-        "league":"National",
-        "division":"West",
-        "full_name":"Colorado Rockies",
-        "name":"Rockies"
-        
-      },
-      {
-        "id":10,
-        "tricode":"DET",
-        "city":"Detroit",
-        "league":"American",
-        "division":"Central",
-        "full_name":"Detroit Tigers",
-        "name":"Tigers"
-      },
-      {
-        "id":11,
-        "tricode":"HOU",
-        "city":"Houston",
-        "league":"American",
-        "division":"West",
-        "full_name":"Houston Astros",
-        "name":"Astros"
-      },
-      {
-        "id":12,
-        "tricode":"KC",
-        "city":"Kansas City",
-        "league":"American",
-        "division":"Central",
-        "full_name":"Kansas City Royals",
-        "name":"Royals"
-      },
-      {
-        "id":13,
-        "tricode":"LAA",
-        "city":"Los Angeles",
-        "league":"American",
-        "division":"West",
-        "full_name":"Los Angeles Angels",
-        "name":"Angels"
-      },
-      {
-        "id":14,
-        "tricode":"LAD",
-        "city":"Los Angeles",
-        "league":"National",
-        "division":"West",
-        "full_name":"Los Angeles Dodgers",
-        "name":"Dodgers"
-      },
-      {
-        "id":15,
-        "tricode":"MIA",
-        "city":"Miami",
-        "league":"National",
-        "division":"East",
-        "full_name":"Miami Marlins",
-        "name":"Marlins"
-      },
-      {
-        "id":16,
-        "tricode":"MIL",
-        "city":"Milwaukee",
-        "league":"National",
-        "division":"Central",
-        "full_name":"Milwaukee Brewers",
-        "name":"Brewers"
-      },
-      {
-        "id":17,
-        "tricode":"MIN",
-        "city":"Minnesota",
-        "league":"American",
-        "division":"Central",
-        "full_name":"Minnesota Twins",
-        "name":"Twins"
-      },
-      {
-        "id":18,
-        "tricode":"NYM",
-        "city":"New York",
-        "league":"National",
-        "division":"East",
-        "full_name":"New York Mets",
-        "name":"Mets"
-      },
-      {
-        "id":19,
-        "tricode":"NYY",
-        "city":"New York",
-        "league":"American",
-        "division":"East",
-        "full_name":"New York Yankees",
-        "name":"Yankees"
-      },
-      {
-        "id":20,
-        "tricode":"ATH",
-        "city":"Athletics",
-        "league":"American",
-        "division":"West",
-        "full_name":"Athletics",
-        "name":"Athletics",
-        "short_name":"A's"
-      },
-      {
-        "id":21,
-        "tricode":"PHI",
-        "city":"Philadelphia",
-        "league":"National",
-        "division":"East",
-        "full_name":"Philadelphia Phillies",
-        "name":"Phillies"
-      },
-      {
-        "id":22,
-        "tricode":"PIT",
-        "city":"Pittsburgh",
-        "league":"National",
-        "division":"Central",
-        "full_name":"Pittsburgh Pirates",
-        "name":"Pirates"
-      },
-      {
-        "id":23,
-        "tricode":"SD",
-        "city":"San Diego",
-        "league":"National",
-        "division":"West",
-        "full_name":"San Diego Padres",
-        "name":"Padres"
-      },
-      {
-        "id":24,
-        "tricode":"SF",
-        "city":"San Francisco",
-        "league":"National",
-        "division":"West",
-        "full_name":"San Francisco Giants",
-        "name":"Giants"
-      },
-      {
-        "id":25,
-        "tricode":"SEA",
-        "city":"Seattle",
-        "league":"American",
-        "division":"West",
-        "full_name":"Seattle Mariners",
-        "name":"Mariners"
-      },
-      {
-        "id":26,
-        "tricode":"STL",
-        "city":"St. Louis",
-        "league":"National",
-        "division":"Central",
-        "full_name":"St. Louis Cardinals",
-        "name":"Cardinals",
-        "short_name":"Cards"
-      },
-      {
-        "id":27,
-        "tricode":"TB",
-        "city":"Tampa Bay",
-        "league":"American",
-        "division":"East",
-        "full_name":"Tampa Bay Rays",
-        "name":"Rays"
-      },
-      {
-        "id":28,
-        "tricode":"TEX",
-        "city":"Texas",
-        "league":"American",
-        "division":"West",
-        "full_name":"Texas Rangers",
-        "name":"Rangers"
-      },
-      {
-        "id":29,
-        "tricode":"TOR",
-        "city":"Toronto",
-        "league":"American",
-        "division":"East",
-        "full_name":"Toronto Blue Jays",
-        "name":"Blue Jays"
-      },
-      {
-        "id":30,
-        "tricode":"WSH",
-        "city":"Washington",
-        "league":"National",
-        "division":"East",
-        "full_name":"Washington Nationals",
-        "name":"Nationals"
-        
-      }
-  ],
-  
-  "nba": [
-    {
-      "id":1,
-      "tricode":"ATL",
-      "city":"Atlanta",
-      "division":"Southeast",
-      "full_name":"Atlanta Hawks",
-      "name":"Hawks"
-      
-    },
-    {
-        "id":2,
-        "tricode":"BKN",
-        "city":"Brooklyn",
-        "division":"Atlantic",
-        "full_name":"Brooklyn Nets",
-        "name":"Nets"
-      },
-      {
-        "id":3,
-        "tricode":"BOS",
-        "city":"Boston",
-        "division":"Atlantic",
-        "full_name":"Boston Celtics",
-        "name":"Celtics"
-      },
-      {
-        "id":4,
-        "tricode":"CHA",
-        "city":"Charlotte",
-        "division":"Southeast",
-        "full_name":"Charlotte Hornets",
-        "name":"Hornets"
-      },
-      {
-        "id":5,
-        "tricode":"CHI",
-        "city":"Chicago",
-        "division":"Central",
-        "full_name":"Chicago Bulls",
-        "name":"Bulls"
-      },
-      {
-        "id":6,
-        "tricode":"CLE",
-        "city":"Cleveland",
-        "division":"Central",
-        "full_name":"Cleveland Cavaliers",
-        "name":"Cavaliers",
-        "nickname": "Cavs"
-      },
-      {
-        "id":7,
-        "tricode":"DAL",
-        "city":"Dallas",
-        "division":"Southwest",
-        "full_name":"Dallas Mavericks",
-        "name":"Mavericks",
-        "nickname":"Mavs"
-      },
-      {
-        "id":8,
-        "tricode":"DEN",
-        "city":"Denver",
-        "division":"Northwest",
-        "full_name":"Denver Nuggets",
-        "name":"Nuggets"
-      },
-      {
-        "id":9,
-        "tricode":"DET",
-        "city":"Detroit",
-        "division":"Central",
-        "full_name":"Detroit Pistons",
-        "name":"Pistons"
-      },
-      {
-        "id":10,
-        "tricode":"GSW",
-        "city":"Golden State",
-        "division":"Pacific",
-        "full_name":"Golden State Warriors",
-        "name":"Warriors"
-      },
-      {
-        "id":11,
-        "tricode":"HOU",
-        "city":"Houston",
-        "division":"Southwest",
-        "full_name":"Houston Rockets",
-        "name":"Rockets"
-      },
-      {
-        "id":12,
-        "tricode":"IND",
-        "city":"Indiana",
-        "division":"Central",
-        "full_name":"Indiana Pacers",
-        "name":"Pacers"
-      },
-      {
-        "id":13,
-        "tricode":"LAC",
-        "city":"Los Angeles",
-        "division":"Pacific",
-        "full_name":"Los Angeles Clippers",
-        "name":"Clippers"
-      },
-      {
-        "id":14,
-        "tricode":"LAL",
-        "city":"Los Angeles",
-        "division":"Pacific",
-        "full_name":"Los Angeles Lakers",
-        "name":"Lakers"
-      },
-      {
-        "id":15,
-        "tricode":"MEM",
-        "city":"Memphis",
-        "division":"Southwest",
-        "full_name":"Memphis Grizzlies",
-        "name":"Grizzlies"
-      },
-      {
-        "id":16,
-        "tricode":"MIA",
-        "city":"Miami",
-        "division":"Southeast",
-        "full_name":"Miami Heat",
-        "name":"Heat"
-      },
-      {
-        "id":17,
-        "tricode":"MIL",
-        "city":"Milwaukee",
-        "division":"Central",
-        "full_name":"Milwaukee Bucks",
-        "name":"Bucks"
-      },
-      {
-        "id":18,
-        "tricode":"MIN",
-        "city":"Minnesota",
-        "division":"Northwest",
-        "full_name":"Minnesota Timberwolves",
-        "name":"Timberwolves",
-        "nickname":"Wolves"
-      },
-      {
-        "id":19,
-        "tricode":"NOP",
-        "city":"New Orleans",
-        "division":"Southwest",
-        "full_name":"New Orleans Pelicans",
-        "name":"Pelicans"
-      },
-      {
-        "id":20,
-        "tricode":"NYK",
-        "city":"New York",
-        "division":"Atlantic",
-        "full_name":"New York Knicks",
-        "name":"Knicks"
-      },
-      {
-        "id":21,
-        "tricode":"OKC",
-        "city":"Oklahoma City",
-        "division":"Northwest",
-        "full_name":"Oklahoma City Thunder",
-        "name":"Thunder"
-      },
-      {
-        "id":22,
-        "tricode":"ORL",
-        "city":"Orlando",
-        "division":"Southeast",
-        "full_name":"Orlando Magic",
-        "name":"Magic"
-      },
-      {
-        "id":23,
-        "tricode":"PHI",
-        "city":"Philadelphia",
-        "division":"Atlantic",
-        "full_name":"Philadephia 76ers",
-        "name":"76ers",
-        "nickname":"Sixers"
-      },
-      {
-        "id":24,
-        "tricode":"PHX",
-        "city":"Phoenix",
-        "division":"Pacific",
-        "full_name":"Phoenix Suns",
-        "name":"Suns"
-      },
-      {
-        "id":25,
-        "tricode":"POR",
-        "city":"Portland",
-        "division":"Northwest",
-        "full_name":"Portland Trail Blazers",
-        "name":"Trail Blazers",
-        "nickname":"Blazers"
-      },
-      {
-        "id":26,
-        "tricode":"SAC",
-        "city":"Sacramento",
-        "division":"Pacific",
-        "full_name":"Sacramento Kings",
-        "name":"Kings"
-      },
-      {
-        "id":27,
-        "tricode":"SAS",
-        "city":"San Antonio",
-        "division":"Southwest",
-        "full_name":"San Antonio Spurs",
-        "name":"Spurs"
-      },
-      {
-        "id":28,
-        "tricode":"TOR",
-        "city":"Toronto",
-        "division":"Atlantic",
-        "full_name":"Toronto Raptors",
-        "name":"Raptors"
-      },
-      {
-        "id":29,
-        "tricode":"UTA",
-        "city":"Utah",
-        "division":"Northwest",
-        "full_name":"Utah Jazz",
-        "name":"Jazz"
-      },
-      {
-        "id":30,
-        "tricode":"WAS",
-        "city":"Washington",
-        "division":"Southeast",
-        "full_name":"Washington Wizards",
-        "name":"Wizards"
-      }
-  ],
-
-  "nhl": [
-    {
       "id": 1,
-      "tricode":"ANA",
-      "city":"Anaheim",
-      "conference":"Western",
-      "division":"Pacific",
-      "full_name":"Anaheim Ducks",
-      "name":"Ducks"
+      "tricode": "ARI",
+      "city": "Arizona",
+      "league": "National",
+      "division": "West",
+      "full_name": "Arizona Diamondbacks",
+      "name": "Diamondbacks"
     },
     {
       "id": 2,
-      "tricode":"BOS",
-      "city":"Boston",
-      "conference":"Eastern",
-      "division":"Atlantic",
-      "full_name":"Boston Bruins",
-      "name":"Bruins"
+      "tricode": "ATL",
+      "city": "Atlanta",
+      "league": "National",
+      "division": "East",
+      "full_name": "Atlanta Braves",
+      "name": "Braves"
     },
     {
       "id": 3,
-      "tricode":"BUF",
-      "city":"Buffalo",
-      "conference":"Eastern",
-      "division":"Atlantic",
-      "full_name":"Buffalo Sabres",
-      "name":"Sabres"
+      "tricode": "BAL",
+      "city": "Baltimore",
+      "league": "American",
+      "division": "East",
+      "full_name": "Baltimore Orioles",
+      "name": "Orioles"
     },
     {
       "id": 4,
-      "tricode":"CAR",
-      "city":"Carolina",
-      "conference":"Eastern",
-      "division":"Metropolitan",
-      "full_name":"Carolina Hurricanes",
-      "name":"Hurricanes",
-      "nickname":"Canes"
+      "tricode": "BOS",
+      "city": "Boston",
+      "league": "American",
+      "division": "East",
+      "full_name": "Boston Red Sox",
+      "name": "Red Sox"
     },
     {
       "id": 5,
-      "tricode":"CBJ",
-      "city":"Columbus",
-      "conference":"Eastern",
-      "division":"Metropolitan",
-      "full_name":"Columbus Blue Jackets",
-      "name":"Blue Jackets"
+      "tricode": "CHC",
+      "city": "Chicago",
+      "league": "National",
+      "division": "Central",
+      "full_name": "Chicago Cubs",
+      "name": "Cubs"
     },
     {
       "id": 6,
-      "tricode":"CGY",
-      "city":"Calgary",
-      "conference":"Western",
-      "division":"Pacific",
-      "full_name":"Calgary Flames",
-      "name":"Flames"
+      "tricode": "CWS",
+      "city": "Chicago",
+      "league": "American",
+      "division": "Central",
+      "full_name": "Chicago White Sox",
+      "name": "White Sox"
     },
     {
       "id": 7,
-      "tricode":"CHI",
-      "city":"Chicago",
-      "conference":"Western",
-      "division":"Central",
-      "full_name":"Chicago Blackhawks",
-      "name":"Blackhawks"
+      "tricode": "CIN",
+      "city": "Cincinnati",
+      "league": "National",
+      "division": "Central",
+      "full_name": "Cincinnati Reds",
+      "name": "Reds"
     },
     {
       "id": 8,
-      "tricode":"COL",
-      "city":"Colorado",
-      "conference":"Western",
-      "division":"Central",
-      "full_name":"Colorado Avalanche",
-      "name":"Avalanche"
+      "tricode": "CLE",
+      "city": "Cleveland",
+      "league": "American",
+      "division": "Central",
+      "full_name": "Cleveland Guardians",
+      "name": "Guardians"
     },
     {
       "id": 9,
-      "tricode":"DAL",
-      "city":"Dallas",
-      "conference":"Western",
-      "division":"Central",
-      "full_name":"Dallas Stars",
-      "name":"Stars"
+      "tricode": "COL",
+      "city": "Colorado",
+      "league": "National",
+      "division": "West",
+      "full_name": "Colorado Rockies",
+      "name": "Rockies"
     },
     {
       "id": 10,
-      "tricode":"DET",
-      "city":"Detroit",
-      "conference":"Eastern",
-      "division":"Atlantic",
-      "full_name":"Detroit Red Wings",
-      "name":"Red Wings"
+      "tricode": "DET",
+      "city": "Detroit",
+      "league": "American",
+      "division": "Central",
+      "full_name": "Detroit Tigers",
+      "name": "Tigers"
     },
     {
       "id": 11,
-      "tricode":"EDM",
-      "city":"Edmonton",
-      "conference":"Western",
-      "division":"Pacific",
-      "full_name":"Edmonton Oilers",
-      "name":"Oilers"
+      "tricode": "HOU",
+      "city": "Houston",
+      "league": "American",
+      "division": "West",
+      "full_name": "Houston Astros",
+      "name": "Astros"
     },
     {
       "id": 12,
-      "tricode":"FLA",
-      "city":"Florida",
-      "conference":"Eastern",
-      "division":"Atlantic",
-      "full_name":"Florida Panthers",
-      "name":"Panthers"
+      "tricode": "KC",
+      "city": "Kansas City",
+      "league": "American",
+      "division": "Central",
+      "full_name": "Kansas City Royals",
+      "name": "Royals"
     },
     {
       "id": 13,
-      "tricode":"LAK",
-      "city":"Los Angeles",
-      "conference":"Western",
-      "division":"Pacific",
-      "full_name":"Los Angeles Kings",
-      "name":"Kings"
+      "tricode": "LAA",
+      "city": "Los Angeles",
+      "league": "American",
+      "division": "West",
+      "full_name": "Los Angeles Angels",
+      "name": "Angels"
     },
     {
       "id": 14,
-      "tricode":"MIN",
-      "city":"Minnesota",
-      "conference":"Western",
-      "division":"Central",
-      "full_name":"Minnesota Wild",
-      "name":"Wild"
+      "tricode": "LAD",
+      "city": "Los Angeles",
+      "league": "National",
+      "division": "West",
+      "full_name": "Los Angeles Dodgers",
+      "name": "Dodgers"
     },
     {
       "id": 15,
-      "tricode":"MTL",
-      "city":"Montreal",
-      "conference":"Eastern",
-      "division":"Atlantic",
-      "full_name":"Montreal Canadiens",
-      "name":"Canadiens"
+      "tricode": "MIA",
+      "city": "Miami",
+      "league": "National",
+      "division": "East",
+      "full_name": "Miami Marlins",
+      "name": "Marlins"
     },
     {
       "id": 16,
-      "tricode":"NJD",
-      "city":"New Jersey",
-      "conference":"Eastern",
-      "division":"Metropolitan",
-      "full_name":"New Jersey Devils",
-      "name":"Devils"
+      "tricode": "MIL",
+      "city": "Milwaukee",
+      "league": "National",
+      "division": "Central",
+      "full_name": "Milwaukee Brewers",
+      "name": "Brewers"
     },
     {
       "id": 17,
-      "tricode":"NSH",
-      "city":"Nashville",
-      "conference":"Western",
-      "division":"Central",
-      "full_name":"Nashville Predators",
-      "name":"Predators"
+      "tricode": "MIN",
+      "city": "Minnesota",
+      "league": "American",
+      "division": "Central",
+      "full_name": "Minnesota Twins",
+      "name": "Twins"
     },
     {
       "id": 18,
-      "tricode":"NYI",
-      "city":"New York",
-      "conference":"Eastern",
-      "division":"Metropolitan",
-      "full_name":"New York Islanders",
-      "name":"Islanders"
+      "tricode": "NYM",
+      "city": "New York",
+      "league": "National",
+      "division": "East",
+      "full_name": "New York Mets",
+      "name": "Mets"
     },
     {
       "id": 19,
-      "tricode":"NYR",
-      "city":"New York",
-      "conference":"Eastern",
-      "division":"Metropolitan",
-      "full_name":"New York Rangers",
-      "name":"Rangers"
+      "tricode": "NYY",
+      "city": "New York",
+      "league": "American",
+      "division": "East",
+      "full_name": "New York Yankees",
+      "name": "Yankees"
     },
     {
       "id": 20,
-      "tricode":"OTT",
-      "city":"Ottawa",
-      "conference":"Eastern",
-      "division":"Atlantic",
-      "full_name":"Ottawa Senators",
-      "name":"Senators"
+      "tricode": "ATH",
+      "city": "Athletics",
+      "league": "American",
+      "division": "West",
+      "full_name": "Athletics",
+      "name": "Athletics",
+      "short_name": "A's"
     },
     {
       "id": 21,
-      "tricode":"PHI",
-      "city":"Philadelphia",
-      "conference":"Eastern",
-      "division":"Metropolitan",
-      "full_name":"Philadelphia Flyers",
-      "name":"Flyers"
+      "tricode": "PHI",
+      "city": "Philadelphia",
+      "league": "National",
+      "division": "East",
+      "full_name": "Philadelphia Phillies",
+      "name": "Phillies"
     },
     {
       "id": 22,
-      "tricode":"PIT",
-      "city":"Pittsburgh",
-      "conference":"Eastern",
-      "division":"Metropolitan",
-      "full_name":"Pittsburgh Penguins",
-      "name":"Penguins"
+      "tricode": "PIT",
+      "city": "Pittsburgh",
+      "league": "National",
+      "division": "Central",
+      "full_name": "Pittsburgh Pirates",
+      "name": "Pirates"
     },
     {
       "id": 23,
-      "tricode":"SEA",
-      "city":"Seattle",
-      "conference":"Western",
-      "division":"Pacific",
-      "full_name":"Seattle Kraken",
-      "name":"Kraken"
+      "tricode": "SD",
+      "city": "San Diego",
+      "league": "National",
+      "division": "West",
+      "full_name": "San Diego Padres",
+      "name": "Padres"
     },
     {
       "id": 24,
-      "tricode":"SJS",
-      "city":"San Jose",
-      "conference":"Western",
-      "division":"Pacific",
-      "full_name":"San Jose Sharks",
-      "name":"Sharks"
+      "tricode": "SF",
+      "city": "San Francisco",
+      "league": "National",
+      "division": "West",
+      "full_name": "San Francisco Giants",
+      "name": "Giants"
     },
     {
       "id": 25,
-      "tricode":"STL",
-      "city":"St. Louis",
-      "conference":"Western",
-      "division":"Central",
-      "full_name":"St. Louis Blues",
-      "name":"Blues"
+      "tricode": "SEA",
+      "city": "Seattle",
+      "league": "American",
+      "division": "West",
+      "full_name": "Seattle Mariners",
+      "name": "Mariners"
     },
     {
       "id": 26,
-      "tricode":"TBL",
-      "city":"Tampa Bay",
-      "conference":"Eastern",
-      "division":"Atlantic",
-      "full_name":"Tampa Bay Lightning",
-      "name":"Lightning"
+      "tricode": "STL",
+      "city": "St. Louis",
+      "league": "National",
+      "division": "Central",
+      "full_name": "St. Louis Cardinals",
+      "name": "Cardinals",
+      "short_name": "Cards"
     },
     {
       "id": 27,
-      "tricode":"TOR",
-      "city":"Toronto",
-      "conference":"Eastern",
-      "division":"Atlantic",
-      "full_name":"Toronto Maple Leafs",
-      "name":"Maple Leafs"
+      "tricode": "TB",
+      "city": "Tampa Bay",
+      "league": "American",
+      "division": "East",
+      "full_name": "Tampa Bay Rays",
+      "name": "Rays"
     },
     {
       "id": 28,
-      "tricode":"UTA",
-      "city":"Utah",
-      "conference":"Western",
-      "division":"Central",
-      "full_name":"Utah Hockey Club",
-      "name":"Hockey Club"
+      "tricode": "TEX",
+      "city": "Texas",
+      "league": "American",
+      "division": "West",
+      "full_name": "Texas Rangers",
+      "name": "Rangers"
     },
     {
       "id": 29,
-      "tricode":"VAN",
-      "city":"Vancouver",
-      "conference":"Western",
-      "division":"Pacific",
-      "full_name":"Vancouver Canucks",
-      "name":"Canucks"
+      "tricode": "TOR",
+      "city": "Toronto",
+      "league": "American",
+      "division": "East",
+      "full_name": "Toronto Blue Jays",
+      "name": "Blue Jays"
     },
     {
       "id": 30,
-      "tricode":"VGK",
-      "city":"Vegas",
-      "conference":"Western",
-      "division":"Pacific",
-      "full_name":"Las Vegas Golden Knights",
-      "name":"Golden Knights"
-    },
-    {
-      "id": 31,
-      "tricode":"WPG",
-      "city":"Winnipeg",
-      "conference":"Western",
-      "division":"Central",
-      "full_name":"Winnipeg Jets",
-      "name":"Jets"
-    },
-    {
-      "id": 32,
-      "tricode":"WSH",
-      "city":"Washington",
-      "conference":"Eastern",
-      "division":"Metropolitan",
-      "full_name":"Washington Capitals",
-      "name":"Capitals"
+      "tricode": "WSH",
+      "city": "Washington",
+      "league": "National",
+      "division": "East",
+      "full_name": "Washington Nationals",
+      "name": "Nationals"
     }
   ],
-
-  "unrivaled": [
+  "nba": [
     {
       "id": 1,
-      "tricode":"LBC",
-      "city":"Laces",
-      "full_name":"Laces Basketball Club",
-      "short_name":"Laces BC",
-      "location":"Miami",
-      "name":"Laces"
+      "tricode": "ATL",
+      "city": "Atlanta",
+      "division": "Southeast",
+      "full_name": "Atlanta Hawks",
+      "name": "Hawks"
     },
     {
       "id": 2,
-      "tricode":"LOBC",
-      "city":"Lunar Owls",
-      "full_name":"Lunar Owls Basketball Club",
-      "short_name":"Lunar Owls BC",
-      "location":"Miami",
-      "name":"Lunar Owls"
+      "tricode": "BKN",
+      "city": "Brooklyn",
+      "division": "Atlantic",
+      "full_name": "Brooklyn Nets",
+      "name": "Nets"
     },
     {
       "id": 3,
-      "tricode":"MBC",
-      "city":"Mist",
-      "full_name":"Mist Basketball Club",
-      "short_name":"Mist BC",
-      "location":"Miami",
-      "name":"Mist"
+      "tricode": "BOS",
+      "city": "Boston",
+      "division": "Atlantic",
+      "full_name": "Boston Celtics",
+      "name": "Celtics"
     },
     {
       "id": 4,
-      "tricode":"PBC",
-      "city":"Phantom",
-      "full_name":"Phantom Basketball Club",
-      "short_name":"Phantom BC",
-      "location":"Miami",
-      "name":"Phantom"
+      "tricode": "CHA",
+      "city": "Charlotte",
+      "division": "Southeast",
+      "full_name": "Charlotte Hornets",
+      "name": "Hornets"
     },
     {
       "id": 5,
-      "tricode":"RBC",
-      "city":"Rose",
-      "full_name":"Rose Basketball Club",
-      "short_name":"Rose BC",
-      "location":"Miami",
-      "name":"Rose"
+      "tricode": "CHI",
+      "city": "Chicago",
+      "division": "Central",
+      "full_name": "Chicago Bulls",
+      "name": "Bulls"
     },
     {
       "id": 6,
-      "tricode":"VBC",
-      "city":"Vinyl",
-      "full_name":"Vinyl Basketball Club",
-      "short_name":"Vinyl BC",
-      "location":"Miami",
-      "name":"Vinyl"
-    }
-    
-  ],
-
-  "ncaa": [
-    {
-      "id": 1,
-      "tricode":"ARI",
-      "city":"Arizona",
-      "division":"Big 12",
-      "full_name":"Arizona Wildcats",
-      "name":"Wildcats"
-    },
-    {
-      "id": 2,
-      "tricode":"ASU",
-      "city":"Arizona State University",
-      "division":"Big 12",
-      "full_name":"Arizona State Sun Devils",
-      "name":"Sun Devils"
-    },
-    {
-      "id": 3,
-      "tricode":"BAY",
-      "city":"Baylor University",
-      "division":"Big 12",
-      "full_name":"Baylor Bears",
-      "name":"Bears"
-    },
-    {
-      "id": 4,
-      "tricode":"BYU",
-      "city":"Brigham Young University",
-      "division":"Big 12",
-      "full_name":"Brigham Young Cougars",
-      "name":"Cougars"
-    },
-    {
-      "id": 5,
-      "tricode":"CIN",
-      "city":"Cincinatti University",
-      "division":"Big 12",
-      "full_name":"Cincinatti Bearcats",
-      "name":"Bearcats"
-    },
-    {
-      "id": 6,
-      "tricode":"COL",
-      "city":"University of Colorado",
-      "division":"Big 12",
-      "full_name":"Colorado Buffaloes",
-      "name":"Buffaloes"
+      "tricode": "CLE",
+      "city": "Cleveland",
+      "division": "Central",
+      "full_name": "Cleveland Cavaliers",
+      "name": "Cavaliers",
+      "nickname": "Cavs"
     },
     {
       "id": 7,
-      "tricode":"UH",
-      "city":"Houston",
-      "division":"Big 12",
-      "full_name":"Houston Cougars",
-      "name":"Cougars"
+      "tricode": "DAL",
+      "city": "Dallas",
+      "division": "Southwest",
+      "full_name": "Dallas Mavericks",
+      "name": "Mavericks",
+      "nickname": "Mavs"
     },
     {
       "id": 8,
-      "tricode":"ISU",
-      "city":"Iowa State University",
-      "division":"Big 12",
-      "full_name":"Iowa State Cyclones",
-      "name":"Cyclones"
+      "tricode": "DEN",
+      "city": "Denver",
+      "division": "Northwest",
+      "full_name": "Denver Nuggets",
+      "name": "Nuggets"
     },
     {
       "id": 9,
-      "tricode":"KAN",
-      "city":"Kansas",
-      "division":"Big 12",
-      "full_name":"Kansas Jayhawks",
-      "name":"Jayhawks"
+      "tricode": "DET",
+      "city": "Detroit",
+      "division": "Central",
+      "full_name": "Detroit Pistons",
+      "name": "Pistons"
     },
     {
       "id": 10,
-      "tricode":"KENT",
-      "city":"Kent State",
-      "division":"Big 12",
-      "full_name":"Kent State Golden Flashes",
-      "name":"Golden Flashes"
+      "tricode": "GSW",
+      "city": "Golden State",
+      "division": "Pacific",
+      "full_name": "Golden State Warriors",
+      "name": "Warriors"
     },
     {
       "id": 11,
-      "tricode":"KSU",
-      "city":"Kansas State",
-      "division":"Big 12",
-      "full_name":"Kansas State Wildcats",
-      "name":"Wildcats"
+      "tricode": "HOU",
+      "city": "Houston",
+      "division": "Southwest",
+      "full_name": "Houston Rockets",
+      "name": "Rockets"
     },
     {
       "id": 12,
-      "tricode":"OKST",
-      "city":"Oklahoma State",
-      "division":"Big 12",
-      "full_name":"Oklahoma State Cowboys",
-      "name":"Cowboys"
+      "tricode": "IND",
+      "city": "Indiana",
+      "division": "Central",
+      "full_name": "Indiana Pacers",
+      "name": "Pacers"
     },
     {
       "id": 13,
-      "tricode":"TCU",
-      "city":"Texas Christian",
-      "division":"Big 12",
-      "full_name":"Texas Christian Horned Frogs",
-      "name":"Horned Frogs"
+      "tricode": "LAC",
+      "city": "Los Angeles",
+      "division": "Pacific",
+      "full_name": "Los Angeles Clippers",
+      "name": "Clippers"
     },
     {
       "id": 14,
-      "tricode":"TTU",
-      "city":"Texas Tech",
-      "division":"Big 12",
-      "full_name":"Texas Tech Red Raiders",
-      "name":"Red Raiders"
+      "tricode": "LAL",
+      "city": "Los Angeles",
+      "division": "Pacific",
+      "full_name": "Los Angeles Lakers",
+      "name": "Lakers"
     },
     {
       "id": 15,
-      "tricode":"TXST",
-      "city":"Texas State",
-      "division":"Big 12",
-      "full_name":"Texas State Bobcats",
-      "name":"Bobcats"
+      "tricode": "MEM",
+      "city": "Memphis",
+      "division": "Southwest",
+      "full_name": "Memphis Grizzlies",
+      "name": "Grizzlies"
     },
     {
       "id": 16,
-      "tricode":"UTAH",
-      "city":"Utah",
-      "division":"Big 12",
-      "full_name":"Utah Utes",
-      "name":"Utes"
+      "tricode": "MIA",
+      "city": "Miami",
+      "division": "Southeast",
+      "full_name": "Miami Heat",
+      "name": "Heat"
     },
     {
       "id": 17,
-      "tricode":"WVU",
-      "city":"West Virginia",
-      "division":"Big 12",
-      "full_name":"West Virginia Mountaineers",
-      "name":"Mountaineers"
+      "tricode": "MIL",
+      "city": "Milwaukee",
+      "division": "Central",
+      "full_name": "Milwaukee Bucks",
+      "name": "Bucks"
+    },
+    {
+      "id": 18,
+      "tricode": "MIN",
+      "city": "Minnesota",
+      "division": "Northwest",
+      "full_name": "Minnesota Timberwolves",
+      "name": "Timberwolves",
+      "nickname": "Wolves"
+    },
+    {
+      "id": 19,
+      "tricode": "NOP",
+      "city": "New Orleans",
+      "division": "Southwest",
+      "full_name": "New Orleans Pelicans",
+      "name": "Pelicans"
+    },
+    {
+      "id": 20,
+      "tricode": "NYK",
+      "city": "New York",
+      "division": "Atlantic",
+      "full_name": "New York Knicks",
+      "name": "Knicks"
+    },
+    {
+      "id": 21,
+      "tricode": "OKC",
+      "city": "Oklahoma City",
+      "division": "Northwest",
+      "full_name": "Oklahoma City Thunder",
+      "name": "Thunder"
+    },
+    {
+      "id": 22,
+      "tricode": "ORL",
+      "city": "Orlando",
+      "division": "Southeast",
+      "full_name": "Orlando Magic",
+      "name": "Magic"
+    },
+    {
+      "id": 23,
+      "tricode": "PHI",
+      "city": "Philadelphia",
+      "division": "Atlantic",
+      "full_name": "Philadephia 76ers",
+      "name": "76ers",
+      "nickname": "Sixers"
+    },
+    {
+      "id": 24,
+      "tricode": "PHX",
+      "city": "Phoenix",
+      "division": "Pacific",
+      "full_name": "Phoenix Suns",
+      "name": "Suns"
+    },
+    {
+      "id": 25,
+      "tricode": "POR",
+      "city": "Portland",
+      "division": "Northwest",
+      "full_name": "Portland Trail Blazers",
+      "name": "Trail Blazers",
+      "nickname": "Blazers"
+    },
+    {
+      "id": 26,
+      "tricode": "SAC",
+      "city": "Sacramento",
+      "division": "Pacific",
+      "full_name": "Sacramento Kings",
+      "name": "Kings"
+    },
+    {
+      "id": 27,
+      "tricode": "SAS",
+      "city": "San Antonio",
+      "division": "Southwest",
+      "full_name": "San Antonio Spurs",
+      "name": "Spurs"
+    },
+    {
+      "id": 28,
+      "tricode": "TOR",
+      "city": "Toronto",
+      "division": "Atlantic",
+      "full_name": "Toronto Raptors",
+      "name": "Raptors"
+    },
+    {
+      "id": 29,
+      "tricode": "UTA",
+      "city": "Utah",
+      "division": "Northwest",
+      "full_name": "Utah Jazz",
+      "name": "Jazz"
+    },
+    {
+      "id": 30,
+      "tricode": "WAS",
+      "city": "Washington",
+      "division": "Southeast",
+      "full_name": "Washington Wizards",
+      "name": "Wizards"
     }
-    
+  ],
+  "nhl": [
+    {
+      "id": 1,
+      "tricode": "ANA",
+      "city": "Anaheim",
+      "conference": "Western",
+      "division": "Pacific",
+      "full_name": "Anaheim Ducks",
+      "name": "Ducks"
+    },
+    {
+      "id": 2,
+      "tricode": "BOS",
+      "city": "Boston",
+      "conference": "Eastern",
+      "division": "Atlantic",
+      "full_name": "Boston Bruins",
+      "name": "Bruins"
+    },
+    {
+      "id": 3,
+      "tricode": "BUF",
+      "city": "Buffalo",
+      "conference": "Eastern",
+      "division": "Atlantic",
+      "full_name": "Buffalo Sabres",
+      "name": "Sabres"
+    },
+    {
+      "id": 4,
+      "tricode": "CAR",
+      "city": "Carolina",
+      "conference": "Eastern",
+      "division": "Metropolitan",
+      "full_name": "Carolina Hurricanes",
+      "name": "Hurricanes",
+      "nickname": "Canes"
+    },
+    {
+      "id": 5,
+      "tricode": "CBJ",
+      "city": "Columbus",
+      "conference": "Eastern",
+      "division": "Metropolitan",
+      "full_name": "Columbus Blue Jackets",
+      "name": "Blue Jackets"
+    },
+    {
+      "id": 6,
+      "tricode": "CGY",
+      "city": "Calgary",
+      "conference": "Western",
+      "division": "Pacific",
+      "full_name": "Calgary Flames",
+      "name": "Flames"
+    },
+    {
+      "id": 7,
+      "tricode": "CHI",
+      "city": "Chicago",
+      "conference": "Western",
+      "division": "Central",
+      "full_name": "Chicago Blackhawks",
+      "name": "Blackhawks"
+    },
+    {
+      "id": 8,
+      "tricode": "COL",
+      "city": "Colorado",
+      "conference": "Western",
+      "division": "Central",
+      "full_name": "Colorado Avalanche",
+      "name": "Avalanche"
+    },
+    {
+      "id": 9,
+      "tricode": "DAL",
+      "city": "Dallas",
+      "conference": "Western",
+      "division": "Central",
+      "full_name": "Dallas Stars",
+      "name": "Stars"
+    },
+    {
+      "id": 10,
+      "tricode": "DET",
+      "city": "Detroit",
+      "conference": "Eastern",
+      "division": "Atlantic",
+      "full_name": "Detroit Red Wings",
+      "name": "Red Wings"
+    },
+    {
+      "id": 11,
+      "tricode": "EDM",
+      "city": "Edmonton",
+      "conference": "Western",
+      "division": "Pacific",
+      "full_name": "Edmonton Oilers",
+      "name": "Oilers"
+    },
+    {
+      "id": 12,
+      "tricode": "FLA",
+      "city": "Florida",
+      "conference": "Eastern",
+      "division": "Atlantic",
+      "full_name": "Florida Panthers",
+      "name": "Panthers"
+    },
+    {
+      "id": 13,
+      "tricode": "LAK",
+      "city": "Los Angeles",
+      "conference": "Western",
+      "division": "Pacific",
+      "full_name": "Los Angeles Kings",
+      "name": "Kings"
+    },
+    {
+      "id": 14,
+      "tricode": "MIN",
+      "city": "Minnesota",
+      "conference": "Western",
+      "division": "Central",
+      "full_name": "Minnesota Wild",
+      "name": "Wild"
+    },
+    {
+      "id": 15,
+      "tricode": "MTL",
+      "city": "Montreal",
+      "conference": "Eastern",
+      "division": "Atlantic",
+      "full_name": "Montreal Canadiens",
+      "name": "Canadiens"
+    },
+    {
+      "id": 16,
+      "tricode": "NJD",
+      "city": "New Jersey",
+      "conference": "Eastern",
+      "division": "Metropolitan",
+      "full_name": "New Jersey Devils",
+      "name": "Devils"
+    },
+    {
+      "id": 17,
+      "tricode": "NSH",
+      "city": "Nashville",
+      "conference": "Western",
+      "division": "Central",
+      "full_name": "Nashville Predators",
+      "name": "Predators"
+    },
+    {
+      "id": 18,
+      "tricode": "NYI",
+      "city": "New York",
+      "conference": "Eastern",
+      "division": "Metropolitan",
+      "full_name": "New York Islanders",
+      "name": "Islanders"
+    },
+    {
+      "id": 19,
+      "tricode": "NYR",
+      "city": "New York",
+      "conference": "Eastern",
+      "division": "Metropolitan",
+      "full_name": "New York Rangers",
+      "name": "Rangers"
+    },
+    {
+      "id": 20,
+      "tricode": "OTT",
+      "city": "Ottawa",
+      "conference": "Eastern",
+      "division": "Atlantic",
+      "full_name": "Ottawa Senators",
+      "name": "Senators"
+    },
+    {
+      "id": 21,
+      "tricode": "PHI",
+      "city": "Philadelphia",
+      "conference": "Eastern",
+      "division": "Metropolitan",
+      "full_name": "Philadelphia Flyers",
+      "name": "Flyers"
+    },
+    {
+      "id": 22,
+      "tricode": "PIT",
+      "city": "Pittsburgh",
+      "conference": "Eastern",
+      "division": "Metropolitan",
+      "full_name": "Pittsburgh Penguins",
+      "name": "Penguins"
+    },
+    {
+      "id": 23,
+      "tricode": "SEA",
+      "city": "Seattle",
+      "conference": "Western",
+      "division": "Pacific",
+      "full_name": "Seattle Kraken",
+      "name": "Kraken"
+    },
+    {
+      "id": 24,
+      "tricode": "SJS",
+      "city": "San Jose",
+      "conference": "Western",
+      "division": "Pacific",
+      "full_name": "San Jose Sharks",
+      "name": "Sharks"
+    },
+    {
+      "id": 25,
+      "tricode": "STL",
+      "city": "St. Louis",
+      "conference": "Western",
+      "division": "Central",
+      "full_name": "St. Louis Blues",
+      "name": "Blues"
+    },
+    {
+      "id": 26,
+      "tricode": "TBL",
+      "city": "Tampa Bay",
+      "conference": "Eastern",
+      "division": "Atlantic",
+      "full_name": "Tampa Bay Lightning",
+      "name": "Lightning"
+    },
+    {
+      "id": 27,
+      "tricode": "TOR",
+      "city": "Toronto",
+      "conference": "Eastern",
+      "division": "Atlantic",
+      "full_name": "Toronto Maple Leafs",
+      "name": "Maple Leafs"
+    },
+    {
+      "id": 28,
+      "tricode": "UTA",
+      "city": "Utah",
+      "conference": "Western",
+      "division": "Central",
+      "full_name": "Utah Hockey Club",
+      "name": "Hockey Club"
+    },
+    {
+      "id": 29,
+      "tricode": "VAN",
+      "city": "Vancouver",
+      "conference": "Western",
+      "division": "Pacific",
+      "full_name": "Vancouver Canucks",
+      "name": "Canucks"
+    },
+    {
+      "id": 30,
+      "tricode": "VGK",
+      "city": "Vegas",
+      "conference": "Western",
+      "division": "Pacific",
+      "full_name": "Las Vegas Golden Knights",
+      "name": "Golden Knights"
+    },
+    {
+      "id": 31,
+      "tricode": "WPG",
+      "city": "Winnipeg",
+      "conference": "Western",
+      "division": "Central",
+      "full_name": "Winnipeg Jets",
+      "name": "Jets"
+    },
+    {
+      "id": 32,
+      "tricode": "WSH",
+      "city": "Washington",
+      "conference": "Eastern",
+      "division": "Metropolitan",
+      "full_name": "Washington Capitals",
+      "name": "Capitals"
+    }
+  ],
+  "unrivaled": [
+    {
+      "id": 1,
+      "tricode": "LBC",
+      "city": "Laces",
+      "full_name": "Laces Basketball Club",
+      "short_name": "Laces BC",
+      "location": "Miami",
+      "name": "Laces"
+    },
+    {
+      "id": 2,
+      "tricode": "LOBC",
+      "city": "Lunar Owls",
+      "full_name": "Lunar Owls Basketball Club",
+      "short_name": "Lunar Owls BC",
+      "location": "Miami",
+      "name": "Lunar Owls"
+    },
+    {
+      "id": 3,
+      "tricode": "MBC",
+      "city": "Mist",
+      "full_name": "Mist Basketball Club",
+      "short_name": "Mist BC",
+      "location": "Miami",
+      "name": "Mist"
+    },
+    {
+      "id": 4,
+      "tricode": "PBC",
+      "city": "Phantom",
+      "full_name": "Phantom Basketball Club",
+      "short_name": "Phantom BC",
+      "location": "Miami",
+      "name": "Phantom"
+    },
+    {
+      "id": 5,
+      "tricode": "RBC",
+      "city": "Rose",
+      "full_name": "Rose Basketball Club",
+      "short_name": "Rose BC",
+      "location": "Miami",
+      "name": "Rose"
+    },
+    {
+      "id": 6,
+      "tricode": "VBC",
+      "city": "Vinyl",
+      "full_name": "Vinyl Basketball Club",
+      "short_name": "Vinyl BC",
+      "location": "Miami",
+      "name": "Vinyl"
+    }
+  ],
+  "ncaa": [
+    {
+      "id": 18,
+      "tricode": "AFA",
+      "city": "AIR Force",
+      "division": "",
+      "full_name": "AIR Force Falcons",
+      "name": "Falcons"
+    },
+    {
+      "id": 19,
+      "tricode": "AKRON",
+      "city": "Akron",
+      "division": "",
+      "full_name": "Akron ZIPS",
+      "name": "ZIPS"
+    },
+    {
+      "id": 20,
+      "tricode": "ALA",
+      "city": "Alabama",
+      "division": "",
+      "full_name": "Alabama Crimson TIDE",
+      "name": "Crimson TIDE"
+    },
+    {
+      "id": 21,
+      "tricode": "APP",
+      "city": "APP State",
+      "division": "",
+      "full_name": "APP State Mountaineers",
+      "name": "Mountaineers"
+    },
+    {
+      "id": 22,
+      "tricode": "APR",
+      "city": "Marquette",
+      "division": "",
+      "full_name": "Marquette Golden Eagles",
+      "name": "Golden Eagles"
+    },
+    {
+      "id": 1,
+      "tricode": "ARI",
+      "city": "Arizona",
+      "division": "Big 12",
+      "full_name": "Arizona Wildcats",
+      "name": "Wildcats"
+    },
+    {
+      "id": 23,
+      "tricode": "ARK",
+      "city": "Arkansas",
+      "division": "",
+      "full_name": "Arkansas Razorbacks",
+      "name": "Razorbacks"
+    },
+    {
+      "id": 24,
+      "tricode": "ARMY",
+      "city": "ARMY",
+      "division": "",
+      "full_name": "ARMY Black Knights",
+      "name": "Black Knights"
+    },
+    {
+      "id": 25,
+      "tricode": "ARPB",
+      "city": "Arkansas PINE Bluff",
+      "division": "",
+      "full_name": "Arkansas PINE Bluff Golden Lions",
+      "name": "Golden Lions"
+    },
+    {
+      "id": 26,
+      "tricode": "ARST",
+      "city": "Arkansas State",
+      "division": "",
+      "full_name": "Arkansas State RED Wolves",
+      "name": "RED Wolves"
+    },
+    {
+      "id": 2,
+      "tricode": "ASU",
+      "city": "Arizona State University",
+      "division": "Big 12",
+      "full_name": "Arizona State Sun Devils",
+      "name": "Sun Devils"
+    },
+    {
+      "id": 27,
+      "tricode": "AUB",
+      "city": "Auburn",
+      "division": "",
+      "full_name": "Auburn Tigers",
+      "name": "Tigers"
+    },
+    {
+      "id": 28,
+      "tricode": "AUG",
+      "city": "Marquette",
+      "division": "",
+      "full_name": "Marquette Golden Eagles",
+      "name": "Golden Eagles"
+    },
+    {
+      "id": 29,
+      "tricode": "BALL",
+      "city": "BALL State",
+      "division": "",
+      "full_name": "BALL State Cardinals",
+      "name": "Cardinals"
+    },
+    {
+      "id": 3,
+      "tricode": "BAY",
+      "city": "Baylor University",
+      "division": "Big 12",
+      "full_name": "Baylor Bears",
+      "name": "Bears"
+    },
+    {
+      "id": 30,
+      "tricode": "BC",
+      "city": "Boston College",
+      "division": "",
+      "full_name": "Boston College Eagles",
+      "name": "Eagles"
+    },
+    {
+      "id": 31,
+      "tricode": "BG",
+      "city": "Bowling Green",
+      "division": "",
+      "full_name": "Bowling Green Falcons",
+      "name": "Falcons"
+    },
+    {
+      "id": 32,
+      "tricode": "BOISE",
+      "city": "Boise State",
+      "division": "",
+      "full_name": "Boise State Broncos",
+      "name": "Broncos"
+    },
+    {
+      "id": 33,
+      "tricode": "BRWN",
+      "city": "Brown",
+      "division": "",
+      "full_name": "Brown Bears",
+      "name": "Bears"
+    },
+    {
+      "id": 34,
+      "tricode": "BRY",
+      "city": "Bryant",
+      "division": "",
+      "full_name": "Bryant Bulldogs",
+      "name": "Bulldogs"
+    },
+    {
+      "id": 35,
+      "tricode": "BUCK",
+      "city": "Bucknell",
+      "division": "",
+      "full_name": "Bucknell Bison",
+      "name": "Bison"
+    },
+    {
+      "id": 36,
+      "tricode": "BUFF",
+      "city": "Buffalo",
+      "division": "",
+      "full_name": "Buffalo Bulls",
+      "name": "Bulls"
+    },
+    {
+      "id": 37,
+      "tricode": "BUT",
+      "city": "Butler",
+      "division": "",
+      "full_name": "Butler Bulldogs",
+      "name": "Bulldogs"
+    },
+    {
+      "id": 4,
+      "tricode": "BYU",
+      "city": "Brigham Young University",
+      "division": "Big 12",
+      "full_name": "Brigham Young Cougars",
+      "name": "Cougars"
+    },
+    {
+      "id": 38,
+      "tricode": "CAL",
+      "city": "California",
+      "division": "",
+      "full_name": "California Golden Bears",
+      "name": "Golden Bears"
+    },
+    {
+      "id": 39,
+      "tricode": "CCU",
+      "city": "Coastal Carolina",
+      "division": "",
+      "full_name": "Coastal Carolina Chanticleers",
+      "name": "Chanticleers"
+    },
+    {
+      "id": 40,
+      "tricode": "CHA",
+      "city": "Charlotte",
+      "division": "",
+      "full_name": "Charlotte 49ers",
+      "name": "49ers"
+    },
+    {
+      "id": 5,
+      "tricode": "CIN",
+      "city": "Cincinatti University",
+      "division": "Big 12",
+      "full_name": "Cincinatti Bearcats",
+      "name": "Bearcats"
+    },
+    {
+      "id": 41,
+      "tricode": "CLEM",
+      "city": "Clemson",
+      "division": "",
+      "full_name": "Clemson Tigers",
+      "name": "Tigers"
+    },
+    {
+      "id": 42,
+      "tricode": "CMU",
+      "city": "Central Michigan",
+      "division": "",
+      "full_name": "Central Michigan Chippewas",
+      "name": "Chippewas"
+    },
+    {
+      "id": 6,
+      "tricode": "COL",
+      "city": "University of Colorado",
+      "division": "Big 12",
+      "full_name": "Colorado Buffaloes",
+      "name": "Buffaloes"
+    },
+    {
+      "id": 43,
+      "tricode": "CONN",
+      "city": "Connecticut",
+      "division": "",
+      "full_name": "Connecticut Huskies",
+      "name": "Huskies"
+    },
+    {
+      "id": 44,
+      "tricode": "CRE",
+      "city": "Creighton",
+      "division": "",
+      "full_name": "Creighton Bluejays",
+      "name": "Bluejays"
+    },
+    {
+      "id": 45,
+      "tricode": "CSU",
+      "city": "Colorado State",
+      "division": "",
+      "full_name": "Colorado State RAMS",
+      "name": "RAMS"
+    },
+    {
+      "id": 46,
+      "tricode": "CUSA",
+      "city": "Conference",
+      "division": "",
+      "full_name": "Conference USA",
+      "name": "USA"
+    },
+    {
+      "id": 47,
+      "tricode": "DAY",
+      "city": "Dayton",
+      "division": "",
+      "full_name": "Dayton Flyers",
+      "name": "Flyers"
+    },
+    {
+      "id": 48,
+      "tricode": "DEL",
+      "city": "Delaware",
+      "division": "",
+      "full_name": "Delaware BLUE HENS",
+      "name": "BLUE HENS"
+    },
+    {
+      "id": 49,
+      "tricode": "DEP",
+      "city": "Depaul",
+      "division": "",
+      "full_name": "Depaul BLUE Demons",
+      "name": "BLUE Demons"
+    },
+    {
+      "id": 50,
+      "tricode": "DUKE",
+      "city": "DUKE",
+      "division": "",
+      "full_name": "DUKE BLUE Devils",
+      "name": "BLUE Devils"
+    },
+    {
+      "id": 51,
+      "tricode": "DUQ",
+      "city": "Duquesne",
+      "division": "",
+      "full_name": "Duquesne Dukes",
+      "name": "Dukes"
+    },
+    {
+      "id": 52,
+      "tricode": "ECU",
+      "city": "EAST Carolina",
+      "division": "",
+      "full_name": "EAST Carolina Pirates",
+      "name": "Pirates"
+    },
+    {
+      "id": 53,
+      "tricode": "EMU",
+      "city": "Eastern Michigan",
+      "division": "",
+      "full_name": "Eastern Michigan Eagles",
+      "name": "Eagles"
+    },
+    {
+      "id": 54,
+      "tricode": "FAU",
+      "city": "Florida Atlantic",
+      "division": "",
+      "full_name": "Florida Atlantic OWLS",
+      "name": "OWLS"
+    },
+    {
+      "id": 55,
+      "tricode": "FIU",
+      "city": "Florida International",
+      "division": "",
+      "full_name": "Florida International Panthers",
+      "name": "Panthers"
+    },
+    {
+      "id": 56,
+      "tricode": "FLA",
+      "city": "Florida",
+      "division": "",
+      "full_name": "Florida Gators",
+      "name": "Gators"
+    },
+    {
+      "id": 57,
+      "tricode": "FRES",
+      "city": "Fresno State",
+      "division": "",
+      "full_name": "Fresno State Bulldogs",
+      "name": "Bulldogs"
+    },
+    {
+      "id": 58,
+      "tricode": "FSU",
+      "city": "Florida State",
+      "division": "",
+      "full_name": "Florida State Seminoles",
+      "name": "Seminoles"
+    },
+    {
+      "id": 59,
+      "tricode": "GASO",
+      "city": "Georgia Southern",
+      "division": "",
+      "full_name": "Georgia Southern Eagles",
+      "name": "Eagles"
+    },
+    {
+      "id": 60,
+      "tricode": "GAST",
+      "city": "Georgia State",
+      "division": "",
+      "full_name": "Georgia State Panthers",
+      "name": "Panthers"
+    },
+    {
+      "id": 61,
+      "tricode": "GEO",
+      "city": "Georgetown",
+      "division": "",
+      "full_name": "Georgetown Hoyas",
+      "name": "Hoyas"
+    },
+    {
+      "id": 62,
+      "tricode": "GT",
+      "city": "Georgia TECH",
+      "division": "",
+      "full_name": "Georgia TECH Yellow Jackets",
+      "name": "Yellow Jackets"
+    },
+    {
+      "id": 63,
+      "tricode": "HAW",
+      "city": "Hawai'i",
+      "division": "",
+      "full_name": "Hawai'i Rainbow Warriors",
+      "name": "Rainbow Warriors"
+    },
+    {
+      "id": 64,
+      "tricode": "ILL",
+      "city": "Illinois",
+      "division": "",
+      "full_name": "Illinois Fighting Illini",
+      "name": "Fighting Illini"
+    },
+    {
+      "id": 65,
+      "tricode": "IONA",
+      "city": "IONA",
+      "division": "",
+      "full_name": "IONA Gaels",
+      "name": "Gaels"
+    },
+    {
+      "id": 66,
+      "tricode": "IOWA",
+      "city": "IOWA",
+      "division": "",
+      "full_name": "IOWA Hawkeyes",
+      "name": "Hawkeyes"
+    },
+    {
+      "id": 8,
+      "tricode": "ISU",
+      "city": "Iowa State University",
+      "division": "Big 12",
+      "full_name": "Iowa State Cyclones",
+      "name": "Cyclones"
+    },
+    {
+      "id": 67,
+      "tricode": "IU",
+      "city": "Indiana",
+      "division": "",
+      "full_name": "Indiana Hoosiers",
+      "name": "Hoosiers"
+    },
+    {
+      "id": 68,
+      "tricode": "JMU",
+      "city": "James Madison",
+      "division": "",
+      "full_name": "James Madison Dukes",
+      "name": "Dukes"
+    },
+    {
+      "id": 69,
+      "tricode": "JUL",
+      "city": "Marquette",
+      "division": "",
+      "full_name": "Marquette Golden Eagles",
+      "name": "Golden Eagles"
+    },
+    {
+      "id": 70,
+      "tricode": "JUN",
+      "city": "Marquette",
+      "division": "",
+      "full_name": "Marquette Golden Eagles",
+      "name": "Golden Eagles"
+    },
+    {
+      "id": 71,
+      "tricode": "JVST",
+      "city": "Jacksonville State",
+      "division": "",
+      "full_name": "Jacksonville State Gamecocks",
+      "name": "Gamecocks"
+    },
+    {
+      "id": 9,
+      "tricode": "KAN",
+      "city": "Kansas",
+      "division": "Big 12",
+      "full_name": "Kansas Jayhawks",
+      "name": "Jayhawks"
+    },
+    {
+      "id": 10,
+      "tricode": "KENT",
+      "city": "Kent State",
+      "division": "Big 12",
+      "full_name": "Kent State Golden Flashes",
+      "name": "Golden Flashes"
+    },
+    {
+      "id": 72,
+      "tricode": "KNSAW",
+      "city": "Kennesaw State",
+      "division": "",
+      "full_name": "Kennesaw State OWLS",
+      "name": "OWLS"
+    },
+    {
+      "id": 11,
+      "tricode": "KSU",
+      "city": "Kansas State",
+      "division": "Big 12",
+      "full_name": "Kansas State Wildcats",
+      "name": "Wildcats"
+    },
+    {
+      "id": 73,
+      "tricode": "LIB",
+      "city": "Liberty",
+      "division": "",
+      "full_name": "Liberty Flames",
+      "name": "Flames"
+    },
+    {
+      "id": 74,
+      "tricode": "LOU",
+      "city": "Louisville",
+      "division": "",
+      "full_name": "Louisville Cardinals",
+      "name": "Cardinals"
+    },
+    {
+      "id": 75,
+      "tricode": "LSU",
+      "city": "LSU",
+      "division": "",
+      "full_name": "LSU Tigers",
+      "name": "Tigers"
+    },
+    {
+      "id": 76,
+      "tricode": "LT",
+      "city": "Louisiana TECH",
+      "division": "",
+      "full_name": "Louisiana TECH Bulldogs",
+      "name": "Bulldogs"
+    },
+    {
+      "id": 77,
+      "tricode": "LUC",
+      "city": "Loyola Chicago",
+      "division": "",
+      "full_name": "Loyola Chicago Ramblers",
+      "name": "Ramblers"
+    },
+    {
+      "id": 78,
+      "tricode": "MAR",
+      "city": "Marquette",
+      "division": "",
+      "full_name": "Marquette Golden Eagles",
+      "name": "Golden Eagles"
+    },
+    {
+      "id": 79,
+      "tricode": "MARSH",
+      "city": "Marshall",
+      "division": "",
+      "full_name": "Marshall Thundering HERD",
+      "name": "Thundering HERD"
+    },
+    {
+      "id": 80,
+      "tricode": "MAY",
+      "city": "Marquette",
+      "division": "",
+      "full_name": "Marquette Golden Eagles",
+      "name": "Golden Eagles"
+    },
+    {
+      "id": 81,
+      "tricode": "MD",
+      "city": "Maryland",
+      "division": "",
+      "full_name": "Maryalnd Terrapins",
+      "name": "Terrapins"
+    },
+    {
+      "id": 82,
+      "tricode": "MEM",
+      "city": "Memphis",
+      "division": "",
+      "full_name": "Memphis Tigers",
+      "name": "Tigers"
+    },
+    {
+      "id": 83,
+      "tricode": "MIAFL",
+      "city": "Miami",
+      "division": "",
+      "full_name": "Miami Hurricanes",
+      "name": "Hurricanes"
+    },
+    {
+      "id": 84,
+      "tricode": "MIAOH",
+      "city": "Miami (OH)",
+      "division": "",
+      "full_name": "Miami (OH) Redhawks",
+      "name": "Redhawks"
+    },
+    {
+      "id": 85,
+      "tricode": "MICH",
+      "city": "Michigan",
+      "division": "",
+      "full_name": "Michigan Wolverines",
+      "name": "Wolverines"
+    },
+    {
+      "id": 86,
+      "tricode": "MINN",
+      "city": "Minnesota",
+      "division": "",
+      "full_name": "Minnesota Golden Gophers",
+      "name": "Golden Gophers"
+    },
+    {
+      "id": 87,
+      "tricode": "MISS",
+      "city": "OLE MISS",
+      "division": "",
+      "full_name": "OLE MISS Rebels",
+      "name": "Rebels"
+    },
+    {
+      "id": 88,
+      "tricode": "MIZZ",
+      "city": "Missouri",
+      "division": "",
+      "full_name": "Missouri Tigers",
+      "name": "Tigers"
+    },
+    {
+      "id": 89,
+      "tricode": "MOST",
+      "city": "Missouri State",
+      "division": "",
+      "full_name": "Missouri State Bears",
+      "name": "Bears"
+    },
+    {
+      "id": 90,
+      "tricode": "MOSU",
+      "city": "Missouri State",
+      "division": "",
+      "full_name": "Missouri State Bears",
+      "name": "Bears"
+    },
+    {
+      "id": 91,
+      "tricode": "MSST",
+      "city": "Mississippi State",
+      "division": "",
+      "full_name": "Mississippi State Bulldogs",
+      "name": "Bulldogs"
+    },
+    {
+      "id": 92,
+      "tricode": "MSU",
+      "city": "Michigan State",
+      "division": "",
+      "full_name": "Michigan State Spartans",
+      "name": "Spartans"
+    },
+    {
+      "id": 93,
+      "tricode": "MTSU",
+      "city": "Middle Tennessee State",
+      "division": "",
+      "full_name": "Middle Tennessee State BLUE Raiders",
+      "name": "BLUE Raiders"
+    },
+    {
+      "id": 94,
+      "tricode": "NAVY",
+      "city": "NAVY",
+      "division": "",
+      "full_name": "NAVY Midshipmen",
+      "name": "Midshipmen"
+    },
+    {
+      "id": 95,
+      "tricode": "NCST",
+      "city": "North Carolina State",
+      "division": "",
+      "full_name": "North Carolina State Wolfpack",
+      "name": "Wolfpack"
+    },
+    {
+      "id": 96,
+      "tricode": "ND",
+      "city": "Notre DAME",
+      "division": "",
+      "full_name": "Notre DAME Fighting Irish",
+      "name": "Fighting Irish"
+    },
+    {
+      "id": 97,
+      "tricode": "NEB",
+      "city": "Nebraska",
+      "division": "",
+      "full_name": "Nebraska Cornhuskers",
+      "name": "Cornhuskers"
+    },
+    {
+      "id": 98,
+      "tricode": "NEV",
+      "city": "Nevada",
+      "division": "",
+      "full_name": "Nevada WOLF PACK",
+      "name": "WOLF PACK"
+    },
+    {
+      "id": 99,
+      "tricode": "NICH",
+      "city": "Nicholls State",
+      "division": "",
+      "full_name": "Nicholls State",
+      "name": "Colonels"
+    },
+    {
+      "id": 100,
+      "tricode": "NIU",
+      "city": "Northern Illinois",
+      "division": "",
+      "full_name": "Northern Illinois Huskies",
+      "name": "Huskies"
+    },
+    {
+      "id": 101,
+      "tricode": "NM",
+      "city": "NEW Mexico",
+      "division": "",
+      "full_name": "NEW Mexico Lobos",
+      "name": "Lobos"
+    },
+    {
+      "id": 102,
+      "tricode": "NMST",
+      "city": "NEW Mexico State",
+      "division": "",
+      "full_name": "NEW Mexico State Aggies",
+      "name": "Aggies"
+    },
+    {
+      "id": 103,
+      "tricode": "NT",
+      "city": "North Texas",
+      "division": "",
+      "full_name": "North Texas MEAN Green",
+      "name": "MEAN Green"
+    },
+    {
+      "id": 104,
+      "tricode": "NW",
+      "city": "Northwestern",
+      "division": "",
+      "full_name": "Northwestern Wildcats",
+      "name": "Wildcats"
+    },
+    {
+      "id": 105,
+      "tricode": "ODU",
+      "city": "OLD Dominion",
+      "division": "",
+      "full_name": "OLD Dominion Monarchs",
+      "name": "Monarchs"
+    },
+    {
+      "id": 106,
+      "tricode": "OHIO",
+      "city": "OHIO",
+      "division": "",
+      "full_name": "OHIO Bobcats",
+      "name": "Bobcats"
+    },
+    {
+      "id": 107,
+      "tricode": "OKLA",
+      "city": "Oklahoma",
+      "division": "",
+      "full_name": "Oklahoma Sooners",
+      "name": "Sooners"
+    },
+    {
+      "id": 12,
+      "tricode": "OKST",
+      "city": "Oklahoma State",
+      "division": "Big 12",
+      "full_name": "Oklahoma State Cowboys",
+      "name": "Cowboys"
+    },
+    {
+      "id": 108,
+      "tricode": "ORE",
+      "city": "Oregon",
+      "division": "",
+      "full_name": "Oregon Ducks",
+      "name": "Ducks"
+    },
+    {
+      "id": 109,
+      "tricode": "OSU",
+      "city": "OHIO State",
+      "division": "",
+      "full_name": "OHIO State Buckeyes",
+      "name": "Buckeyes"
+    },
+    {
+      "id": 110,
+      "tricode": "PITT",
+      "city": "Pittsburgh",
+      "division": "",
+      "full_name": "Pittsburgh Panthers",
+      "name": "Panthers"
+    },
+    {
+      "id": 111,
+      "tricode": "PRO",
+      "city": "Providence",
+      "division": "",
+      "full_name": "Providence Friars",
+      "name": "Friars"
+    },
+    {
+      "id": 112,
+      "tricode": "PSU",
+      "city": "PENN State",
+      "division": "",
+      "full_name": "PENN State Nittany Lions",
+      "name": "Nittany Lions"
+    },
+    {
+      "id": 113,
+      "tricode": "PUR",
+      "city": "Purdue",
+      "division": "",
+      "full_name": "Purdue Boilermakers",
+      "name": "Boilermakers"
+    },
+    {
+      "id": 114,
+      "tricode": "RICE",
+      "city": "RICE",
+      "division": "",
+      "full_name": "RICE OWLS",
+      "name": "OWLS"
+    },
+    {
+      "id": 115,
+      "tricode": "RUT",
+      "city": "Rutgers",
+      "division": "",
+      "full_name": "Rutgers Scarlet Knights",
+      "name": "Scarlet Knights"
+    },
+    {
+      "id": 116,
+      "tricode": "SCAR",
+      "city": "South Carolina",
+      "division": "",
+      "full_name": "South Carolina Gamecocks",
+      "name": "Gamecocks"
+    },
+    {
+      "id": 117,
+      "tricode": "SDSU",
+      "city": "SAN Diego State",
+      "division": "",
+      "full_name": "SAN Diego State Aztecs",
+      "name": "Aztecs"
+    },
+    {
+      "id": 118,
+      "tricode": "SFU",
+      "city": "ST. Francis (PA)",
+      "division": "",
+      "full_name": "ST. Francis (PA) RED Flash",
+      "name": "RED Flash"
+    },
+    {
+      "id": 119,
+      "tricode": "SHSU",
+      "city": "SAM Houston",
+      "division": "",
+      "full_name": "SAM Houston Bearkats",
+      "name": "Bearkats"
+    },
+    {
+      "id": 120,
+      "tricode": "SHU",
+      "city": "Seton HALL",
+      "division": "",
+      "full_name": "Seton HALL Pirates",
+      "name": "Pirates"
+    },
+    {
+      "id": 121,
+      "tricode": "SJSU",
+      "city": "SAN JOSE State",
+      "division": "",
+      "full_name": "SAN JOSE State Spartans",
+      "name": "Spartans"
+    },
+    {
+      "id": 122,
+      "tricode": "SJU",
+      "city": "ST. John's",
+      "division": "",
+      "full_name": "ST. John's RED Storm",
+      "name": "RED Storm"
+    },
+    {
+      "id": 123,
+      "tricode": "SMU",
+      "city": "SMU",
+      "division": "",
+      "full_name": "SMU Mustangs",
+      "name": "Mustangs"
+    },
+    {
+      "id": 124,
+      "tricode": "SOAL",
+      "city": "South Alabama",
+      "division": "",
+      "full_name": "South Alabama Jaguars",
+      "name": "Jaguars"
+    },
+    {
+      "id": 125,
+      "tricode": "STAN",
+      "city": "Stanford",
+      "division": "",
+      "full_name": "Stanford Cardinal",
+      "name": "Cardinal"
+    },
+    {
+      "id": 126,
+      "tricode": "SYR",
+      "city": "Syracuse",
+      "division": "",
+      "full_name": "Syracuse Orange",
+      "name": "Orange"
+    },
+    {
+      "id": 127,
+      "tricode": "TAMU",
+      "city": "Texas A&M",
+      "division": "",
+      "full_name": "Texas A&M Aggies",
+      "name": "Aggies"
+    },
+    {
+      "id": 13,
+      "tricode": "TCU",
+      "city": "Texas Christian",
+      "division": "Big 12",
+      "full_name": "Texas Christian Horned Frogs",
+      "name": "Horned Frogs"
+    },
+    {
+      "id": 128,
+      "tricode": "TEM",
+      "city": "Temple",
+      "division": "",
+      "full_name": "Temple OWLS",
+      "name": "OWLS"
+    },
+    {
+      "id": 129,
+      "tricode": "TENN",
+      "city": "Tennessee",
+      "division": "",
+      "full_name": "Tennesse Volunteers",
+      "name": "Volunteers"
+    },
+    {
+      "id": 130,
+      "tricode": "TEX",
+      "city": "Texas",
+      "division": "",
+      "full_name": "Texas Longhorns",
+      "name": "Longhorns"
+    },
+    {
+      "id": 131,
+      "tricode": "TOL",
+      "city": "Toledo",
+      "division": "",
+      "full_name": "Toledo Rockets",
+      "name": "Rockets"
+    },
+    {
+      "id": 132,
+      "tricode": "TROY",
+      "city": "TROY",
+      "division": "",
+      "full_name": "TROY Trojans",
+      "name": "Trojans"
+    },
+    {
+      "id": 14,
+      "tricode": "TTU",
+      "city": "Texas Tech",
+      "division": "Big 12",
+      "full_name": "Texas Tech Red Raiders",
+      "name": "Red Raiders"
+    },
+    {
+      "id": 133,
+      "tricode": "TULN",
+      "city": "Tulane",
+      "division": "",
+      "full_name": "Tulane Green WAVE",
+      "name": "Green WAVE"
+    },
+    {
+      "id": 134,
+      "tricode": "TULSA",
+      "city": "Tulsa",
+      "division": "",
+      "full_name": "Tulsa Golden Hurricane",
+      "name": "Golden Hurricane"
+    },
+    {
+      "id": 15,
+      "tricode": "TXST",
+      "city": "Texas State",
+      "division": "Big 12",
+      "full_name": "Texas State Bobcats",
+      "name": "Bobcats"
+    },
+    {
+      "id": 135,
+      "tricode": "UAB",
+      "city": "UAB",
+      "division": "",
+      "full_name": "UAB Blazers",
+      "name": "Blazers"
+    },
+    {
+      "id": 136,
+      "tricode": "UCF",
+      "city": "UCF",
+      "division": "",
+      "full_name": "UCF Knights",
+      "name": "Knights"
+    },
+    {
+      "id": 137,
+      "tricode": "UCLA",
+      "city": "UCLA",
+      "division": "",
+      "full_name": "UCLA Bruins",
+      "name": "Bruins"
+    },
+    {
+      "id": 138,
+      "tricode": "UGA",
+      "city": "Georgia",
+      "division": "",
+      "full_name": "Georgia Bulldogs",
+      "name": "Bulldogs"
+    },
+    {
+      "id": 7,
+      "tricode": "UH",
+      "city": "Houston",
+      "division": "Big 12",
+      "full_name": "Houston Cougars",
+      "name": "Cougars"
+    },
+    {
+      "id": 139,
+      "tricode": "UK",
+      "city": "Kentucky",
+      "division": "",
+      "full_name": "Kentucky Wildcats",
+      "name": "Wildcats"
+    },
+    {
+      "id": 140,
+      "tricode": "ULL",
+      "city": "Louisiana",
+      "division": "",
+      "full_name": "Louisiana Ragin' Cajuns",
+      "name": "Ragin' Cajuns"
+    },
+    {
+      "id": 141,
+      "tricode": "ULM",
+      "city": "UL Monroe",
+      "division": "",
+      "full_name": "UL Monroe Warhawks",
+      "name": "Warhawks"
+    },
+    {
+      "id": 142,
+      "tricode": "UMASS",
+      "city": "Massachusetts",
+      "division": "",
+      "full_name": "Massachusetts Minutemen",
+      "name": "Minutemen"
+    },
+    {
+      "id": 143,
+      "tricode": "UMBC",
+      "city": "UMBC",
+      "division": "",
+      "full_name": "UMBC Retrievers",
+      "name": "Retrievers"
+    },
+    {
+      "id": 144,
+      "tricode": "UNC",
+      "city": "North Carolina",
+      "division": "",
+      "full_name": "North Carolina TAR Heels",
+      "name": "TAR Heels"
+    },
+    {
+      "id": 145,
+      "tricode": "UNLV",
+      "city": "UNLV",
+      "division": "",
+      "full_name": "UNLV Rebels",
+      "name": "Rebels"
+    },
+    {
+      "id": 146,
+      "tricode": "URI",
+      "city": "Rhode Island",
+      "division": "",
+      "full_name": "Rhode Island RAMS",
+      "name": "RAMS"
+    },
+    {
+      "id": 147,
+      "tricode": "USC",
+      "city": "USC",
+      "division": "",
+      "full_name": "USC Trojans",
+      "name": "Trojans"
+    },
+    {
+      "id": 148,
+      "tricode": "USF",
+      "city": "South Florida",
+      "division": "",
+      "full_name": "South Florida Bulls",
+      "name": "Bulls"
+    },
+    {
+      "id": 149,
+      "tricode": "USM",
+      "city": "Southern MISS",
+      "division": "",
+      "full_name": "Southern MISS Golden Eagles",
+      "name": "Golden Eagles"
+    },
+    {
+      "id": 16,
+      "tricode": "UTAH",
+      "city": "Utah",
+      "division": "Big 12",
+      "full_name": "Utah Utes",
+      "name": "Utes"
+    },
+    {
+      "id": 150,
+      "tricode": "UTEP",
+      "city": "UTEP",
+      "division": "",
+      "full_name": "UTEP Miners",
+      "name": "Miners"
+    },
+    {
+      "id": 151,
+      "tricode": "UTSA",
+      "city": "UTSA",
+      "division": "",
+      "full_name": "UTSA Roadrunners",
+      "name": "Roadrunners"
+    },
+    {
+      "id": 152,
+      "tricode": "UTST",
+      "city": "UTAH State",
+      "division": "",
+      "full_name": "UTAH State Aggies",
+      "name": "Aggies"
+    },
+    {
+      "id": 153,
+      "tricode": "UVA",
+      "city": "Virginia",
+      "division": "",
+      "full_name": "Virginia Cavaliers",
+      "name": "Cavaliers"
+    },
+    {
+      "id": 154,
+      "tricode": "VANDY",
+      "city": "Vanderbilt",
+      "division": "",
+      "full_name": "Vanderbilt Commodores",
+      "name": "Commodores"
+    },
+    {
+      "id": 155,
+      "tricode": "VIL",
+      "city": "Villanova",
+      "division": "",
+      "full_name": "Villanova Wildcats",
+      "name": "Wildcats"
+    },
+    {
+      "id": 156,
+      "tricode": "VT",
+      "city": "Virginia TECH",
+      "division": "",
+      "full_name": "Virginia TECH Hokies",
+      "name": "Hokies"
+    },
+    {
+      "id": 157,
+      "tricode": "W&M",
+      "city": "William & MARY",
+      "division": "",
+      "full_name": "William & MARY Tribe",
+      "name": "Tribe"
+    },
+    {
+      "id": 158,
+      "tricode": "WAKE",
+      "city": "WAKE Forest",
+      "division": "",
+      "full_name": "WAKE Forest Demon Deacons",
+      "name": "Demon Deacons"
+    },
+    {
+      "id": 159,
+      "tricode": "WASH",
+      "city": "Washington",
+      "division": "",
+      "full_name": "Washington Huskies",
+      "name": "Huskies"
+    },
+    {
+      "id": 160,
+      "tricode": "WISC",
+      "city": "Wisconsin",
+      "division": "",
+      "full_name": "Wisconsin Badgers",
+      "name": "Badgers"
+    },
+    {
+      "id": 161,
+      "tricode": "WKU",
+      "city": "Western Kentucky",
+      "division": "",
+      "full_name": "Western Kentucky Hilltoppers",
+      "name": "Hilltoppers"
+    },
+    {
+      "id": 162,
+      "tricode": "WMU",
+      "city": "Western Michigan",
+      "division": "",
+      "full_name": "Western Michigan Broncos",
+      "name": "Broncos"
+    },
+    {
+      "id": 17,
+      "tricode": "WVU",
+      "city": "West Virginia",
+      "division": "Big 12",
+      "full_name": "West Virginia Mountaineers",
+      "name": "Mountaineers"
+    },
+    {
+      "id": 163,
+      "tricode": "WYO",
+      "city": "Wyoming",
+      "division": "",
+      "full_name": "Wyoming Cowboys",
+      "name": "Cowboys"
+    },
+    {
+      "id": 164,
+      "tricode": "XAV",
+      "city": "Xavier",
+      "division": "",
+      "full_name": "Xavier Musketeers",
+      "name": "Musketeers"
+    }
   ]
-  
 }
