@@ -1415,9 +1415,9 @@
     {
       "id": 76,
       "tricode": "LT",
-      "city": "Louisiana TECH",
+      "city": "Louisiana Tech",
       "division": "",
-      "full_name": "Louisiana TECH Bulldogs",
+      "full_name": "Louisiana Tech Bulldogs",
       "name": "Bulldogs"
     },
     {
@@ -1441,8 +1441,8 @@
       "tricode": "MARSH",
       "city": "Marshall",
       "division": "",
-      "full_name": "Marshall Thundering HERD",
-      "name": "Thundering HERD"
+      "full_name": "Marshall Thundering Herd",
+      "name": "Thundering Herd"
     },
     {
       "id": 80,
@@ -1759,10 +1759,10 @@
     {
       "id": 118,
       "tricode": "SFU",
-      "city": "ST. Francis (PA)",
+      "city": "ST. Francis",
       "division": "",
-      "full_name": "ST. Francis (PA) RED Flash",
-      "name": "RED Flash"
+      "full_name": "ST. Francis Red Flash",
+      "name": "Red Flash"
     },
     {
       "id": 119,
@@ -1775,9 +1775,9 @@
     {
       "id": 120,
       "tricode": "SHU",
-      "city": "Seton HALL",
+      "city": "Seton Hall",
       "division": "",
-      "full_name": "Seton HALL Pirates",
+      "full_name": "Seton Hall Pirates",
       "name": "Pirates"
     },
     {
