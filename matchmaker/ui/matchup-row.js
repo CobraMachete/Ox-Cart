@@ -193,7 +193,7 @@ export class MatchupRow extends HTMLElement {
     this._pendingInputs = [];
 
     // Configurable via attributes if you want
-    this._riveSrc = this.getAttribute('rive-src') || 'https://cobramachete.github.io/Ox-Cart/matchmaker/rive/matchmaker_loading.riv';
+    this._riveSrc = this.getAttribute('rive-src') || 'https://tntsports-ftrack.s3.us-east-1.amazonaws.com/gui_components/tntsports-matchmaker-components/rive/matchmaker_loading.riv';
     this._riveArtboard = this.getAttribute('rive-artboard') || 'mm_loader';
     this._riveStateMachine = this.getAttribute('rive-sm') || 'State Machine 1';
 
